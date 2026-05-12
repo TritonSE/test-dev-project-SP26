@@ -1,17 +1,30 @@
 # TSE Social Points Tracker
 
-A web application for tracking social points across TSE project teams.
+A mobile-first web application for tracking social event points across TSE project teams. Teams earn points when members attend socials. This app handles submissions, admin review, and live standings.
 
 ---
 
 # Getting Started
+
+## Tech Stack
+| Stack | Technology |
+|-------|------------|
+| **Frontend** | Next.js 16 + TypeScript + Tailwind CSS |
+| **Backend** | Express.js + TypeScript |
+| **Database** | MongoDB |
+| **Linting** | ESLint + Prettier |
+| **Git Hooks** | Husky + Secret Scanner |
+
+---
 
 ## Prerequisites
 
 Before running the project, make sure you have:
 
 - Node.js v18+
+  - ```node --version```    # should show v18.0.0 or higher
 - npm v9+
+  - ```npm --version```     # should show v9.0.0 or higher
 - MongoDB (for local development)
 
 ---
@@ -22,6 +35,7 @@ Before running the project, make sure you have:
 
 ```bash
 git clone https://github.com/TritonSE/test-dev-project-SP26.git
+cd test-dev-project-SP26
 ```
 
 ---
@@ -71,6 +85,7 @@ Frontend runs on:
 ---
 
 # Project Structure
+IMPORTANT: Never remove anything from .gitignore. It prevents .env files and other sensitive files from being pushed to GitHub.
 
 ```plaintext
 .
@@ -88,23 +103,40 @@ Frontend runs on:
 - Run lint checks before committing:
 
 ```bash
-npm run lint-check
+npm run lint-fix     # auto-fixes lint errors and reformats code — run before opening a PR
+npm run lint-check   # checks for errors without modifying files — used by CI
+npm run format       # reformats code only, no lint check
 ```
 
 ---
 
-# Tech Stack
+# Daily Workflow
+### 1. Make sure you're on main and up to date
+```
+git checkout main
+git pull origin main
+```
+### 2. Create a new branch for your feature
+```
+git checkout -b feature/your-feature-name
+```
 
-## Frontend
-- Next.js
-- TypeScript
-- Tailwind CSS
+### 3. Make your changes and commit frequently
+```
+git add .
+git commit -m "feat: add submission form"
+```
 
-## Backend
-- Express.js
-- TypeScript
+### 4. Push your branch
+```
+git push -u origin feature/your-feature-name
+```
 
-## Database
-- MongoDB
+### 5. Open a Pull Request on GitHub
+```
+- Fill out the PR template
+- Request a reviewer
+- Wait for CI checks to pass
+```
 
 ---
