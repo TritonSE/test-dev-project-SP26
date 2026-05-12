@@ -22,7 +22,6 @@ Before running the project, make sure you have:
 
 ```bash
 git clone https://github.com/TritonSE/test-dev-project-SP26.git
-cd tse-social-points-tracker
 ```
 
 ---

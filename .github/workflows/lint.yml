@@ -1,32 +1,28 @@
-name: Lint & Format Check
+name: Lint and style checks
 
 on:
   pull_request:
-    branches: [main, dev]
+    branches:
+      main
 
 jobs:
-  lint-backend:
+  backend:
+    name: Backend lint and style check
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm install
-      - run: npm run lint
-
-  lint-frontend:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+    - working-directory: backend # Change this to the name of your backend directory
+      run: |
+        npm ci
+        npm run lint-check
+  frontend:
+    name: Frontend lint and style check
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm install
-      - run: npm run lint
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+    - working-directory: frontend # Change this to the name of your frontend directory
+      run: |
+        npm ci
+        npm run lint-check
