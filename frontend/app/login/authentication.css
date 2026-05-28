@@ -1,0 +1,128 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    background-color: #0C2B35; 
+    color: white;
+    font-family: 'Rubik', sans-serif;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tse-logo {
+    width: 22.25rem; 
+    height: 17.9rem;
+    margin-top: 3rem;
+    align-content: center;
+    display: block;
+    object-fit: contain;
+}
+
+.org-title {
+    color: #DEBB01;
+    font-size: 1.43rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    max-width: 26rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.org-subtitle {
+    font-size: 0.875rem;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.input-card {
+    background-color: white;
+    border-radius: 1.25rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.1rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    width: 100%;
+    max-width: 23rem;
+    color: #000000;
+    box-sizing: border-box;
+}
+
+.input-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.code-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    background-color: #f5f5f5;
+    font-size: 1rem;
+    margin-bottom: 0.15rem;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.code-input.input-error {
+    border: 0.125rem solid #e74c3c;
+    background-color: #fdf0ed;
+}
+
+.helper-text {
+    font-size: 0.625rem;
+    color: #6c6c6c;
+    letter-spacing: 0.02em;
+}
+
+.error-text {
+    font-size: 0.75rem;
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 22rem;
+    max-width: 30rem;
+}
+
+.continue-button {
+    justify-content: center;
+    background-color: #DEBB01;
+    color: black;
+    font-weight: 700;
+    font-size: 1.25rem;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.6rem;
+    width: 100%;
+    max-width: 22rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(3px 3px 3px rgba(41, 41, 41, 0.5));
+}
+
+.continue-button:active {
+    background-color: #DEBB01;
+}
