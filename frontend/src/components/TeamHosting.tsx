@@ -3,7 +3,6 @@ import teamChipStyles from "../styles/teamChip.module.css";
 
 import TeamChip from "./TeamChip";
 
-
 type Team = {
   id: string;
   name: string;
@@ -70,7 +69,8 @@ export default function TeamsHosting({ teams }: Props) {
             opacity: 1,
           }}
         >
-          If teams are missing, go back and tag people from those teams. Points will be split by headcount.
+          If teams are missing, go back and tag people from those teams. Points will be split by
+          headcount.
         </p>
       </div>
 
@@ -78,7 +78,9 @@ export default function TeamsHosting({ teams }: Props) {
         <hr style={{ margin: "0", border: "none", borderTop: `1px solid #8FA7B0` }} />
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-start" }}>
+      <div
+        style={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-start" }}
+      >
         {featuredTeams.map((team) => (
           <div
             key={team.id}

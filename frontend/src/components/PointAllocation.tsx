@@ -81,9 +81,7 @@ export default function PointAllocation({ teams, onNext }: Props) {
             <TeamChip team={pair[0]} />
 
             {/* Second team chip (if exists) */}
-            {pair[1] && (
-              <TeamChip team={pair[1]} />
-            )}
+            {pair[1] && <TeamChip team={pair[1]} />}
 
             {/* Spacer */}
             <div style={{ flex: 1 }}></div>
@@ -137,7 +135,15 @@ export default function PointAllocation({ teams, onNext }: Props) {
         ))}
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "auto", alignItems: "flex-end" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          marginTop: "auto",
+          alignItems: "flex-end",
+        }}
+      >
         <div
           style={{
             display: "flex",
