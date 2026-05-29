@@ -24,5 +24,5 @@ jobs:
     - uses: actions/setup-node@v3
     - working-directory: frontend # Change this to the name of your frontend directory
       run: |
-        npm ci --leagacy-peer-deps
+        npm ci --legacy-peer-deps
         npm run lint-check
