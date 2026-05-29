@@ -21,12 +21,10 @@
 //   - Mobile view only (no need to optimize for desktop)
 //   - The invite code is club-wide (one code for all members)
 // =============================================================================
-import React from 'react';
+import React from "react";
 
-import Authentication from './authentication';
+import Authentication from "./authentication";
 
 export default function LoginPage() {
-  return (
-    <Authentication />
-  );
+  return <Authentication />;
 }
