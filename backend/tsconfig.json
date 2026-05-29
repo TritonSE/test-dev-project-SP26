@@ -6,6 +6,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "types": ["node"],
     "strict": true,
     "outDir": "./dist",
     "esModuleInterop": true,

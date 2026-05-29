@@ -1,0 +1,135 @@
+import "dotenv/config";
+import mongoose from "mongoose";
+
+const memberSchema = new mongoose.Schema({
+  name: String,
+  team: String,
+  role: String,
+  isPVP: Boolean,
+});
+
+const Member = mongoose.model("Member", memberSchema);
+
+const members = [
+  // PVP
+  { name: "Benjamin Johnson", team: "PVP", role: "President", isPVP: true },
+  { name: "Nancy Liu", team: "PVP", role: "VP Design", isPVP: true },
+  { name: "Eshaan Sharma", team: "PVP", role: "VP Engineering", isPVP: true },
+  { name: "Sur Shah", team: "PVP", role: "VP Operations", isPVP: true },
+  { name: "Nandini Desai", team: "PVP", role: "VP Products", isPVP: true },
+  { name: "Yixuan Li", team: "PVP", role: "VP Technology", isPVP: true },
+  // CRED
+  { name: "Irene Joo", team: "CRED", role: "Designer", isPVP: false },
+  { name: "Alice Lan", team: "CRED", role: "Designer", isPVP: false },
+  { name: "Andrea Labbaika", team: "CRED", role: "Designer", isPVP: false },
+  { name: "Aaryan Patel", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Anirudh Annabathula", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Jeff Umanzor", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Jenny Zhu", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Jerry Zhang", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Kalyssa Choy", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Nico Docena", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Rushil Gupta", team: "CRED", role: "Developer", isPVP: false },
+  { name: "Ketan Mittal", team: "CRED", role: "Engineering Manager", isPVP: false },
+  { name: "Luis Marquez", team: "CRED", role: "Product Manager", isPVP: false },
+  // DBC
+  { name: "Vivian Liu", team: "DBC", role: "Designer", isPVP: false },
+  { name: "Kate Songpetchmongkol", team: "DBC", role: "Designer", isPVP: false },
+  { name: "Caleb Kim", team: "DBC", role: "Designer", isPVP: false },
+  { name: "Jamie Han", team: "DBC", role: "Designer", isPVP: false },
+  { name: "Darshika Mishra", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Edward Millan", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Hoang Anh Pham", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Ishayu Ghosh", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Jeremy Lim", team: "DBC", role: "Developer", isPVP: false },
+  { name: "JP Davalos", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Ming Lu", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Rudraksh Bhandari", team: "DBC", role: "Developer", isPVP: false },
+  { name: "Jordan Junaidi", team: "DBC", role: "Engineering Manager", isPVP: false },
+  { name: "Brandon Jonathan", team: "DBC", role: "Product Manager", isPVP: false },
+  // F3
+  { name: "Alice Guo", team: "F3", role: "Designer", isPVP: false },
+  { name: "Sylvie Tran", team: "F3", role: "Designer", isPVP: false },
+  { name: "Jeffrey Antony", team: "F3", role: "Designer", isPVP: false },
+  { name: "Jaden Huang", team: "F3", role: "Developer", isPVP: false },
+  { name: "James Escobedo", team: "F3", role: "Developer", isPVP: false },
+  { name: "Katelyn Li", team: "F3", role: "Developer", isPVP: false },
+  { name: "Munachi Okoro", team: "F3", role: "Developer", isPVP: false },
+  { name: "Suhaan Khurana", team: "F3", role: "Developer", isPVP: false },
+  { name: "Sweekrit Bhatnagar", team: "F3", role: "Developer", isPVP: false },
+  { name: "Yasmin Kabir", team: "F3", role: "Developer", isPVP: false },
+  { name: "Weston Zong", team: "F3", role: "Engineering Manager", isPVP: false },
+  { name: "Annabelle Guiditta", team: "F3", role: "Product Manager", isPVP: false },
+  // Fulcrum
+  { name: "Allison Huang", team: "Fulcrum", role: "Designer", isPVP: false },
+  { name: "Kristen Lee", team: "Fulcrum", role: "Designer", isPVP: false },
+  { name: "Hillary Co", team: "Fulcrum", role: "Designer", isPVP: false },
+  { name: "Annabelle Zhou", team: "Fulcrum", role: "Designer", isPVP: false },
+  { name: "Aniket Warty", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Huize Mao", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Pranav Puttagunta", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Raghav Sreekumar", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Shashwat Bhandari", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Sungwoo Cho", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "William Wu", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Yifei Xue", team: "Fulcrum", role: "Developer", isPVP: false },
+  { name: "Philip Chen", team: "Fulcrum", role: "Engineering Manager", isPVP: false },
+  { name: "Srikar Eranky", team: "Fulcrum", role: "Product Manager", isPVP: false },
+  // HomeStart
+  { name: "Renato Pimentel", team: "HomeStart", role: "Designer", isPVP: false },
+  { name: "Joyce Ren", team: "HomeStart", role: "Designer", isPVP: false },
+  { name: "Charlie Suarez Robles", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Edward Yao", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Jeffrey Liu", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Koji Nakazawa", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Lulu Shao", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Michael Wang", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Nate Murphy", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Yuzuki Tomioka", team: "HomeStart", role: "Developer", isPVP: false },
+  { name: "Navyaa Gupta", team: "HomeStart", role: "Engineering Manager", isPVP: false },
+  { name: "Karen Yan", team: "HomeStart", role: "Product Manager", isPVP: false },
+  // Meemli
+  { name: "Liam Lai", team: "Meemli", role: "Designer", isPVP: false },
+  { name: "Ivan Rim", team: "Meemli", role: "Designer", isPVP: false },
+  { name: "Evan Chen", team: "Meemli", role: "Designer", isPVP: false },
+  { name: "Alyssia Almanza", team: "Meemli", role: "Developer", isPVP: false },
+  { name: "Himir Desai", team: "Meemli", role: "Developer", isPVP: false },
+  { name: "Isabel Ku", team: "Meemli", role: "Developer", isPVP: false },
+  { name: "Lucas Yan", team: "Meemli", role: "Developer", isPVP: false },
+  { name: "Michael Sullivan", team: "Meemli", role: "Engineering Manager", isPVP: false },
+  { name: "Yoto Kim", team: "Meemli", role: "Product Manager", isPVP: false },
+  // TEST
+  { name: "Rohaan Sandhu", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Thomas Rocha", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Jesus Azpitarte", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Alexis Vega", team: "TEST", role: "Developer Lead", isPVP: false },
+  { name: "Alice Park", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Angeleen Duong", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Isaac Montanez", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Sofia Heim", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Tony Wang", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Thy Doan", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Waleed Siddiqui", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Alice Guo", team: "TEST", role: "Design Lead", isPVP: false },
+  { name: "David Nguyen", team: "TEST", role: "Designer", isPVP: false },
+  { name: "Juee Deshmukh", team: "TEST", role: "Designer", isPVP: false },
+  { name: "Sakura Nishikawa", team: "TEST", role: "Designer", isPVP: false },
+  { name: "Yang Zheng", team: "TEST", role: "Designer", isPVP: false },
+];
+
+async function seed() {
+  await mongoose.connect(process.env.MONGODB_URI!);
+  console.log("Connected to MongoDB");
+
+  await Member.deleteMany({});
+  const inserted = await Member.insertMany(members);
+  console.log(`Seeded ${inserted.length} members`);
+
+  await mongoose.disconnect();
+  console.log("Done");
+}
+
+seed().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

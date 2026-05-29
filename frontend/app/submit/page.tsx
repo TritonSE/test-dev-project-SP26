@@ -1,20 +1,115 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-// TODO: replace with GET /api/members
-const TSE_MEMBERS = [
-  { id: "1", name: "Nancy Liu", team: "PVP" },
-  { id: "2", name: "Karen Yan", team: "HomeStar" },
-  { id: "3", name: "Vivian Liu", team: "DBC" },
-  { id: "4", name: "Alex Chen", team: "F3 Global" },
-  { id: "5", name: "Priya Patel", team: "CRED" },
-  { id: "6", name: "Jordan Smith", team: "PVP" },
-  { id: "7", name: "Maya Johnson", team: "HomeStar" },
-  { id: "8", name: "Tyler Davis", team: "DBC" },
-  { id: "9", name: "Sophie Williams", team: "F3 Global" },
-  { id: "10", name: "Marcus Brown", team: "CRED" },
+type Member = { id: string; name: string; team: string };
+
+const FALLBACK_MEMBERS: Member[] = [
+  // PVP
+  { id: "1", name: "Benjamin Johnson", team: "PVP" },
+  { id: "2", name: "Nancy Liu", team: "PVP" },
+  { id: "3", name: "Eshaan Sharma", team: "PVP" },
+  { id: "4", name: "Sur Shah", team: "PVP" },
+  { id: "5", name: "Nandini Desai", team: "PVP" },
+  { id: "6", name: "Yixuan Li", team: "PVP" },
+  // CRED
+  { id: "7", name: "Irene Joo", team: "CRED" },
+  { id: "8", name: "Alice Lan", team: "CRED" },
+  { id: "9", name: "Andrea Labbaika", team: "CRED" },
+  { id: "10", name: "Aaryan Patel", team: "CRED" },
+  { id: "11", name: "Anirudh Annabathula", team: "CRED" },
+  { id: "12", name: "Jeff Umanzor", team: "CRED" },
+  { id: "13", name: "Jenny Zhu", team: "CRED" },
+  { id: "14", name: "Jerry Zhang", team: "CRED" },
+  { id: "15", name: "Kalyssa Choy", team: "CRED" },
+  { id: "16", name: "Nico Docena", team: "CRED" },
+  { id: "17", name: "Rushil Gupta", team: "CRED" },
+  { id: "18", name: "Ketan Mittal", team: "CRED" },
+  { id: "19", name: "Luis Marquez", team: "CRED" },
+  // DBC
+  { id: "20", name: "Vivian Liu", team: "DBC" },
+  { id: "21", name: "Kate Songpetchmongkol", team: "DBC" },
+  { id: "22", name: "Caleb Kim", team: "DBC" },
+  { id: "23", name: "Jamie Han", team: "DBC" },
+  { id: "24", name: "Darshika Mishra", team: "DBC" },
+  { id: "25", name: "Edward Millan", team: "DBC" },
+  { id: "26", name: "Hoang Anh Pham", team: "DBC" },
+  { id: "27", name: "Ishayu Ghosh", team: "DBC" },
+  { id: "28", name: "Jeremy Lim", team: "DBC" },
+  { id: "29", name: "JP Davalos", team: "DBC" },
+  { id: "30", name: "Ming Lu", team: "DBC" },
+  { id: "31", name: "Rudraksh Bhandari", team: "DBC" },
+  { id: "32", name: "Jordan Junaidi", team: "DBC" },
+  { id: "33", name: "Brandon Jonathan", team: "DBC" },
+  // F3
+  { id: "34", name: "Alice Guo", team: "F3" },
+  { id: "35", name: "Sylvie Tran", team: "F3" },
+  { id: "36", name: "Jeffrey Antony", team: "F3" },
+  { id: "37", name: "Jaden Huang", team: "F3" },
+  { id: "38", name: "James Escobedo", team: "F3" },
+  { id: "39", name: "Katelyn Li", team: "F3" },
+  { id: "40", name: "Munachi Okoro", team: "F3" },
+  { id: "41", name: "Suhaan Khurana", team: "F3" },
+  { id: "42", name: "Sweekrit Bhatnagar", team: "F3" },
+  { id: "43", name: "Yasmin Kabir", team: "F3" },
+  { id: "44", name: "Weston Zong", team: "F3" },
+  { id: "45", name: "Annabelle Guiditta", team: "F3" },
+  // Fulcrum
+  { id: "46", name: "Allison Huang", team: "Fulcrum" },
+  { id: "47", name: "Kristen Lee", team: "Fulcrum" },
+  { id: "48", name: "Hillary Co", team: "Fulcrum" },
+  { id: "49", name: "Annabelle Zhou", team: "Fulcrum" },
+  { id: "50", name: "Aniket Warty", team: "Fulcrum" },
+  { id: "51", name: "Huize Mao", team: "Fulcrum" },
+  { id: "52", name: "Pranav Puttagunta", team: "Fulcrum" },
+  { id: "53", name: "Raghav Sreekumar", team: "Fulcrum" },
+  { id: "54", name: "Shashwat Bhandari", team: "Fulcrum" },
+  { id: "55", name: "Sungwoo Cho", team: "Fulcrum" },
+  { id: "56", name: "William Wu", team: "Fulcrum" },
+  { id: "57", name: "Yifei Xue", team: "Fulcrum" },
+  { id: "58", name: "Philip Chen", team: "Fulcrum" },
+  { id: "59", name: "Srikar Eranky", team: "Fulcrum" },
+  // HomeStart
+  { id: "60", name: "Renato Pimentel", team: "HomeStart" },
+  { id: "61", name: "Joyce Ren", team: "HomeStart" },
+  { id: "62", name: "Charlie Suarez Robles", team: "HomeStart" },
+  { id: "63", name: "Edward Yao", team: "HomeStart" },
+  { id: "64", name: "Jeffrey Liu", team: "HomeStart" },
+  { id: "65", name: "Koji Nakazawa", team: "HomeStart" },
+  { id: "66", name: "Lulu Shao", team: "HomeStart" },
+  { id: "67", name: "Michael Wang", team: "HomeStart" },
+  { id: "68", name: "Nate Murphy", team: "HomeStart" },
+  { id: "69", name: "Yuzuki Tomioka", team: "HomeStart" },
+  { id: "70", name: "Navyaa Gupta", team: "HomeStart" },
+  { id: "71", name: "Karen Yan", team: "HomeStart" },
+  // Meemli
+  { id: "72", name: "Liam Lai", team: "Meemli" },
+  { id: "73", name: "Ivan Rim", team: "Meemli" },
+  { id: "74", name: "Evan Chen", team: "Meemli" },
+  { id: "75", name: "Alyssia Almanza", team: "Meemli" },
+  { id: "76", name: "Himir Desai", team: "Meemli" },
+  { id: "77", name: "Isabel Ku", team: "Meemli" },
+  { id: "78", name: "Lucas Yan", team: "Meemli" },
+  { id: "79", name: "Michael Sullivan", team: "Meemli" },
+  { id: "80", name: "Yoto Kim", team: "Meemli" },
+  // TEST
+  { id: "81", name: "Rohaan Sandhu", team: "TEST" },
+  { id: "82", name: "Thomas Rocha", team: "TEST" },
+  { id: "83", name: "Jesus Azpitarte", team: "TEST" },
+  { id: "84", name: "Alexis Vega", team: "TEST" },
+  { id: "85", name: "Alice Park", team: "TEST" },
+  { id: "86", name: "Angeleen Duong", team: "TEST" },
+  { id: "87", name: "Isaac Montanez", team: "TEST" },
+  { id: "88", name: "Sofia Heim", team: "TEST" },
+  { id: "89", name: "Tony Wang", team: "TEST" },
+  { id: "90", name: "Thy Doan", team: "TEST" },
+  { id: "91", name: "Waleed Siddiqui", team: "TEST" },
+  { id: "92", name: "Alice Guo", team: "TEST" },
+  { id: "93", name: "David Nguyen", team: "TEST" },
+  { id: "94", name: "Juee Deshmukh", team: "TEST" },
+  { id: "95", name: "Sakura Nishikawa", team: "TEST" },
+  { id: "96", name: "Yang Zheng", team: "TEST" },
 ];
 
 type Tag = {
@@ -28,25 +123,82 @@ type Tag = {
 
 let tagCounter = 0;
 
+const ITEM_WIDTH = 343; // 328px photo + 15px gap
+
 export default function SubmitPage() {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(true);
+  const [members, setMembers] = useState<Member[]>(FALLBACK_MEMBERS);
   const [photos, setPhotos] = useState<string[]>([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [scrollX, setScrollX] = useState(0);
   const [tagsByPhoto, setTagsByPhoto] = useState<Tag[][]>([]);
   const [pendingTag, setPendingTag] = useState<{ x: number; y: number } | null>(null);
   const [draggingTagId, setDraggingTagId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [dragOffset, setDragOffset] = useState(0);
+  const [isDraggingCarousel, setIsDraggingCarousel] = useState(false);
   const [sheetOffset, setSheetOffset] = useState(0);
 
   const sheetDragStartY = useRef<number | null>(null);
   const photoRef = useRef<HTMLDivElement>(null);
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
   const didDragRef = useRef(false);
-  const carouselStartRef = useRef<{ x: number; y: number } | null>(null);
+  const carouselStartRef = useRef<{ x: number; y: number; baseScrollX: number } | null>(null);
   const isCarouselDragging = useRef(false);
+  const hasLoaded = useRef(false);
 
-  const currentTags: Tag[] = tagsByPhoto[currentIdx] ?? [];
+  useEffect(() => {
+    if (hasLoaded.current) return;
+    hasLoaded.current = true;
+    const raw = sessionStorage.getItem("pendingPhotos");
+    sessionStorage.removeItem("pendingPhotos");
+    const stored = (raw ? JSON.parse(raw) : []) as string[];
+    if (stored.length > 0) {
+      setPhotos(stored);
+      setTagsByPhoto(stored.map(() => []));
+    } else {
+      router.replace("/submit/select");
+    }
+    setLoading(false);
+
+    void (async () => {
+      try {
+        const r = await fetch("/api/members");
+        const data = (await r.json()) as Array<{ _id: string; name: string; team: string }>;
+        if (Array.isArray(data) && data.length > 0) {
+          setMembers(data.map((m) => ({ id: m._id, name: m.name, team: m.team })));
+        }
+      } catch {
+        /* keep fallback list */
+      }
+    })();
+  }, []);
+
+  const allTaggedMembers = useMemo(() => {
+    const seen = new Set<string>();
+    const result: Tag[] = [];
+    for (const tags of tagsByPhoto) {
+      for (const tag of tags ?? []) {
+        if (!seen.has(tag.memberId)) {
+          seen.add(tag.memberId);
+          result.push(tag);
+        }
+      }
+    }
+    return result;
+  }, [tagsByPhoto]);
+
+  const filteredMembers = useMemo(
+    () => members.filter((m) => m.name.toLowerCase().includes(search.toLowerCase())),
+    [members, search],
+  );
+
+  if (loading) return null;
+
+  const currentIdx =
+    photos.length === 0
+      ? 0
+      : Math.max(0, Math.min(photos.length - 1, Math.round(-scrollX / ITEM_WIDTH)));
 
   function updateCurrentTags(updater: (prev: Tag[]) => Tag[]) {
     setTagsByPhoto((prev) => {
@@ -56,22 +208,45 @@ export default function SubmitPage() {
     });
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length === 0) return;
-    const urls = files.map((f) => URL.createObjectURL(f));
-    setPhotos(urls);
-    setCurrentIdx(0);
-    setTagsByPhoto(urls.map(() => []));
-    setPendingTag(null);
-  }
-
   function getPercentPosition(clientX: number, clientY: number) {
     const rect = photoRef.current!.getBoundingClientRect();
     return {
       x: Math.max(2, Math.min(98, ((clientX - rect.left) / rect.width) * 100)),
       y: Math.max(2, Math.min(98, ((clientY - rect.top) / rect.height) * 100)),
     };
+  }
+
+  function getPositionInCarousel(clientX: number, clientY: number) {
+    if (!carouselContainerRef.current) return null;
+    const rect = carouselContainerRef.current.getBoundingClientRect();
+    const contentX = clientX - rect.left - 5 - scrollX;
+    const photoIdx = Math.max(0, Math.min(photos.length - 1, Math.floor(contentX / ITEM_WIDTH)));
+    const xWithinPhoto = contentX - photoIdx * ITEM_WIDTH;
+    const xPercent = Math.max(2, Math.min(98, (xWithinPhoto / 328) * 100));
+    const yPercent = Math.max(2, Math.min(98, ((clientY - rect.top) / 332) * 100));
+    return { photoIdx, xPercent, yPercent };
+  }
+
+  function moveDraggingTag(clientX: number, clientY: number) {
+    const pos = getPositionInCarousel(clientX, clientY);
+    if (!pos) return;
+    const { photoIdx, xPercent, yPercent } = pos;
+    setTagsByPhoto((prev) => {
+      const fromIdx = prev.findIndex((tags) => tags?.some((t) => t.id === draggingTagId));
+      if (fromIdx === -1) return prev;
+      const next = prev.map((arr) => [...(arr ?? [])]);
+      if (fromIdx === photoIdx) {
+        next[photoIdx] = next[photoIdx].map((t) =>
+          t.id === draggingTagId ? { ...t, x: xPercent, y: yPercent } : t,
+        );
+      } else {
+        const tag = next[fromIdx].find((t) => t.id === draggingTagId);
+        if (!tag) return prev;
+        next[fromIdx] = next[fromIdx].filter((t) => t.id !== draggingTagId);
+        next[photoIdx] = [...next[photoIdx], { ...tag, x: xPercent, y: yPercent }];
+      }
+      return next;
+    });
   }
 
   function handlePhotoClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -87,7 +262,11 @@ export default function SubmitPage() {
 
   function handlePhotoTouchStart(e: React.TouchEvent<HTMLDivElement>) {
     if ((e.target as HTMLElement).closest("[data-tag]")) return;
-    carouselStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    carouselStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      baseScrollX: scrollX,
+    };
     isCarouselDragging.current = false;
   }
 
@@ -95,8 +274,8 @@ export default function SubmitPage() {
     if ((e.target as HTMLElement).closest("[data-tag]")) return;
     if (didDragRef.current) {
       didDragRef.current = false;
-      setDragOffset(0);
       isCarouselDragging.current = false;
+      setIsDraggingCarousel(false);
       return;
     }
     if (!carouselStartRef.current) return;
@@ -105,18 +284,7 @@ export default function SubmitPage() {
     const dy = Math.abs(touch.clientY - carouselStartRef.current.y);
     carouselStartRef.current = null;
     isCarouselDragging.current = false;
-    setDragOffset(0);
-
-    if (Math.abs(dx) > 40 && dy < 35) {
-      if (dx < 0 && currentIdx < photos.length - 1) {
-        setCurrentIdx((i) => i + 1);
-        setPendingTag(null);
-      } else if (dx > 0 && currentIdx > 0) {
-        setCurrentIdx((i) => i - 1);
-        setPendingTag(null);
-      }
-      return;
-    }
+    setIsDraggingCarousel(false);
 
     if (Math.abs(dx) < 8 && dy < 8 && photoRef.current) {
       const { x, y } = getPercentPosition(touch.clientX, touch.clientY);
@@ -126,13 +294,14 @@ export default function SubmitPage() {
   }
 
   function goTo(idx: number) {
-    setCurrentIdx(idx);
+    setScrollX(-idx * ITEM_WIDTH);
     setPendingTag(null);
   }
 
   function handleSelectMember(memberId: string) {
-    const member = TSE_MEMBERS.find((m) => m.id === memberId);
+    const member = members.find((m) => m.id === memberId);
     if (!member || !pendingTag) return;
+    if (tagsByPhoto.some((tags) => tags?.some((t) => t.memberId === memberId))) return;
     updateCurrentTags((prev) => [
       ...prev,
       {
@@ -144,11 +313,6 @@ export default function SubmitPage() {
         isPvp: member.team === "PVP",
       },
     ]);
-  }
-
-  function removeTag(tagId: string, e: React.MouseEvent) {
-    e.stopPropagation();
-    updateCurrentTags((prev) => prev.filter((t) => t.id !== tagId));
   }
 
   function handleRemoveMember(memberId: string) {
@@ -163,11 +327,10 @@ export default function SubmitPage() {
     setPendingTag(null);
   }
 
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!draggingTagId || !photoRef.current) return;
+  function handleMouseMove(e: React.MouseEvent) {
+    if (!draggingTagId) return;
     didDragRef.current = true;
-    const { x, y } = getPercentPosition(e.clientX, e.clientY);
-    updateCurrentTags((prev) => prev.map((t) => (t.id === draggingTagId ? { ...t, x, y } : t)));
+    moveDraggingTag(e.clientX, e.clientY);
   }
 
   function handleMouseUp() {
@@ -182,11 +345,10 @@ export default function SubmitPage() {
   }
 
   function handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
-    if (draggingTagId && photoRef.current) {
+    if (draggingTagId && carouselContainerRef.current) {
       didDragRef.current = true;
       const touch = e.touches[0];
-      const { x, y } = getPercentPosition(touch.clientX, touch.clientY);
-      updateCurrentTags((prev) => prev.map((t) => (t.id === draggingTagId ? { ...t, x, y } : t)));
+      moveDraggingTag(touch.clientX, touch.clientY);
       return;
     }
     if (!carouselStartRef.current) return;
@@ -196,7 +358,12 @@ export default function SubmitPage() {
     // bail if clearly a vertical scroll
     if (dy > Math.abs(dx) && !isCarouselDragging.current) return;
     isCarouselDragging.current = true;
-    setDragOffset(dx);
+    setIsDraggingCarousel(true);
+    const newScrollX = Math.max(
+      -(photos.length - 1) * ITEM_WIDTH,
+      Math.min(0, carouselStartRef.current.baseScrollX + dx),
+    );
+    setScrollX(newScrollX);
   }
 
   function handleTagDragTouchEnd() {
@@ -223,30 +390,17 @@ export default function SubmitPage() {
     }
   }
 
-  const allTaggedMembers = useMemo(() => {
-    const seen = new Set<string>();
-    const result: Tag[] = [];
-    for (const tags of tagsByPhoto) {
-      for (const tag of tags ?? []) {
-        if (!seen.has(tag.memberId)) {
-          seen.add(tag.memberId);
-          result.push(tag);
-        }
-      }
-    }
-    return result;
-  }, [tagsByPhoto]);
-
   const taggedIds = new Set(allTaggedMembers.map((t) => t.memberId));
-  const filteredMembers = useMemo(
-    () => TSE_MEMBERS.filter((m) => m.name.toLowerCase().includes(search.toLowerCase())),
-    [search],
-  );
   const needMore = Math.max(0, 3 - allTaggedMembers.length);
   const canContinue = photos.length > 0 && allTaggedMembers.length >= 3;
 
   return (
-    <main className="relative flex flex-col bg-white w-full max-w-[402px] min-h-[874px] mx-auto overflow-hidden">
+    <main
+      className="relative flex flex-col bg-white w-full max-w-[402px] min-h-[874px] mx-auto overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
       <div style={{ position: "relative", marginTop: 58, marginLeft: 35, width: 313, height: 77 }}>
         <button
           style={{
@@ -260,16 +414,7 @@ export default function SubmitPage() {
             border: "none",
             cursor: "pointer",
           }}
-          onClick={() => {
-            if (photos.length > 0) {
-              setPhotos([]);
-              setTagsByPhoto([]);
-              setCurrentIdx(0);
-              setPendingTag(null);
-            } else {
-              router.back();
-            }
-          }}
+          onClick={() => router.back()}
         >
           <svg width="9" height="18" viewBox="0 0 9 18" fill="none">
             <path
@@ -348,299 +493,263 @@ export default function SubmitPage() {
       </div>
 
       <div style={{ marginTop: 22, display: "flex", flexDirection: "column" }}>
-        {photos.length === 0 ? (
-          <label
-            htmlFor="photo-upload"
-            className="mx-[24px] rounded-2xl bg-[#F5F5F5] flex flex-col items-center justify-center gap-3 h-[332px] active:bg-gray-200 transition-colors w-[calc(100%-48px)]"
-            style={{ cursor: "pointer" }}
+        <>
+          {/* Carousel container — tags are rendered here so they stay mounted across photo changes */}
+          <div
+            ref={carouselContainerRef}
+            style={{ position: "relative", marginLeft: 34, overflow: "hidden", height: 334 }}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={(e) => {
+              handleTagDragTouchEnd();
+              handlePhotoTouchEnd(e);
+            }}
           >
-            <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-sm">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-7 h-7 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
-                />
-              </svg>
-            </div>
-            <div className="text-center">
-              <p className="text-sm font-semibold text-gray-600">Upload photos</p>
-              <p className="text-xs text-gray-400 mt-0.5">Tap to open your camera roll</p>
-            </div>
-          </label>
-        ) : (
-          <>
-            <div style={{ marginLeft: 34, overflow: "hidden", height: 334 }}>
-              <div
-                style={{
-                  display: "flex",
-                  gap: 15,
-                  paddingLeft: 5,
-                  height: 334,
-                  transform: `translateX(${currentIdx * -(328 + 15) + dragOffset}px)`,
-                  transition: draggingTagId || dragOffset !== 0 ? "none" : "transform 0.3s ease",
-                }}
-              >
-                {photos.map((photo, i) => (
-                  <div
-                    key={i}
-                    ref={i === currentIdx ? photoRef : null}
-                    className="relative select-none flex-shrink-0"
-                    style={{
-                      width: 328,
-                      height: 332,
-                      cursor:
-                        i === currentIdx ? (draggingTagId ? "grabbing" : "crosshair") : "pointer",
-                      overflow: "visible",
-                    }}
-                    onClick={i === currentIdx ? handlePhotoClick : () => goTo(i)}
-                    onMouseMove={i === currentIdx ? handleMouseMove : undefined}
-                    onMouseUp={i === currentIdx ? handleMouseUp : undefined}
-                    onMouseLeave={i === currentIdx ? handleMouseUp : undefined}
-                    onTouchStart={i === currentIdx ? handlePhotoTouchStart : undefined}
-                    onTouchMove={i === currentIdx ? handleTouchMove : undefined}
-                    onTouchEnd={
-                      i === currentIdx
-                        ? (e) => {
-                            handleTagDragTouchEnd();
-                            handlePhotoTouchEnd(e);
-                          }
-                        : undefined
-                    }
-                  >
-                    <img
-                      src={photo}
-                      alt={`Event photo ${i + 1}`}
-                      style={{ width: 328, height: 332, objectFit: "cover", display: "block" }}
-                      draggable={false}
-                    />
-
-                    {i === currentIdx &&
-                      currentTags.map((tag) => (
-                        <div
-                          key={tag.id}
-                          data-tag
-                          className="absolute flex flex-col items-center"
-                          style={{
-                            left: `${tag.x}%`,
-                            top: `${tag.y}%`,
-                            transform: "translate(-50%, -100%)",
-                            cursor: draggingTagId === tag.id ? "grabbing" : "grab",
-                            zIndex: 10,
-                          }}
-                          onMouseDown={(e) => handleTagMouseDown(e, tag.id)}
-                          onTouchStart={(e) => handleTagTouchStart(e, tag.id)}
-                        >
-                          <div
-                            className="flex items-center gap-1 text-white text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap shadow-lg"
-                            style={{ background: "#606060", mixBlendMode: "multiply" }}
-                          >
-                            {tag.isPvp && (
-                              <span className="text-[#DEBB01] text-[10px] font-bold mr-0.5">
-                                PVP
-                              </span>
-                            )}
-                            <span>{tag.memberName}</span>
-                            <button
-                              className="text-white/60 hover:text-white text-sm leading-none ml-0.5"
-                              onMouseDown={(e) => e.stopPropagation()}
-                              onTouchStart={(e) => e.stopPropagation()}
-                              onClick={(e) => removeTag(tag.id, e)}
-                            >
-                              ×
-                            </button>
-                          </div>
-                          <div className="w-2 h-2 bg-white rounded-full shadow mt-0.5" />
-                        </div>
-                      ))}
-
-                    {i === currentIdx && pendingTag && (
-                      <div
-                        data-tag
-                        className="absolute w-3 h-3 rounded-full border-2 border-white bg-white/40 pointer-events-none"
-                        style={{
-                          left: `${pendingTag.x}%`,
-                          top: `${pendingTag.y}%`,
-                          transform: "translate(-50%,-50%)",
-                          zIndex: 10,
-                        }}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <div
               style={{
-                width: 402,
-                height: 65,
-                marginTop: 31,
-                borderTop: "1px solid #B7B7B7",
-                position: "relative",
-                flexShrink: 0,
+                display: "flex",
+                gap: 15,
+                paddingLeft: 5,
+                height: 334,
+                transform: `translateX(${scrollX}px)`,
+                transition: draggingTagId || isDraggingCarousel ? "none" : "transform 0.3s ease",
               }}
             >
-              <div
+              {photos.map((photo, i) => (
+                <div
+                  key={i}
+                  ref={i === currentIdx ? photoRef : null}
+                  className="relative select-none flex-shrink-0"
+                  style={{
+                    width: 328,
+                    height: 332,
+                    cursor:
+                      i === currentIdx ? (draggingTagId ? "grabbing" : "crosshair") : "pointer",
+                    overflow: "visible",
+                  }}
+                  onClick={i === currentIdx ? handlePhotoClick : () => goTo(i)}
+                  onTouchStart={(e) => {
+                    if ((e.target as HTMLElement).closest("[data-tag]")) return;
+                    if (i === currentIdx) handlePhotoTouchStart(e);
+                  }}
+                >
+                  <img
+                    src={photo}
+                    alt={`Event photo ${i + 1}`}
+                    style={{ width: 328, height: 332, objectFit: "cover", display: "block" }}
+                    draggable={false}
+                  />
+
+                  {i === currentIdx && pendingTag && (
+                    <div
+                      data-tag
+                      className="absolute w-3 h-3 rounded-full border-2 border-white bg-white/40 pointer-events-none"
+                      style={{
+                        left: `${pendingTag.x}%`,
+                        top: `${pendingTag.y}%`,
+                        transform: "translate(-50%,-50%)",
+                        zIndex: 10,
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* All tags rendered flat here so their DOM elements survive cross-photo moves */}
+            {tagsByPhoto.flatMap((tags, photoIdx) =>
+              (tags ?? []).map((tag) => {
+                const left = 5 + scrollX + photoIdx * ITEM_WIDTH + (tag.x / 100) * 328;
+                const top = (tag.y / 100) * 332;
+                return (
+                  <div
+                    key={tag.id}
+                    data-tag
+                    className="absolute flex flex-col items-center select-none"
+                    style={{
+                      left,
+                      top,
+                      transform: "translate(-50%, -100%)",
+                      cursor: draggingTagId === tag.id ? "grabbing" : "grab",
+                      zIndex: 10,
+                    }}
+                    onMouseDown={(e) => handleTagMouseDown(e, tag.id)}
+                    onTouchStart={(e) => handleTagTouchStart(e, tag.id)}
+                  >
+                    <div
+                      className="flex items-center gap-1 text-white text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap shadow-lg"
+                      style={{ background: "#606060", mixBlendMode: "multiply" }}
+                    >
+                      {tag.isPvp && (
+                        <span className="text-[#DEBB01] text-[10px] font-bold mr-0.5">PVP</span>
+                      )}
+                      <span>{tag.memberName}</span>
+                    </div>
+                    <div className="w-2 h-2 bg-white rounded-full shadow mt-0.5" />
+                  </div>
+                );
+              }),
+            )}
+          </div>
+
+          <div
+            style={{
+              width: 402,
+              height: 65,
+              marginTop: 31,
+              borderTop: "1px solid #B7B7B7",
+              position: "relative",
+              flexShrink: 0,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                width: 192.64,
+                height: 45,
+                top: 20,
+                left: 106.15,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 11,
+              }}
+            >
+              <p
                 style={{
-                  position: "absolute",
+                  fontFamily: "var(--font-inter), Inter, sans-serif",
+                  fontWeight: 500,
+                  fontSize: 16,
+                  lineHeight: "100%",
+                  letterSpacing: 0,
+                  textAlign: "center",
+                  color: "#606060",
+                  margin: 0,
                   width: 192.64,
-                  height: 45,
-                  top: 20,
-                  left: 106.15,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 11,
+                  height: 19,
                 }}
               >
+                Tap photo to tag people.
+              </p>
+              {needMore > 0 && (
                 <p
                   style={{
                     fontFamily: "var(--font-inter), Inter, sans-serif",
                     fontWeight: 500,
-                    fontSize: 16,
+                    fontSize: 12,
                     lineHeight: "100%",
-                    letterSpacing: 0,
-                    textAlign: "center",
-                    color: "#606060",
+                    letterSpacing: "0.04em",
+                    color: "#C3C3C3",
                     margin: 0,
-                    width: 192.64,
-                    height: 19,
+                    width: 144,
+                    height: 15,
+                    textAlign: "center",
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  Tap photo to tag people.
+                  [add ≥ {needMore} member{needMore !== 1 ? "s" : ""} more!]
                 </p>
-                {needMore > 0 && (
-                  <p
+              )}
+            </div>
+          </div>
+
+          {allTaggedMembers.length > 0 && (
+            <div
+              style={{
+                marginLeft: 24,
+                marginRight: 24,
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                marginTop: 12,
+                maxHeight: 180,
+                overflowY: "auto",
+              }}
+            >
+              {allTaggedMembers.map((tag) => {
+                const member = members.find((m) => m.id === tag.memberId);
+                return (
+                  <div
+                    key={tag.memberId}
                     style={{
-                      fontFamily: "var(--font-inter), Inter, sans-serif",
-                      fontWeight: 500,
-                      fontSize: 12,
-                      lineHeight: "100%",
-                      letterSpacing: "0.04em",
-                      color: "#C3C3C3",
-                      margin: 0,
-                      width: 144,
-                      height: 15,
-                      textAlign: "center",
-                      whiteSpace: "nowrap",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    [add ≥ {needMore} member{needMore !== 1 ? "s" : ""} more!]
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {allTaggedMembers.length > 0 && (
-              <div
-                style={{
-                  marginLeft: 24,
-                  marginRight: 24,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 14,
-                  marginTop: 12,
-                }}
-              >
-                {allTaggedMembers.map((tag) => {
-                  const member = TSE_MEMBERS.find((m) => m.id === tag.memberId);
-                  return (
-                    <div
-                      key={tag.memberId}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <div
-                          style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: "50%",
-                            background: "#D1D5DB",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 11,
-                            fontWeight: 600,
-                            color: "#4B5563",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {tag.memberName
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .slice(0, 2)}
-                        </div>
-                        <span
-                          style={{
-                            fontFamily: "var(--font-inter), Inter, sans-serif",
-                            fontWeight: 400,
-                            fontSize: 13,
-                            lineHeight: "100%",
-                            letterSpacing: 0,
-                            color: "rgba(31,31,31,1)",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {tag.memberName}
-                        </span>
-                      </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <div
                         style={{
-                          width: 88,
-                          height: 31,
-                          borderRadius: 100,
-                          border: "2px solid rgba(222,187,1,1)",
-                          background: "rgba(255,255,255,1)",
-                          paddingTop: 8,
-                          paddingBottom: 7,
-                          paddingLeft: 31,
-                          paddingRight: 31,
+                          width: 32,
+                          height: 32,
+                          borderRadius: "50%",
+                          background: "#D1D5DB",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          fontSize: 11,
+                          fontWeight: 600,
+                          color: "#4B5563",
                           flexShrink: 0,
-                          boxSizing: "border-box",
                         }}
                       >
-                        <span
-                          style={{
-                            fontFamily: "var(--font-rubik), Rubik, sans-serif",
-                            fontWeight: 400,
-                            fontSize: 12,
-                            lineHeight: "100%",
-                            letterSpacing: 0,
-                            color: "rgba(31,31,31,1)",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {member?.team ?? ""}
-                        </span>
+                        {tag.memberName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .slice(0, 2)}
                       </div>
+                      <span
+                        style={{
+                          fontFamily: "var(--font-inter), Inter, sans-serif",
+                          fontWeight: 400,
+                          fontSize: 13,
+                          lineHeight: "100%",
+                          letterSpacing: 0,
+                          color: "rgba(31,31,31,1)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {tag.memberName}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-          </>
-        )}
+                    <div
+                      style={{
+                        width: 88,
+                        height: 31,
+                        borderRadius: 100,
+                        border: "2px solid rgba(222,187,1,1)",
+                        background: "rgba(255,255,255,1)",
+                        paddingTop: 8,
+                        paddingBottom: 7,
+                        paddingLeft: 31,
+                        paddingRight: 31,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        boxSizing: "border-box",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-rubik), Rubik, sans-serif",
+                          fontWeight: 400,
+                          fontSize: 12,
+                          lineHeight: "100%",
+                          letterSpacing: 0,
+                          color: "rgba(31,31,31,1)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {member?.team ?? ""}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
       </div>
 
       {pendingTag && (
@@ -686,7 +795,7 @@ export default function SubmitPage() {
             <div
               style={{
                 width: 402,
-                height: 98,
+                height: 88,
                 flexShrink: 0,
                 position: "sticky",
                 top: 0,
@@ -953,21 +1062,9 @@ export default function SubmitPage() {
               letterSpacing: 0,
               color: "#FFFFFF",
             }}
-          >
-            Next
-          </span>
+          ></span>
         </button>
       </div>
-
-      {/* input is offscreen (not display:none) so iOS allows label-triggered file picker */}
-      <input
-        id="photo-upload"
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ position: "fixed", top: -200, left: -200, width: 1, height: 1 }}
-      />
     </main>
   );
 }
