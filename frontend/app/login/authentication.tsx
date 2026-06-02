@@ -18,16 +18,28 @@ const Authentication: React.FC = () => {
   const [code, setCode] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const handleContinue = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    if (code === "TSE2026") {
-      setError("");
-    } else {
-      setError("Incorrect code, try again");
+  const handleContinue = async (): Promise<void> => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+
+      if (res.ok) {
+        setError("");
+        // router.push("/welcome")
+      } else {
+        setError("Incorrect code, try again");
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setCode(e.target.value);
+    if (error) setError("");
   };
 
   return (
@@ -50,6 +62,7 @@ const Authentication: React.FC = () => {
             placeholder="*****"
             value={code}
             onChange={handleInputChange}
+            suppressHydrationWarning={true}
           />
 
           {error ? (
@@ -58,9 +71,13 @@ const Authentication: React.FC = () => {
             <span className="helper-text">Enter the universal code!</span>
           )}
         </div>
-
         <div className="button-container">
-          <button className="continue-button" onClick={handleContinue}>
+          <button
+            className="continue-button"
+            onClick={() => {
+              void handleContinue();
+            }}
+          >
             CONTINUE
           </button>
         </div>
