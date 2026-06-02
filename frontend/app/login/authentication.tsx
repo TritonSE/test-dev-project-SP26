@@ -12,7 +12,6 @@ USE REM!
 import React, { useState } from "react";
 
 import "./authentication.css";
-import logoImage from "./tseLogo.png";
 
 const Authentication: React.FC = () => {
   const [code, setCode] = useState<string>("");
@@ -46,7 +45,7 @@ const Authentication: React.FC = () => {
     <div className="page-container">
       <div className="content-wrapper">
         <div className="header-section">
-          <img src={logoImage.src} alt="TSE Logo" className="tse-logo" />
+          <img src="/tseLogo.png" alt="TSE Logo" className="tse-logo" />
           <h1 className="org-title">Triton Software Engineering</h1>
           <p className="org-subtitle">Track Social Points Easier</p>
         </div>
