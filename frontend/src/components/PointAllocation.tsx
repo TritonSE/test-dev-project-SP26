@@ -29,8 +29,16 @@ export default function PointAllocation({ teams, onNext }: Props) {
     teamPairs.push([teamById.pvp, undefined]);
   }
 
+  if (teamById.f3) {
+    teamPairs.push([teamById.f3, undefined]);
+  }
+
   if (teamById.homestart) {
     teamPairs.push([teamById.homestart, undefined]);
+  }
+
+  if (teamById.test) {
+    teamPairs.push([teamById.test, undefined]);
   }
 
   return (
@@ -107,9 +115,13 @@ export default function PointAllocation({ teams, onNext }: Props) {
                 teamChipStyles.scoreBubble,
                 pair[0].id === "dbc"
                   ? teamChipStyles.dbcScore
+                  : pair[0].id === "f3"
+                    ? teamChipStyles.f3Score
                   : pair[0].id === "homestart"
                     ? teamChipStyles.homestartScore
-                    : teamChipStyles.pvpScore,
+                    : pair[0].id === "test"
+                      ? teamChipStyles.testScore
+                      : teamChipStyles.pvpScore,
               ]
                 .filter(Boolean)
                 .join(" ")}

@@ -101,8 +101,12 @@ export default function TeamsHosting({ teams }: Props) {
                   teamChipStyles.scoreBubble,
                   team.id === "dbc"
                     ? teamChipStyles.dbcScore
+                    : team.id === "f3"
+                      ? teamChipStyles.f3Score
                     : team.id === "homestart"
                       ? teamChipStyles.homestartScore
+                    : team.id === "test"
+                      ? teamChipStyles.testScore
                       : teamChipStyles.pvpScore,
                 ]
                   .filter(Boolean)

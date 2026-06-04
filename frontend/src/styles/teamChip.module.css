@@ -39,12 +39,20 @@
   --team-chip-border: #c87bff;
 }
 
+.f3 {
+  --team-chip-border: #1f4f9f;
+}
+
 .homestart {
   --team-chip-border: #6bdb0f;
 }
 
-.pvp {
+.test {
   --team-chip-border: #f0c400;
+}
+
+.pvp {
+  --team-chip-border: #4c5c86;
 }
 
 .scoreBubble {
@@ -65,8 +73,16 @@
   --score-bubble-color: #c87bff;
 }
 
+.f3Score {
+  --score-bubble-color: #1f4f9f;
+}
+
 .homestartScore {
   --score-bubble-color: #6bdb0f;
+}
+
+.testScore {
+  --score-bubble-color: #ffd000f6;
 }
 
 .pvpScore {

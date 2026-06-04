@@ -13,7 +13,9 @@ type Team = {
 export default function SubmissionForm() {
   const [teams, setTeams] = useState<Team[]>([
     { id: "dbc", name: "DBC" },
+    { id: "f3", name: "F3" },
     { id: "homestart", name: "Homestart" },
+    { id: "test", name: "TEST" },
     { id: "pvp", name: "PVP" },
   ]);
 
