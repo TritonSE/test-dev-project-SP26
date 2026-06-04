@@ -117,11 +117,11 @@ export default function PointAllocation({ teams, onNext }: Props) {
                   ? teamChipStyles.dbcScore
                   : pair[0].id === "f3"
                     ? teamChipStyles.f3Score
-                  : pair[0].id === "homestart"
-                    ? teamChipStyles.homestartScore
-                    : pair[0].id === "test"
-                      ? teamChipStyles.testScore
-                      : teamChipStyles.pvpScore,
+                    : pair[0].id === "homestart"
+                      ? teamChipStyles.homestartScore
+                      : pair[0].id === "test"
+                        ? teamChipStyles.testScore
+                        : teamChipStyles.pvpScore,
               ]
                 .filter(Boolean)
                 .join(" ")}
