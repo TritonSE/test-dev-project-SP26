@@ -1,0 +1,67 @@
+:root {
+  --color-background: #0c2b35;
+  --color-accent: #debb01;
+  --color-text: white;
+  --color-border: black;
+  --color-spinner: rgba(255, 255, 255, 0.2);
+}
+
+.confirmationContainer {
+  background-color: var(--color-background);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.thankYouHeading {
+  color: var(--color-accent);
+  font-size: clamp(1.5rem, 7vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.thankYouHeading span {
+  font-size: clamp(2rem, 10vw, 3rem);
+}
+
+.avatar {
+  width: min(173px, 43vw);
+  height: min(173px, 43vw);
+  border-radius: 50%;
+  border: 3px solid black;
+  overflow: hidden;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background-color: #888;
+}
+
+.spinner {
+  width: min(48px, 12vw);
+  height: min(48px, 12vw);
+  border-radius: 50%;
+  border: 3px solid var(--color-spinner);
+  border-top-color: white;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.redirectMessage {
+  color: white;
+  font-size: clamp(0.875rem, 3.5vw, 1.25rem);
+  font-weight: 400;
+  margin: 0;
+}
