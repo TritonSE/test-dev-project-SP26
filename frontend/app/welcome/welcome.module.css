@@ -1,5 +1,13 @@
+:root {
+  --color-background: #0c2b35;
+  --color-accent: #debb01;
+  --color-text: white;
+  --color-border: black;
+  --color-spinner: rgba(255, 255, 255, 0.2);
+}
+
 .container {
-  background-color: #0c2b35;
+  background-color: var(--color-background);
   font-family: Rubik, sans-serif;
   min-height: 100dvh;
   display: flex;
@@ -18,15 +26,15 @@
 }
 
 .greeting {
-  color: #debb01;
+  color: var(--color-accent);
   font-size: clamp(2rem, 10vw, 3rem);
   font-weight: 700;
   line-height: 1;
   margin: 0;
 }
 
-.description {
-  color: #ffffff;
+.loadMessage {
+  color: var(--color-text);
   font-size: clamp(0.875rem, 3.5vw, 1.25rem);
   font-weight: 400;
   line-height: 1;
@@ -37,7 +45,7 @@
   width: min(173px, 43vw);
   height: min(173px, 43vw);
   border-radius: 50%;
-  border: 3px solid #000000;
+  border: 3px solid var(--color-border);
 }
 
 .avatar img {
@@ -50,8 +58,8 @@
   width: min(48px, 12vw);
   height: min(48px, 12vw);
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  border-top-color: #fff;
+  border: 3px solid var(--color-spinner);
+  border-top-color: var(--color-text);
   animation: spin 0.9s linear infinite;
 }
 

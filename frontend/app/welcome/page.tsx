@@ -7,8 +7,11 @@ export default function WelcomePage() {
         <img src="ep_back.svg" alt="go back button" />
       </button>
 
-      <h1 className={styles.greeting}>Welcome, Caleb!</h1>
-      <p className={styles.description}>Logging you in now...</p>
+      <h1 className={styles.greeting}>
+        Welcome, <br />
+        Caleb!
+      </h1>
+      <p className={styles.loadMessage}>Logging you in now...</p>
       <div className={styles.avatar}>
         <img src="Ellipse3819.svg" alt="Caleb avatar" />
       </div>
