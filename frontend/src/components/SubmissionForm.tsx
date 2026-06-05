@@ -18,6 +18,8 @@ export default function SubmissionForm() {
     { id: "test", name: "TEST" },
     { id: "pvp", name: "PVP" },
   ]);
+  const visibleTeamIds = new Set(["dbc", "homestart", "pvp"]);
+  const visibleTeams = teams.filter((team) => visibleTeamIds.has(team.id));
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -37,8 +39,8 @@ export default function SubmissionForm() {
 
   return (
     <div>
-      <TeamHosting teams={teams} />
-      <PointAllocation teams={teams} />
+      <TeamHosting teams={visibleTeams} />
+      <PointAllocation teams={visibleTeams} />
     </div>
   );
 }
