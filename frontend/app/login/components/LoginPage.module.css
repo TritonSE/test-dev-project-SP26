@@ -1,0 +1,175 @@
+.container {
+  min-height: 100vh;
+  background-color: #0c2b35;
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 44px;
+  color: #debb01;
+  margin-top: 362px;
+  margin-bottom: 8px;
+  height: 52px;
+  text-align: center;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 15px;
+  height: 18px;
+  color: white;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.dropdownWrapper {
+  margin-bottom: 24px;
+  position: relative;
+  width: auto;
+  border-radius: 20px;
+  transition: border-color 0.2s ease;
+}
+
+.inputBox {
+  height: 129px;
+  width: 346px;
+  background-color: white;
+  color: black;
+  padding: 14px 16px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  border: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+}
+
+.input {
+  width: 316px;
+  height: 40px;
+  padding-left: 12px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  outline: none;
+  background: #f5f5f5;
+  font-size: 16px;
+  font-weight: 400;
+  color: #6c6c6c;
+}
+
+.helper {
+  font-size: 10px;
+  font-weight: 400;
+  color: #6c6c6c;
+}
+
+.dropdownList {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  background: white;
+  color: black;
+  border: none;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+  margin-top: -1px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: all 0.25s ease;
+  width: 316px;
+  left: 16px;
+}
+
+.dropdownOpen {
+  max-height: 90px;
+  opacity: 1;
+  transform: translateY(0);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border: 2px solid #e9e9e9;
+}
+
+.dropdownItem {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 16px;
+  background: white;
+  text-align: left;
+  padding-left: 12px;
+}
+
+.continueButton {
+  margin-top: auto;
+  margin-bottom: 200px;
+  width: 345px;
+  height: 52px;
+  border-radius: 100px;
+  border: none;
+  font-weight: 650;
+  font-size: 20px;
+  background-color: #debb01;
+  color: black;
+  box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.3) inset;
+}
+
+.backButton {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: none;
+  border: none;
+  padding: 8px;
+  z-index: 20;
+}
+
+.dropdownArrow {
+  position: absolute;
+  right: 34px;
+  top: 52px;
+  width: 12px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.inputBoxOpen .input {
+  background: white;
+  color: black;
+  border: 2px solid #e9e9e9;
+  padding-left: 12px;
+  transition: all 0.2s ease;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.noResults {
+  height: 48px; /* same height as a dropdown item */
+  display: flex;
+  align-items: center;
+  padding: 0 16px; /* same horizontal padding as items */
+  font-size: 16px;
+  color: #6c6c6c;
+  background: white;
+  white-space: nowrap; /* prevents cutoff */
+}
