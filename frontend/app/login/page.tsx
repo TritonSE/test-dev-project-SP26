@@ -1,3 +1,5 @@
+import LoginPage from "./components/LoginPage";
+
 // =============================================================================
 // SCREEN: Authentication  (/login)
 // =============================================================================
@@ -22,15 +24,6 @@
 //   - The invite code is club-wide (one code for all members)
 // =============================================================================
 
-export default function LoginPage() {
-  return (
-    <main>
-      <h1>Join TSE Social Points</h1>
-      {/* TODO: Add invite code input */}
-      {/* TODO: Add member name dropdown (fetched from API) */}
-      {/* TODO: Add team dropdown (fetched from API) */}
-      {/* TODO: Add submit button + auth logic */}
-      <p>Login form goes here.</p>
-    </main>
-  );
+export default function Page() {
+  return <LoginPage />;
 }
