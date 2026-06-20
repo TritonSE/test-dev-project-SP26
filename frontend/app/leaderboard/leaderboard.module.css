@@ -12,7 +12,7 @@
   align-items: center;
   text-align: center;
   background-color: var(--tse-blue);
-  font-family: var(--rubik);
+  font-family: var(--rubik), Arial, Helvetica, sans-serif;
 }
 
 .profilePicture {
