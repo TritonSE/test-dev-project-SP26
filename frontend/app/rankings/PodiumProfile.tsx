@@ -26,7 +26,7 @@ export default function PodiumProfile({ rank, points, name, imageSrc }: PodiumPr
   const rankClass = isFirst ? styles.firstRank : isSecond ? styles.secondRank : styles.thirdRank;
 
   const colorClass = isFirst ? styles.gold : isSecond ? styles.silver : styles.bronze;
-  const suffix = rank === 1 ? "st" : rank === 2 ? "nd" : "rd";
+  const suffix = rank === 1 ? "st " : rank === 2 ? "nd " : "rd ";
 
   return (
     <div className={styles.topProfile}>
@@ -43,6 +43,7 @@ export default function PodiumProfile({ rank, points, name, imageSrc }: PodiumPr
           {rank}
           {suffix}
         </span>
+        Place
       </h3>
     </div>
   );

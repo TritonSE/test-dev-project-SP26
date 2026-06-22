@@ -68,10 +68,19 @@
 .topThree {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   height: 12.125rem;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+
+.topThree > *:nth-child(2),
+.topThree > *:nth-child(3) {
+  margin-left: -0.8rem;
+}
+
+.topThree > *:nth-child(2) {
+  position: relative;
+  z-index: 3;
 }
 
 .topProfile {
@@ -116,7 +125,7 @@
 }
 
 .gold {
-  color: #debb01;
+  color: var(--gold);
 }
 
 .secondPoints {
