@@ -1,11 +1,10 @@
 "use client";
 import { Inter, Rubik } from "next/font/google";
-import Image from "next/image";
 
+import IndividualTeam from "./IndividualTeam";
 import PodiumProfile from "./PodiumProfile";
 import styles from "./rankings.module.css";
 import TabSwitch from "./TabSwitch";
-import IndividualTeam from "./IndividualTeam";
 
 const rubik = Rubik({
   subsets: ["latin"],
@@ -22,7 +21,7 @@ const inter = Inter({
 const podiumTeams = [
   { rank: 3, name: "Nancy", points: 50, imageSrc: "/eshaan-profile.jpg" },
   { rank: 1, name: "Eshaan", points: 100, imageSrc: "/eshaan-profile.jpg" },
-  { rank: 2, name: "Sur", points: 80, imageSrc: "/eshaan-profile.jpg" }
+  { rank: 2, name: "Sur", points: 80, imageSrc: "/eshaan-profile.jpg" },
 ];
 
 const topThreeList = [
@@ -35,7 +34,7 @@ const runnerUpsList = [
   { rank: 4, name: "PVP", points: 10, containerStyle: "" },
   { rank: 5, name: "DBC", points: 10, containerStyle: "" },
   { rank: 6, name: "Fulcrum", points: 10, containerStyle: "" },
-  { rank: 7, name: "CRED", points: 10, containerStyle: ""},
+  { rank: 7, name: "CRED", points: 10, containerStyle: "" },
   { rank: 8, name: "Meemli", points: 10, containerStyle: "" },
 ];
 
@@ -60,24 +59,24 @@ export default function LeaderboardPage() {
         <h2 className={styles.mainLabel}>Top 3 Teams</h2>
         {topThreeList.map((team) => (
           <IndividualTeam
-          key={team.rank}
-          rank={team.rank}
-          name={team.name}
-          points={team.points}
-          containerStyle={team.containerStyle}
+            key={team.rank}
+            rank={team.rank}
+            name={team.name}
+            points={team.points}
+            containerStyle={team.containerStyle}
           />
         ))}
 
-      <h2 className={styles.mainLabel}>Runner Ups</h2>
-      {runnerUpsList.map((team, index) => (
-        <IndividualTeam
-        key={`${team.rank}-${index}`}
-        rank={team.rank}
-        name={team.name}
-        points={team.points}
-        containerStyle={team.containerStyle}
-        />
-      ))}
+        <h2 className={styles.mainLabel}>Runner Ups</h2>
+        {runnerUpsList.map((team, index) => (
+          <IndividualTeam
+            key={`${team.rank}-${index}`}
+            rank={team.rank}
+            name={team.name}
+            points={team.points}
+            containerStyle={team.containerStyle}
+          />
+        ))}
       </div>
     </main>
   );
