@@ -1,0 +1,60 @@
+:root {
+  --tse-blue: #0c2b35;
+  --gold: #debb01;
+  --gold-border: #72660d;
+}
+
+.teamContainer {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: var(--tse-blue);
+  font-family: var(--rubik), Arial, Helvetica, sans-serif;
+}
+
+.profilePicture {
+  width: 23.1875rem;
+  height: 22.875rem;
+  aspect-ratio: 74/73;
+  position: relative;
+  top: -3rem;
+  border: 0.125rem solid var(--gold-border);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.title {
+  margin-top: 7.0625rem;
+  font-size: 2.75rem;
+  width: 20.75rem;
+  line-height: 2.8781rem;
+  letter-spacing: 0.0041rem;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.points {
+  font-weight: 800;
+  font-size: 5.3125rem;
+  color: #debb01;
+  -webkit-text-stroke: 0.125rem var(--gold-border);
+  z-index: 2;
+}
+
+.rank {
+  font-weight: 800;
+  font-size: 4.6875rem;
+  color: white;
+  -webkit-text-stroke: 0.125rem var(--gold-border);
+  position: relative;
+  top: -7rem;
+}
+
+.rankNum {
+  color: var(--gold);
+}
