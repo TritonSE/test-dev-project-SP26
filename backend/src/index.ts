@@ -7,12 +7,7 @@ import type { Request, Response } from "express";
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_ORIGIN ?? "http://localhost:3000",
-    methods: ["GET", "POST", "OPTIONS"],
-  }),
-);
+app.use(cors());
 
 app.use(express.json());
 
@@ -34,5 +29,3 @@ app.post("/auth/verify", (req: Request, res: Response) => {
 app.listen(PORT, () => {
   console.info(`Server running on port ${PORT}`);
 });
-
-process.stdin.resume();
