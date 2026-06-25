@@ -21,16 +21,10 @@
 //   - Mobile view only (no need to optimize for desktop)
 //   - The invite code is club-wide (one code for all members)
 // =============================================================================
+import React from "react";
+
+import Authentication from "./authentication";
 
 export default function LoginPage() {
-  return (
-    <main>
-      <h1>Join TSE Social Points</h1>
-      {/* TODO: Add invite code input */}
-      {/* TODO: Add member name dropdown (fetched from API) */}
-      {/* TODO: Add team dropdown (fetched from API) */}
-      {/* TODO: Add submit button + auth logic */}
-      <p>Login form goes here.</p>
-    </main>
-  );
+  return <Authentication />;
 }

@@ -1,0 +1,70 @@
+:root {
+  --color-background: #0c2b35;
+  --color-accent: #debb01;
+  --color-text: white;
+  --color-border: black;
+  --color-spinner: rgba(255, 255, 255, 0.2);
+}
+
+.container {
+  background-color: var(--color-background);
+  font-family: Rubik, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.backButton {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  cursor: pointer;
+}
+
+.greeting {
+  color: var(--color-accent);
+  font-size: clamp(2rem, 10vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+}
+
+.loadMessage {
+  color: var(--color-text);
+  font-size: clamp(0.875rem, 3.5vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+}
+
+.avatar {
+  width: min(173px, 43vw);
+  height: min(173px, 43vw);
+  border-radius: 50%;
+  border: 3px solid var(--color-border);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spinner {
+  width: min(48px, 12vw);
+  height: min(48px, 12vw);
+  border-radius: 50%;
+  border: 3px solid var(--color-spinner);
+  border-top-color: var(--color-text);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
