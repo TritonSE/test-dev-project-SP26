@@ -4,13 +4,14 @@ import cors from "cors";
 import express from "express";
 
 import type { Request, Response } from "express";
-import membersRoute from "./routes/members";
+import membersRoute from "./routes/memberRoutes";
+import { frontend_origin } from "./config";
 
 const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost", "http://localhost:3000"],
+    origin: frontend_origin,
   }),
 );
 
@@ -22,12 +23,8 @@ app.get("/test", (req, res) => {
 
 app.use("/api/members", membersRoute);
 
-const PORT = process.env.PORT ?? 3001;
-
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "TSE Social Points API is running!" });
 });
 
-app.listen(PORT, () => {
-  console.info(`Server running on port ${PORT}`);
-});
+export default app;

@@ -26,9 +26,16 @@ export default function LoginPage() {
 
   useEffect(() => {
     async function loadMembers() {
-      const res = await fetch("http://localhost:3001/api/members");
-      const data = (await res.json()) as Member[];
-      setMembers(data);
+      try {
+        const res = await fetch("http://localhost:3001/api/members");
+        if (!res.ok) {
+          throw new Error("Failed to fetch members");
+        }
+        const data = (await res.json()) as Member[];
+        setMembers(data);
+      } catch (error) {
+        console.error("Error fetching members:", error);
+      }
     }
 
     void loadMembers();

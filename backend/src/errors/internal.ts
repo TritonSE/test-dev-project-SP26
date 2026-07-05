@@ -1,0 +1,11 @@
+import { CustomError } from "./errors";
+
+const NO_APP_PORT = "Could not find app port env variable";
+const NO_FRONTEND_ORIGIN = "Could not find frontend origin env variable";
+const NO_DATABASE_URL = "Could not find DATABASE_URL env variable";
+
+export class InternalError extends CustomError {
+  static NO_APP_PORT = new InternalError(0, 500, NO_APP_PORT);
+  static NO_FRONTEND_ORIGIN = new InternalError(0, 500, NO_FRONTEND_ORIGIN);
+  static NO_DATABASE_URL = new InternalError(0, 500, NO_DATABASE_URL);
+}
