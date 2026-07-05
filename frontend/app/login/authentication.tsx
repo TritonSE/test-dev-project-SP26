@@ -1,14 +1,6 @@
-//Authentication Page
-/*Full screen TSE primary color background with yellow TSE logo at top
-Text input field for the invite code
-"Continue" button (sticky, consistent placement at bottom)
-If code is correct → navigate to the welcome/splash screen
-If code is incorrect → show an inline error message (e.g. "Incorrect code, try again"): do NOT navigate away
-Hardcode the correct code for now as a placeholder (e.g. "TSE2026"), it will be replaced with a real backend check later
-USE REM!
-*/
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import "./authentication.css";
@@ -16,6 +8,7 @@ import "./authentication.css";
 const Authentication: React.FC = () => {
   const [code, setCode] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const handleContinue = async (): Promise<void> => {
     try {
@@ -27,7 +20,7 @@ const Authentication: React.FC = () => {
 
       if (res.ok) {
         setError("");
-        // router.push("/welcome")
+        router.push("/welcome");
       } else {
         setError("Incorrect code, try again");
       }
@@ -63,13 +56,13 @@ const Authentication: React.FC = () => {
             onChange={handleInputChange}
             suppressHydrationWarning={true}
           />
-
           {error ? (
             <span className="error-text">{error}</span>
           ) : (
             <span className="helper-text">Enter the universal code!</span>
           )}
         </div>
+
         <div className="button-container">
           <button
             className="continue-button"
@@ -84,4 +77,5 @@ const Authentication: React.FC = () => {
     </div>
   );
 };
+
 export default Authentication;

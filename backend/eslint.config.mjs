@@ -7,14 +7,17 @@ export default antfu({
     "build/",
     "**/build/**/",
     "dist/",
+    "dist/**",
     "**/dist/**/",
     "out/",
     "**/out/**/",
     "public/",
     "**/public/**/",
+    "node_modules/**",
     "**/next.config.js",
     "**/vite.config.ts",
     "**/vite-env.d.ts",
+    "src/models/**",
   ],
 
   // Disables stylistic rules to avoid conflicts with Prettier
