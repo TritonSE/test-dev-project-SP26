@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 import type { Request, Response } from "express";
+
 import { Config } from "./models/Config";
 
 const app = express();

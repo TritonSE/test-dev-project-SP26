@@ -41,7 +41,7 @@ const runnerUpsList = [
 export default function LeaderboardPage() {
   return (
     <main className={`${styles.leaderboardContainer} ${rubik.variable} ${inter.variable}`}>
-      <TabSwitch activeTab="ranks" onTabSwitch={(tab) => console.log(tab)} />
+      <TabSwitch activeTab="ranks" onTabSwitch={(tab) => console.info(tab)} />
       {/* TODO: Replace with real team data from API */}
       <div className={styles.topThree}>
         {podiumTeams.map((team) => (
