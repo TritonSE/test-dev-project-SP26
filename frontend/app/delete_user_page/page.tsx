@@ -78,7 +78,12 @@ export default function DeleteUserPage() {
               <td>{member.role}</td>
               <td>{member.isPVP ? "Yes" : "No"}</td>
               <td>
-                <button className={styles.deleteButton} onClick={void handleDeleteMember(member)}>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => {
+                    void handleDeleteMember(member);
+                  }}
+                >
                   Delete
                 </button>
               </td>
