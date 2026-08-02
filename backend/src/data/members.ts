@@ -1,4 +1,4 @@
-export const members = [
+const members = [
   // PVP
   { name: "Benjamin Johnson", team: "PVP", role: "President", isPVP: true },
   { name: "Nancy Liu", team: "PVP", role: "VP Design", isPVP: true },
@@ -111,3 +111,5 @@ export const members = [
   { name: "Sakura Nishikawa", team: "TEST", role: "Designer", isPVP: false },
   { name: "Yang Zheng", team: "TEST", role: "Designer", isPVP: false },
 ];
+
+export default members;

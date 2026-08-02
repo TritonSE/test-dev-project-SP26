@@ -16,7 +16,7 @@ export default function NewUserPage() {
     const newMember = { name, team, role, isPVP };
 
     try {
-      const response = await fetch("http://localhost:3001/api/members", {
+      const response = await fetch("api/members", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

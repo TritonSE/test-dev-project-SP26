@@ -99,6 +99,7 @@
 .dropdownOpen {
   max-height: 90px;
   opacity: 1;
+  overflow-y: auto;
   transform: translateY(0);
   border-top-left-radius: 0;
   border-top-right-radius: 0;

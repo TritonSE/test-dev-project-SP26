@@ -13,6 +13,7 @@ import styles from "./LoginPage.module.css";
 type Member = {
   name: string;
   [key: string]: unknown;
+  _id: string;
 };
 
 // Simple helper type to safely handle Next.js static asset imports
@@ -27,7 +28,7 @@ export default function LoginPage() {
   useEffect(() => {
     async function loadMembers() {
       try {
-        const res = await fetch("http://localhost:3001/api/members");
+        const res = await fetch("api/members");
         if (!res.ok) {
           throw new Error("Failed to fetch members");
         }
@@ -63,7 +64,7 @@ export default function LoginPage() {
     }
   }, [searchTerm]);
 
-  const uniqueMembers = Array.from(new Map(members.map((m) => [m.name, m])).values());
+  const uniqueMembers = Array.from(new Map(members.map((m) => [m._id, m])).values());
 
   const filteredMembers = uniqueMembers.filter((m) => {
     const fullName = m.name.toLowerCase().trim();
@@ -116,7 +117,7 @@ export default function LoginPage() {
               {filteredMembers.length > 0 ? (
                 filteredMembers.map((m) => (
                   <button
-                    key={m.name}
+                    key={m._id}
                     onClick={() => {
                       setSelectedName(m.name);
                       setSearchTerm(m.name);

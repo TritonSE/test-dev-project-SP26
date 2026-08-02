@@ -18,7 +18,7 @@ export default function DeleteUserPage() {
   useEffect(() => {
     async function fetchAllMembers() {
       try {
-        const response = await fetch("http://localhost:3001/api/members");
+        const response = await fetch("api/members");
         if (!response.ok) {
           throw new Error("Failed to fetch members");
         }
@@ -35,19 +35,17 @@ export default function DeleteUserPage() {
 
   const handleDeleteMember = async (member: Member) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/members/${member._id}`, {
+      const response = await fetch(`api/members/${member._id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
         throw new Error("Failed to delete member");
       }
-      setMembers((prevMembers) => prevMembers.filter((m) => m.name !== member.name));
+      setMembers((prevMembers) => prevMembers.filter((m) => m._id !== member._id));
     } catch (error) {
       console.error("Error deleting member:", error);
     }
   };
-
-  const uniqueMembers = Array.from(new Map(members.map((m) => [m.name, m])).values());
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -71,8 +69,8 @@ export default function DeleteUserPage() {
           </tr>
         </thead>
         <tbody>
-          {uniqueMembers.map((member) => (
-            <tr key={member.name}>
+          {members.map((member) => (
+            <tr key={member._id}>
               <td>{member.name}</td>
               <td>{member.team}</td>
               <td>{member.role}</td>

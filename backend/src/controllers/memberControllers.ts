@@ -1,5 +1,4 @@
 import type { NextFunction, Request, Response } from "express";
-
 import Member from "../models/memberModel";
 
 export const getMembers = async (req: Request, res: Response, next: NextFunction) => {
