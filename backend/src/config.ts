@@ -14,7 +14,4 @@ const frontend_origin = process.env.FRONTEND_ORIGIN;
 if (!process.env.MONGODB_URI) throw InternalError.NO_MONGODB_URI;
 const database_url = process.env.MONGODB_URI;
 
-if (!process.env.PUBLIC_BACKEND_URI) throw InternalError.NO_PUBLIC_BACKEND_URI;
-const public_backend_uri = process.env.PUBLIC_BACKEND_URI;
-
-export { database_url, frontend_origin, port, public_backend_uri };
+export { database_url, frontend_origin, port };

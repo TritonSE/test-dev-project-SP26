@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import { database_url } from "../config";
 import members from "../data/members";
-import Member from "../models/memberModel";
+import Member from "../models/Member";
 
 async function seed() {
   await mongoose.connect(database_url);

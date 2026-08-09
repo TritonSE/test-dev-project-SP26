@@ -1,11 +1,11 @@
-/* eslint-disable perfectionist/sort-imports */
-
 import cors from "cors";
+import "dotenv/config";
 import express from "express";
 
 import type { Request, Response } from "express";
-import membersRoute from "./routes/memberRoutes";
 import { frontend_origin } from "./config";
+import configRoute from "./routes/configRoutes";
+import membersRoute from "./routes/memberRoutes";
 
 const app = express();
 
@@ -17,13 +17,11 @@ app.use(
 
 app.use(express.json());
 
-app.get("/test", (req, res) => {
-  res.send("TEST ROUTE WORKS");
-});
-
 app.use("/api/members", membersRoute);
 
-app.get("/", (req: Request, res: Response) => {
+app.use("/api/config", configRoute);
+
+app.get("/", (_req: Request, res: Response) => {
   res.json({ message: "TSE Social Points API is running!" });
 });
 

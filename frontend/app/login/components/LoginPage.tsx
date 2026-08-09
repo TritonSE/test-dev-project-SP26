@@ -2,6 +2,7 @@
 
 /* eslint-disable perfectionist/sort-imports, import/order */
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import BackIcon from "@/public/ep_back.svg";
@@ -24,6 +25,7 @@ export default function LoginPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [_selectedName, setSelectedName] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function loadMembers() {
@@ -71,6 +73,10 @@ export default function LoginPage() {
     const search = searchTerm.toLowerCase().trim();
     return fullName.startsWith(search);
   });
+
+  const handleContinue = () => {
+    router.push("/welcome");
+  };
 
   return (
     <main className={styles.container}>
@@ -135,7 +141,14 @@ export default function LoginPage() {
           )}
         </div>
 
-        <button className={styles.continueButton}>CONTINUE</button>
+        <button
+          className={styles.continueButton}
+          onClick={() => {
+            void handleContinue();
+          }}
+        >
+          CONTINUE
+        </button>
       </div>
     </main>
   );

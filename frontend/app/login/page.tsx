@@ -1,5 +1,3 @@
-import LoginPage from "./components/LoginPage";
-
 // =============================================================================
 // SCREEN: Authentication  (/login)
 // =============================================================================
@@ -23,7 +21,19 @@ import LoginPage from "./components/LoginPage";
 //   - Mobile view only (no need to optimize for desktop)
 //   - The invite code is club-wide (one code for all members)
 // =============================================================================
+"use client";
+
+import React, { useState } from "react";
+
+import Authentication from "./components/authentication";
+import LoginPage from "./components/LoginPage";
 
 export default function Page() {
+  const [step, setStep] = useState<"authentication" | "login">("authentication");
+
+  if (step === "authentication") {
+    return <Authentication onContinue={() => setStep("login")} />;
+  }
+
   return <LoginPage />;
 }
