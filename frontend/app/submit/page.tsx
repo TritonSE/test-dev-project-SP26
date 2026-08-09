@@ -1,3 +1,4 @@
+import SubmissionForm from "../../src/components/SubmissionForm";
 // =============================================================================
 // SCREEN: Social Submission Form  (/submit)
 // =============================================================================
@@ -38,17 +39,7 @@
 export default function SubmitPage() {
   return (
     <main>
-      <h1>Submit a Social</h1>
-      {/* TODO: Field 1 — Submission name (text input) */}
-      {/* TODO: Field 2 — Activity type (text input) */}
-      {/* TODO: Field 3 — Who attended (multi-select dropdown, fetch from /api/members) */}
-      {/* TODO: Field 4 — Date & time (date + time picker) */}
-      {/* TODO: Field 5 — Photo upload (required) */}
-      {/* TODO: Field 6 — Point assignment per team */}
-      {/* TODO: Field 7 — PVP flag (if applicable) */}
-      {/* TODO: Validate min 3 attendees before submit */}
-      {/* TODO: POST to /api/submissions, then redirect to /submit/confirmation */}
-      <p>Submission form goes here.</p>
+      <SubmissionForm />
     </main>
   );
 }
