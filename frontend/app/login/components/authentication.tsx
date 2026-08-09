@@ -1,18 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import "./authentication.css";
 
-const Authentication: React.FC = () => {
+type AuthenticationProps = {
+  onContinue: () => void;
+};
+
+export default function Authentication({ onContinue }: AuthenticationProps) {
   const [code, setCode] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const router = useRouter();
 
   const handleContinue = async (): Promise<void> => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify`, {
+      const res = await fetch(`api/config/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
@@ -20,7 +22,7 @@ const Authentication: React.FC = () => {
 
       if (res.ok) {
         setError("");
-        router.push("/welcome");
+        onContinue();
       } else {
         setError("Incorrect code, try again");
       }
@@ -76,6 +78,4 @@ const Authentication: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default Authentication;
+}

@@ -1,17 +1,14 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-type MemberType = {
-  name: string;
-  team: string;
-  role: string;
-  isPVP: boolean;
-};
+import type { InferSchemaType } from "mongoose";
 
-const memberSchema = new mongoose.Schema<MemberType>({
+const memberSchema = new Schema({
   name: { type: String, required: true },
   team: { type: String, required: true },
   role: { type: String, required: true },
-  isPVP: { type: Boolean, default: false },
+  isPVP: { type: Boolean, required: true },
 });
 
-export const Member = mongoose.model<MemberType>("Member", memberSchema);
+type Member = InferSchemaType<typeof memberSchema>;
+
+export default model<Member>("Member", memberSchema);

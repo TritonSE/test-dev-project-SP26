@@ -10,8 +10,6 @@ export default antfu({
     "**/dist/**/",
     "out/",
     "**/out/**/",
-    "public/",
-    "**/public/**/",
     "**/next.config.js",
     "**/vite.config.ts",
     "**/vite-env.d.ts",
@@ -25,6 +23,7 @@ export default antfu({
   // Enables type aware rules
   typescript: {
     tsconfigPath: "tsconfig.json",
+    typeAware: true,
     overrides: {
       // Avoid bugs
       "ts/no-shadow": ["error", { ignoreTypeValueShadow: true }],

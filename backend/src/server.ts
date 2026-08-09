@@ -1,0 +1,29 @@
+/**
+ * Initializes mongoose and express.
+ */
+
+import "module-alias/register";
+import mongoose from "mongoose";
+
+import { database_url, port } from "./config";
+
+import app from "./index";
+
+async function startServer() {
+  try {
+    await mongoose.connect(database_url);
+    console.info("Database Connected");
+
+    app.listen(port, () => {
+      console.info(`Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer().catch((err) => {
+  console.error("Unhandled startup error:", err);
+  process.exit(1);
+});
