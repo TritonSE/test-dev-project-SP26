@@ -15,6 +15,7 @@ export default function TabSwitch({ activeTab, onTabSwitch }: TabSwitchProps) {
         >
           Ranks
         </li>
+
         <li
           className={`${styles.navText} ${activeTab === "history" ? styles.activeTab : ""}`}
           onClick={() => onTabSwitch("history")}

@@ -5,31 +5,55 @@
 }
 
 .teamContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+
   display: flex;
-  height: 100vh;
-  width: 100vw;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 100dvh;
+
+  background-color: var(--tse-blue);
+  font-family: var(--rubik), Arial, Helvetica, sans-serif;
+
+  overflow: hidden;
+
+  animation: pageFadeOut 0.7s ease-in-out 0.9s forwards;
+}
+
+.transitionContent {
+  display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--tse-blue);
-  font-family: var(--rubik), Arial, Helvetica, sans-serif;
+
+  animation: glideToRankings 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 .profilePicture {
-  width: 23.1875rem;
-  height: 22.875rem;
-  aspect-ratio: 74/73;
+  width: min(23.1875rem, 80vw);
+  height: min(22.875rem, 79vw);
+
+  aspect-ratio: 74 / 73;
+
   position: relative;
   top: -3rem;
+
   border: 0.125rem solid var(--gold-border);
   border-radius: 50%;
+
   object-fit: cover;
 }
 
 .title {
   margin-top: 7.0625rem;
+
   font-size: 2.75rem;
   width: 20.75rem;
+
   line-height: 2.8781rem;
   letter-spacing: 0.0041rem;
 }
@@ -41,20 +65,61 @@
 .points {
   font-weight: 800;
   font-size: 5.3125rem;
-  color: #debb01;
+
+  color: var(--gold);
+
   -webkit-text-stroke: 0.125rem var(--gold-border);
+
   z-index: 2;
 }
 
 .rank {
   font-weight: 800;
   font-size: 4.6875rem;
+
   color: white;
+
   -webkit-text-stroke: 0.125rem var(--gold-border);
+
   position: relative;
   top: -7rem;
 }
 
 .rankNum {
   color: var(--gold);
+}
+
+/* ------------------------------------------------------------
+   MAIN ANIMATION
+   ------------------------------------------------------------ */
+
+@keyframes glideToRankings {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  55% {
+    transform: translateY(-12vh) scale(0.78);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-28vh) scale(0.48);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------
+   PAGE FADE
+   ------------------------------------------------------------ */
+
+@keyframes pageFadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

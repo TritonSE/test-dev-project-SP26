@@ -18,19 +18,23 @@ export default function PodiumProfile({ rank, points, name, imageSrc }: PodiumPr
     : isSecond
       ? styles.secondPoints
       : styles.thirdPoints;
+
   const profileClass = isFirst
     ? styles.firstProfile
     : isSecond
       ? styles.secondProfile
       : styles.thirdProfile;
+
   const rankClass = isFirst ? styles.firstRank : isSecond ? styles.secondRank : styles.thirdRank;
 
   const colorClass = isFirst ? styles.gold : isSecond ? styles.silver : styles.bronze;
-  const suffix = rank === 1 ? "st " : rank === 2 ? "nd " : "rd ";
+
+  const suffix = rank === 1 ? "st" : rank === 2 ? "nd" : "rd";
 
   return (
     <div className={styles.topProfile}>
       <h3 className={pointsClass}>{points}</h3>
+
       <Image
         src={imageSrc}
         alt={`Headshot of ${name}`}
@@ -38,11 +42,12 @@ export default function PodiumProfile({ rank, points, name, imageSrc }: PodiumPr
         height={150}
         className={profileClass}
       />
+
       <h3 className={rankClass}>
         <span className={colorClass}>
           {rank}
           {suffix}
-        </span>
+        </span>{" "}
         Place
       </h3>
     </div>

@@ -31,9 +31,13 @@ import LoginPage from "./components/LoginPage";
 export default function Page() {
   const [step, setStep] = useState<"authentication" | "login">("authentication");
 
+  const handleBackToAuth = () => {
+    setStep("authentication");
+  };
+
   if (step === "authentication") {
     return <Authentication onContinue={() => setStep("login")} />;
   }
 
-  return <LoginPage />;
+  return <LoginPage onBack={handleBackToAuth} />;
 }
