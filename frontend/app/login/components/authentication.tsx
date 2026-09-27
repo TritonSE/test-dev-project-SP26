@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import React, { useState } from "react";
 
 import tseLogo from "@/public/tseLogo.png";
@@ -43,7 +43,7 @@ export default function Authentication({ onContinue }: AuthenticationProps) {
     <div className="page-container">
       <div className="content-wrapper">
         <div className="header-section">
-          <Image src={tseLogo} alt="TSE Logo" className="tse-logo" loading="eager" />
+          <Image src={tseLogo as StaticImageData } alt="TSE Logo" className="tse-logo" loading="eager" />
           <h1 className="org-title">Triton Software Engineering</h1>
           <p className="org-subtitle">Track Social Points Easier</p>
         </div>
