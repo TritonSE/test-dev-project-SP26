@@ -1,5 +1,6 @@
 "use client";
 
+import { Calendar } from "@tritonse/tse-constellation";
 import Image from "next/image";
 import styles from "./submit.module.css";
 import { useRouter } from "next/navigation";
@@ -20,8 +21,78 @@ let tagCounter = 0;
 
 const ITEM_WIDTH = 343; // 328px photo + 15px gap
 
+export function PointAllocation() {
+  return <>point allocation goes here</>;
+}
+
+export function EventDetailsForm() {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [eventName, setEventName] = useState("");
+  const [location, setLocation] = useState("");
+
+  return (
+    <main className={`${styles.page} py-8 px-4 antialiased`}>
+      <form className="flex flex-col gap-6 mt-4">
+        {/* Field 1 — Event name & activity */}
+        <div className="flex flex-col w-83.25" style={{ gap: "20px" }}>
+          <label htmlFor="eventName" className={styles.sectionLabel}>
+            Event name &amp; activity
+          </label>
+          <input
+            type="text"
+            id="eventName"
+            name="eventName"
+            maxLength={100}
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)}
+            placeholder="e.g. F3 Global Karaoke night!!"
+            className={styles.inputField}
+          />
+          <span className={styles.charCounter}>{eventName.length}/100</span>
+        </div>
+
+        {/* TODO: Field 2 — Activity type (text input) */}
+        {/* TODO: Field 3 — Who attended (multi-select dropdown, fetch from /api/members) */}
+
+        {/* Field 4 — Select Date */}
+        <section className="flex flex-col gap-2">
+          <label className={styles.sectionLabel}>Select Date</label>
+          <div className={styles.calendarWrapper}>
+            <Calendar selected={selectedDate} setSelected={setSelectedDate} />
+          </div>
+        </section>
+
+        {/* Field 5 — Location */}
+        <div className="flex flex-col w-83.25" style={{ gap: "20px" }}>
+          <label htmlFor="location" className={styles.sectionLabel}>
+            Location
+          </label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            maxLength={100}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="e.g. Jin's Studio"
+            className={styles.inputField}
+          />
+          <span className={styles.charCounter}>{location.length}/100</span>
+        </div>
+
+        {/* TODO: Field 6 — Point assignment per team */}
+        {/* TODO: Field 7 — PVP flag (if applicable) */}
+        {/* TODO: Validate min 3 attendees before submit */}
+        {/* TODO: POST to /api/submissions, then redirect to /submit/confirmation */}
+      </form>
+    </main>
+  );
+}
+
 export default function SubmitPage() {
   const router = useRouter();
+
+  const [pageState, setPageState] = useState<number>(0);
 
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState<Member[]>([]);
@@ -334,7 +405,7 @@ export default function SubmitPage() {
   const canContinue = photos.length > 0 && allTaggedMembers.length >= 3;
 
   return (
-    <main className={styles.mainContainer}>
+    <div className={styles.mainContainer}>
       <div className={styles.submissionHeader}>
         <button className={styles.backButton} onClick={() => router.back()}>
           <svg width="9" height="18" viewBox="0 0 9 18" fill="none">
@@ -445,41 +516,43 @@ export default function SubmitPage() {
               }),
             )}
           </div>
-
-          <div className={styles.tagInstructionsSection}>
-            <div className={styles.tagInstructions}>
-              <p className={styles.tagInstructionsText}>Tap photo to tag people.</p>
-              {needMore > 0 && (
-                <p className={styles.needMoreText}>
-                  [add ≥ {needMore} member{needMore !== 1 ? "s" : ""} more!]
-                </p>
-              )}
-            </div>
-          </div>
-
-          {allTaggedMembers.length > 0 && (
-            <div className={styles.taggedMembersList}>
-              {allTaggedMembers.map((tag) => {
-                const member = members.find((m) => m.id === tag.memberId);
-                return (
-                  <div key={tag.memberId} className={styles.taggedMemberRow}>
-                    <div className={styles.memberIdentity}>
-                      <div className={styles.taggedMemberAvatar}>
-                        {tag.memberName
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .slice(0, 2)}
+          {pageState === 0 && (
+            <>
+              <div className={styles.tagInstructionsSection}>
+                <div className={styles.tagInstructions}>
+                  <p className={styles.tagInstructionsText}>Tap photo to tag people.</p>
+                  {needMore > 0 && (
+                    <p className={styles.needMoreText}>
+                      [add ≥ {needMore} member{needMore !== 1 ? "s" : ""} more!]
+                    </p>
+                  )}
+                </div>
+              </div>
+              {allTaggedMembers.length > 0 && (
+                <div className={styles.taggedMembersList}>
+                  {allTaggedMembers.map((tag) => {
+                    const member = members.find((m) => m.id === tag.memberId);
+                    return (
+                      <div key={tag.memberId} className={styles.taggedMemberRow}>
+                        <div className={styles.memberIdentity}>
+                          <div className={styles.taggedMemberAvatar}>
+                            {tag.memberName
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)}
+                          </div>
+                          <span className={styles.taggedMemberName}>{tag.memberName}</span>
+                        </div>
+                        <div className={styles.teamBadge}>
+                          <span className={styles.teamText}>{member?.team ?? ""}</span>
+                        </div>
                       </div>
-                      <span className={styles.taggedMemberName}>{tag.memberName}</span>
-                    </div>
-                    <div className={styles.teamBadge}>
-                      <span className={styles.teamText}>{member?.team ?? ""}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
         </>
       </div>
@@ -591,10 +664,13 @@ export default function SubmitPage() {
         </div>
       )}
 
+      {pageState === 1 && <EventDetailsForm />}
+      {pageState >= 1 && <PointAllocation />}
+
       <div className={styles.nextButtonWrapper}>
         <button
           disabled={!canContinue}
-          onClick={() => router.push("/submit/event-info")}
+          onClick={() => setPageState((prev) => prev + 1)}
           className={styles.nextButton}
           style={{
             opacity: canContinue ? 1 : 0.4,
@@ -604,6 +680,6 @@ export default function SubmitPage() {
           <span className={styles.nextButtonText}>Next</span>
         </button>
       </div>
-    </main>
+    </div>
   );
 }

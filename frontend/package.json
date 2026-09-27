@@ -21,6 +21,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
     "@tailwindcss/postcss": "^4",
+    "@tritonse/tse-constellation": "^0.0.22",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
