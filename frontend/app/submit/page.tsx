@@ -51,11 +51,10 @@ export default function SubmitPage() {
 
     let stored: string[] = [];
     try {
-      const parsed = raw ? JSON.parse(raw) : [];
-      // Handle both string arrays and object arrays safely
-      stored = parsed
-        .map((item: any) => (typeof item === "string" ? item : item?.url))
-        .filter((url: any) => typeof url === "string" && url.trim() !== "");
+      const parsed = raw ? (JSON.parse(raw) as string[]) : [];
+      if (Array.isArray(parsed)) {
+        stored = parsed.filter((url): url is string => typeof url === "string" && url.trim() !== "");
+      }
     } catch {
       stored = [];
     }
