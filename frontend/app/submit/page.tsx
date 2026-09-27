@@ -53,7 +53,9 @@ export default function SubmitPage() {
     try {
       const parsed = raw ? (JSON.parse(raw) as string[]) : [];
       if (Array.isArray(parsed)) {
-        stored = parsed.filter((url): url is string => typeof url === "string" && url.trim() !== "");
+        stored = parsed.filter(
+          (url): url is string => typeof url === "string" && url.trim() !== "",
+        );
       }
     } catch {
       stored = [];
