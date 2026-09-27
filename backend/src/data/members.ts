@@ -1,15 +1,3 @@
-import "dotenv/config";
-import mongoose from "mongoose";
-
-const memberSchema = new mongoose.Schema({
-  name: String,
-  team: String,
-  role: String,
-  isPVP: Boolean,
-});
-
-const Member = mongoose.model("Member", memberSchema);
-
 const members = [
   // PVP
   { name: "Benjamin Johnson", team: "PVP", role: "President", isPVP: true },
@@ -18,6 +6,7 @@ const members = [
   { name: "Sur Shah", team: "PVP", role: "VP Operations", isPVP: true },
   { name: "Nandini Desai", team: "PVP", role: "VP Products", isPVP: true },
   { name: "Yixuan Li", team: "PVP", role: "VP Technology", isPVP: true },
+
   // CRED
   { name: "Irene Joo", team: "CRED", role: "Designer", isPVP: false },
   { name: "Alice Lan", team: "CRED", role: "Designer", isPVP: false },
@@ -32,6 +21,7 @@ const members = [
   { name: "Rushil Gupta", team: "CRED", role: "Developer", isPVP: false },
   { name: "Ketan Mittal", team: "CRED", role: "Engineering Manager", isPVP: false },
   { name: "Luis Marquez", team: "CRED", role: "Product Manager", isPVP: false },
+
   // DBC
   { name: "Vivian Liu", team: "DBC", role: "Designer", isPVP: false },
   { name: "Kate Songpetchmongkol", team: "DBC", role: "Designer", isPVP: false },
@@ -47,6 +37,7 @@ const members = [
   { name: "Rudraksh Bhandari", team: "DBC", role: "Developer", isPVP: false },
   { name: "Jordan Junaidi", team: "DBC", role: "Engineering Manager", isPVP: false },
   { name: "Brandon Jonathan", team: "DBC", role: "Product Manager", isPVP: false },
+
   // F3
   { name: "Alice Guo", team: "F3", role: "Designer", isPVP: false },
   { name: "Sylvie Tran", team: "F3", role: "Designer", isPVP: false },
@@ -60,6 +51,7 @@ const members = [
   { name: "Yasmin Kabir", team: "F3", role: "Developer", isPVP: false },
   { name: "Weston Zong", team: "F3", role: "Engineering Manager", isPVP: false },
   { name: "Annabelle Guiditta", team: "F3", role: "Product Manager", isPVP: false },
+
   // Fulcrum
   { name: "Allison Huang", team: "Fulcrum", role: "Designer", isPVP: false },
   { name: "Kristen Lee", team: "Fulcrum", role: "Designer", isPVP: false },
@@ -75,6 +67,7 @@ const members = [
   { name: "Yifei Xue", team: "Fulcrum", role: "Developer", isPVP: false },
   { name: "Philip Chen", team: "Fulcrum", role: "Engineering Manager", isPVP: false },
   { name: "Srikar Eranky", team: "Fulcrum", role: "Product Manager", isPVP: false },
+
   // HomeStart
   { name: "Renato Pimentel", team: "HomeStart", role: "Designer", isPVP: false },
   { name: "Joyce Ren", team: "HomeStart", role: "Designer", isPVP: false },
@@ -88,20 +81,22 @@ const members = [
   { name: "Yuzuki Tomioka", team: "HomeStart", role: "Developer", isPVP: false },
   { name: "Navyaa Gupta", team: "HomeStart", role: "Engineering Manager", isPVP: false },
   { name: "Karen Yan", team: "HomeStart", role: "Product Manager", isPVP: false },
+
   // Meemli
   { name: "Liam Lai", team: "Meemli", role: "Designer", isPVP: false },
   { name: "Ivan Rim", team: "Meemli", role: "Designer", isPVP: false },
   { name: "Evan Chen", team: "Meemli", role: "Designer", isPVP: false },
   { name: "Alyssia Almanza", team: "Meemli", role: "Developer", isPVP: false },
   { name: "Himir Desai", team: "Meemli", role: "Developer", isPVP: false },
+  { name: "Rohaan Sandhu", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Thomas Rocha", team: "TEST", role: "Developer", isPVP: false },
+  { name: "Jesus Azpitarte", team: "TEST", role: "Developer", isPVP: false },
   { name: "Isabel Ku", team: "Meemli", role: "Developer", isPVP: false },
   { name: "Lucas Yan", team: "Meemli", role: "Developer", isPVP: false },
   { name: "Michael Sullivan", team: "Meemli", role: "Engineering Manager", isPVP: false },
   { name: "Yoto Kim", team: "Meemli", role: "Product Manager", isPVP: false },
+
   // TEST
-  { name: "Rohaan Sandhu", team: "TEST", role: "Developer", isPVP: false },
-  { name: "Thomas Rocha", team: "TEST", role: "Developer", isPVP: false },
-  { name: "Jesus Azpitarte", team: "TEST", role: "Developer", isPVP: false },
   { name: "Alexis Vega", team: "TEST", role: "Developer Lead", isPVP: false },
   { name: "Alice Park", team: "TEST", role: "Developer", isPVP: false },
   { name: "Angeleen Duong", team: "TEST", role: "Developer", isPVP: false },
@@ -117,19 +112,4 @@ const members = [
   { name: "Yang Zheng", team: "TEST", role: "Designer", isPVP: false },
 ];
 
-async function seed() {
-  await mongoose.connect(process.env.MONGODB_URI!);
-  console.log("Connected to MongoDB");
-
-  await Member.deleteMany({});
-  const inserted = await Member.insertMany(members);
-  console.log(`Seeded ${inserted.length} members`);
-
-  await mongoose.disconnect();
-  console.log("Done");
-}
-
-seed().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+export default members;

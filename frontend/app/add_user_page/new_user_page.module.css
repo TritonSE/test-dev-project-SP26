@@ -1,0 +1,13 @@
+.textBox {
+  background-color: white;
+  color: black;
+  padding: 14px 16px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  border: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}

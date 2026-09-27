@@ -21,16 +21,23 @@
 //   - Mobile view only (no need to optimize for desktop)
 //   - The invite code is club-wide (one code for all members)
 // =============================================================================
+"use client";
 
-export default function LoginPage() {
-  return (
-    <main>
-      <h1>Join TSE Social Points</h1>
-      {/* TODO: Add invite code input */}
-      {/* TODO: Add member name dropdown (fetched from API) */}
-      {/* TODO: Add team dropdown (fetched from API) */}
-      {/* TODO: Add submit button + auth logic */}
-      <p>Login form goes here.</p>
-    </main>
-  );
+import { useState } from "react";
+
+import Authentication from "./components/authentication";
+import LoginPage from "./components/LoginPage";
+
+export default function Page() {
+  const [step, setStep] = useState<"authentication" | "login">("authentication");
+
+  const handleBackToAuth = () => {
+    setStep("authentication");
+  };
+
+  if (step === "authentication") {
+    return <Authentication onContinue={() => setStep("login")} />;
+  }
+
+  return <LoginPage onBack={handleBackToAuth} />;
 }

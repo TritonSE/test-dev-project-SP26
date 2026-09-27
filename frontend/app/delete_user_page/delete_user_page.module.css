@@ -1,0 +1,35 @@
+.table {
+  width: 90%;
+  max-width: 800px;
+  margin: 24px auto 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  color: black;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 10px 20px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.deleteButton {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    padding: 8px 10px;
+  }
+}
