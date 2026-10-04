@@ -1,24 +1,11 @@
 "use client";
 
-import { Inter, Rubik } from "next/font/google";
 import { useSearchParams } from "next/navigation";
 
-import IndividualTeam from "./IndividualTeam";
-import PodiumProfile from "./PodiumProfile";
+import IndividualTeam from "./_components/IndividualTeam";
+import PodiumProfile from "./_components/PodiumProfile";
 import styles from "./rankings.module.css";
-import TabSwitch from "./TabSwitch";
-
-const rubik = Rubik({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--rubik",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--inter",
-});
+import TabSwitch from "./_components/TabSwitch";
 
 const podiumTeams = [
   {
@@ -110,7 +97,7 @@ export default function RankingsPage() {
   );
 
   return (
-    <main className={`${styles.leaderboardContainer} ${rubik.variable} ${inter.variable}`}>
+    <main className={styles.leaderboardContainer}>
       <TabSwitch activeTab="ranks" onTabSwitch={(tab) => console.info(tab)} />
 
       <div className={styles.topThree}>

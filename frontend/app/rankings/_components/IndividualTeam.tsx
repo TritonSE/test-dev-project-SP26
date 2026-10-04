@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import styles from "./rankings.module.css";
+import styles from "../rankings.module.css";
 
 type IndividualTeamProps = {
   rank: number;

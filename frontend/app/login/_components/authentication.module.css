@@ -22,7 +22,7 @@
 /* ============================================================================
    CONTAINER
    ============================================================================ */
-.page-container {
+.pageContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -34,7 +34,7 @@
   box-sizing: border-box;
 }
 
-.content-wrapper {
+.contentWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,13 +48,13 @@
 /* ============================================================================
    HEADER
    ============================================================================ */
-.header-section {
+.headerSection {
   text-align: center;
   margin-bottom: var(--spacing-lg);
   width: 100%;
 }
 
-.tse-logo {
+.tseLogo {
   width: 100%;
   max-width: 356px;
   height: auto;
@@ -64,7 +64,7 @@
   object-fit: contain;
 }
 
-.org-title {
+.orgTitle {
   color: var(--color-accent);
   font-size: clamp(1.2rem, 4vw, 1.43rem);
   font-weight: 700;
@@ -73,7 +73,7 @@
   margin: 0 0 0.25rem 0;
 }
 
-.org-subtitle {
+.orgSubtitle {
   font-size: clamp(0.75rem, 2.5vw, 0.875rem);
   font-weight: 400;
   margin: 0;
@@ -83,7 +83,7 @@
 /* ============================================================================
    INPUT CARD
    ============================================================================ */
-.input-card {
+.inputCard {
   background-color: var(--color-white);
   border-radius: 1.25rem;
   padding: var(--spacing-lg) var(--spacing-md);
@@ -93,14 +93,14 @@
   box-sizing: border-box;
 }
 
-.input-label {
+.inputLabel {
   display: block;
   font-size: clamp(0.9rem, 3vw, 1rem);
   font-weight: 500;
   margin-bottom: 0.2rem;
 }
 
-.code-input {
+.codeInput {
   width: 100%;
   padding: 0.5rem;
   border: none;
@@ -113,18 +113,18 @@
   height: 40px;
 }
 
-.code-input.input-error {
+.codeInput.inputError {
   border: 0.125rem solid var(--color-error);
   background-color: var(--color-error-bg);
 }
 
-.helper-text {
+.helperText {
   font-size: clamp(0.55rem, 2vw, 0.625rem);
   color: var(--color-gray);
   letter-spacing: 0.02em;
 }
 
-.error-text {
+.errorText {
   font-size: clamp(0.65rem, 2.5vw, 0.75rem);
   color: var(--color-error);
   font-weight: 600;
@@ -133,7 +133,7 @@
 /* ============================================================================
    BUTTON
    ============================================================================ */
-.button-container {
+.buttonContainer {
   padding-top: var(--spacing-lg);
   width: 100%;
   display: flex;
@@ -142,7 +142,7 @@
   max-width: var(--max-width);
 }
 
-.continue-button {
+.continueButton {
   background-color: var(--color-accent);
   color: var(--color-black);
   font-weight: 700;
@@ -160,6 +160,6 @@
   min-height: 52px;
 }
 
-.continue-button:active {
+.continueButton:active {
   background-color: var(--color-accent);
 }

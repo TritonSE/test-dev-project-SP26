@@ -80,8 +80,8 @@ export default antfu({
     "perfectionist/sort-imports": [
       "warn",
       {
-        groups: ["builtin", "external", "parent", "sibling", "index", "object", "type"],
-        newlinesBetween: "always",
+        groups: ["builtin", "external", "parent", "sibling", "index", "ts-equals-import", "type"],
+        newlinesBetween: 1,
       },
     ],
     "perfectionist/sort-named-imports": ["warn"],
