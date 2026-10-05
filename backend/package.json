@@ -26,7 +26,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "module-alias": "^2.3.4",
-    "mongoose": "^9.7.3"
+    "mongoose": "^9.7.3",
+    "multer": "^2.4.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.27.3",
