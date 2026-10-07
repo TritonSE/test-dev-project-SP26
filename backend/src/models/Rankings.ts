@@ -5,6 +5,7 @@ import type { InferSchemaType } from "mongoose";
 const rankingSchema = new Schema(
   {
     message: { type: String, required: true },
+    photoKeys: { type: [String], default: [] },
   },
   {
     timestamps: true,

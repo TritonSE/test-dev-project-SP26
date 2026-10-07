@@ -4,7 +4,10 @@ import type { InferSchemaType } from "mongoose";
 
 const submissionSchema = new Schema(
   {
-    photoUrls: [{ type: String, required: true }],
+    photoKeys: {
+      type: [String],
+      validate: [(val: string[]) => val.length > 0, "At least one photo key is required."],
+    },
     eventName: { type: String, required: true },
     date: { type: Date, required: true, default: Date.now },
     location: { type: String, required: true },
