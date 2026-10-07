@@ -1,4 +1,4 @@
-import styles from "./rankings.module.css";
+import styles from "../rankings.module.css";
 
 type TabSwitchProps = {
   activeTab: "ranks" | "history";

@@ -1,8 +1,11 @@
 "use client";
 
+import Image, { type StaticImageData } from "next/image";
 import React, { useState } from "react";
 
-import "./authentication.css";
+import tseLogo from "@/public/tseLogo.png";
+
+import styles from "./authentication.module.css";
 
 type AuthenticationProps = {
   onContinue: () => void;
@@ -37,37 +40,42 @@ export default function Authentication({ onContinue }: AuthenticationProps) {
   };
 
   return (
-    <div className="page-container">
-      <div className="content-wrapper">
-        <div className="header-section">
-          <img src="/tseLogo.png" alt="TSE Logo" className="tse-logo" />
-          <h1 className="org-title">Triton Software Engineering</h1>
-          <p className="org-subtitle">Track Social Points Easier</p>
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.headerSection}>
+          <Image
+            src={tseLogo as StaticImageData}
+            alt="TSE Logo"
+            className="tse-logo"
+            loading="eager"
+          />
+          <h1 className={styles.orgTitle}>Triton Software Engineering</h1>
+          <p className={styles.orgSubtitle}>Track Social Points Easier</p>
         </div>
 
-        <div className="input-card">
-          <label htmlFor="auth-code" className="input-label">
+        <div className={styles.inputCard}>
+          <label htmlFor="auth-code" className={styles.inputLabel}>
             Authentication Code
           </label>
           <input
             id="auth-code"
             type="text"
-            className={`code-input ${error ? "input-error" : ""}`}
+            className={`${styles.codeInput} ${error ? styles.inputError : ""}`}
             placeholder="*****"
             value={code}
             onChange={handleInputChange}
             suppressHydrationWarning={true}
           />
           {error ? (
-            <span className="error-text">{error}</span>
+            <span className={styles.errorText}>{error}</span>
           ) : (
-            <span className="helper-text">Enter the universal code!</span>
+            <span className={styles.helperText}>Enter the universal code!</span>
           )}
         </div>
 
-        <div className="button-container">
+        <div className={styles.buttonContainer}>
           <button
-            className="continue-button"
+            className={styles.continueButton}
             onClick={() => {
               void handleContinue();
             }}

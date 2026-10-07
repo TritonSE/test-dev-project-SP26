@@ -23,10 +23,10 @@
 // =============================================================================
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
-import Authentication from "./components/authentication";
-import LoginPage from "./components/LoginPage";
+import Authentication from "./_components/authentication";
+import LoginPage from "./_components/LoginPage";
 
 export default function Page() {
   const [step, setStep] = useState<"authentication" | "login">("authentication");

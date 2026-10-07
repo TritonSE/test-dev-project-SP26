@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable perfectionist/sort-imports, import/order */
+/* eslint-disable perfectionist/sort-imports */
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import BackIcon from "@/public/ep_back.svg";
 import DropdownArrow from "@/public/Vector.svg";
 
-import styles from "./LoginPage.module.css";
-/* eslint-enable perfectionist/sort-imports, import/order */
+import styles from "./loginPage.module.css";
+/* eslint-enable perfectionist/sort-imports */
 
 type Member = {
   name: string;
