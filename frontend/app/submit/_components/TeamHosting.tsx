@@ -1,8 +1,6 @@
 "use client";
-import teamChipStyles from "./teamChip.module.css";
-
 import TeamChip from "./TeamChip";
-
+import teamChipStyles from "./teamChip.module.css";
 import styles from "./teamHosting.module.css";
 
 type Team = {

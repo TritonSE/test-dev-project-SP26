@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+
 import styles from "./page.module.css";
 
 export default function SelectPhotosPage() {

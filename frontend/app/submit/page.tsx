@@ -1,10 +1,11 @@
 "use client";
 
-import SubmissionForm from "./_components/SubmissionForm";
 import Image from "next/image";
-import styles from "./submit.module.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+
+import SubmissionForm from "./_components/SubmissionForm";
+import styles from "./submit.module.css";
 
 type Member = { id: string; name: string; team: string };
 
@@ -85,6 +86,30 @@ export default function SubmitPage() {
     })();
   }, []);
 
+  function getPercentPosition(clientX: number, clientY: number) {
+    if (!photoRef.current) return { x: 50, y: 50 };
+    const rect = photoRef.current.getBoundingClientRect();
+    return {
+      x: Math.max(2, Math.min(98, ((clientX - rect.left) / rect.width) * 100)),
+      y: Math.max(2, Math.min(98, ((clientY - rect.top) / rect.height) * 100)),
+    };
+  }
+
+  const currentIdx =
+    photos.length === 0
+      ? 0
+      : Math.max(0, Math.min(photos.length - 1, Math.round(-scrollX / ITEM_WIDTH)));
+
+  function updateCurrentTags(updater: (prev: Tag[]) => Tag[]) {
+    setTagsByPhoto((prev) => {
+      if (currentIdx < 0 || currentIdx >= prev.length) return prev;
+
+      const next = [...prev];
+      next[currentIdx] = updater(next[currentIdx] ?? []);
+      return next;
+    });
+  }
+
   useEffect(() => {
     if (!draggingTagId) return;
 
@@ -131,30 +156,6 @@ export default function SubmitPage() {
   );
 
   if (loading) return null;
-
-  const currentIdx =
-    photos.length === 0
-      ? 0
-      : Math.max(0, Math.min(photos.length - 1, Math.round(-scrollX / ITEM_WIDTH)));
-
-  function updateCurrentTags(updater: (prev: Tag[]) => Tag[]) {
-    setTagsByPhoto((prev) => {
-      if (currentIdx < 0 || currentIdx >= prev.length) return prev;
-
-      const next = [...prev];
-      next[currentIdx] = updater(next[currentIdx] ?? []);
-      return next;
-    });
-  }
-
-  function getPercentPosition(clientX: number, clientY: number) {
-    if (!photoRef.current) return { x: 50, y: 50 };
-    const rect = photoRef.current.getBoundingClientRect();
-    return {
-      x: Math.max(2, Math.min(98, ((clientX - rect.left) / rect.width) * 100)),
-      y: Math.max(2, Math.min(98, ((clientY - rect.top) / rect.height) * 100)),
-    };
-  }
 
   function getPositionInCarousel(clientX: number, clientY: number) {
     if (!carouselContainerRef.current) return null;

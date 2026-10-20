@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import EventDetailsStep from "./EventDetailsStep";
 import PointAllocation from "./PointAllocation";
 import TeamHosting from "./TeamHosting";
-import EventDetailsStep from "./EventDetailsStep";
 
 type Team = {
   id: string;

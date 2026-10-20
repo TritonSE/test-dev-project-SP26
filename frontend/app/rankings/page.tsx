@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 
 import IndividualTeam from "./_components/IndividualTeam";
 import PodiumProfile from "./_components/PodiumProfile";
-import styles from "./rankings.module.css";
 import TabSwitch from "./_components/TabSwitch";
+import styles from "./rankings.module.css";
 
 const podiumTeams = [
   {

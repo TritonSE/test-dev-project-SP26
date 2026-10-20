@@ -1,5 +1,6 @@
-import type { Request, Response } from "express";
 import { Config } from "../models/Config";
+
+import type { Request, Response } from "express";
 
 export const authVerify = async (req: Request, res: Response) => {
   const { code } = req.body as { code: string };

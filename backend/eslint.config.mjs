@@ -37,6 +37,7 @@ export default antfu({
   },
 
   rules: {
+    "import/order": "off",
     "unused-imports/no-unused-imports": [
       "warn",
       {

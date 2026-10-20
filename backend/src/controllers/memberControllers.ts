@@ -1,6 +1,7 @@
-import type { Request, Response } from "express";
 import Member from "../models/Member";
 import { getPresignedImageUrl, uploadFileToS3 } from "../utils/s3";
+
+import type { Request, Response } from "express";
 
 export const getMembers = async (req: Request, res: Response) => {
   try {

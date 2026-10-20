@@ -2,11 +2,9 @@
 
 import Image from "next/image";
 
-import teamChipStyles from "./teamChip.module.css";
-
-import TeamChip from "./TeamChip";
-
 import styles from "./pointAllocation.module.css";
+import TeamChip from "./TeamChip";
+import teamChipStyles from "./teamChip.module.css";
 
 type Team = {
   id: string;
@@ -16,10 +14,9 @@ type Team = {
 
 type Props = {
   teams: Team[];
-  onNext?: () => void;
 };
 
-export default function PointAllocation({ teams, onNext }: Props) {
+export default function PointAllocation({ teams }: Props) {
   const teamById = Object.fromEntries(teams.map((team) => [team.id, team]));
   const teamPairs: [Team, Team | undefined][] = [];
 

@@ -1,11 +1,11 @@
 "use client";
 
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import React, { useState } from "react";
 
-import tseLogo from "@/public/tseLogo.png";
-
 import styles from "./authentication.module.css";
+
+import tseLogo from "@/public/tseLogo.png";
 
 type AuthenticationProps = {
   onContinue: () => void;
@@ -43,12 +43,7 @@ export default function Authentication({ onContinue }: AuthenticationProps) {
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.headerSection}>
-          <Image
-            src={tseLogo as StaticImageData}
-            alt="TSE Logo"
-            className="tse-logo"
-            loading="eager"
-          />
+          <Image src={tseLogo} alt="TSE Logo" className="tse-logo" loading="eager" />
           <h1 className={styles.orgTitle}>Triton Software Engineering</h1>
           <p className={styles.orgSubtitle}>Track Social Points Easier</p>
         </div>

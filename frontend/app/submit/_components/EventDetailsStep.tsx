@@ -1,9 +1,8 @@
-import styles from "./eventDetailsStep.module.css";
-import { Calendar } from "@tritonse/tse-constellation";
 import { useState } from "react";
 
+import styles from "./eventDetailsStep.module.css";
+
 export default function EventDetailsStep() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [eventName, setEventName] = useState("");
   const [location, setLocation] = useState("");
 
@@ -33,9 +32,7 @@ export default function EventDetailsStep() {
       {/* Field 4 — Select Date */}
       <section className={styles.dataFieldWrapper}>
         <label className={styles.sectionLabel}>Select Date</label>
-        <div className={styles.calendarWrapper}>
-          <Calendar selected={selectedDate} setSelected={setSelectedDate} />
-        </div>
+        <div className={styles.calendarWrapper}></div>
       </section>
 
       {/* Field 5 — Location */}
