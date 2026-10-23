@@ -1,0 +1,92 @@
+.container {
+  width: 402px;
+  padding-top: 13px;
+  padding-right: 30px;
+  padding-left: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 1;
+}
+
+.title {
+  width: 115px;
+  height: 18px;
+  margin: 0;
+  font-family: "Rubik", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #0c2b35;
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+.pairsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pairRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.calcLabel {
+  font-family: "Rubik", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #8fa7b0;
+}
+
+.ptsLabel {
+  font-family: "Rubik", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #8fa7b0;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  align-items: flex-end;
+}
+
+.statusWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: fit-content;
+}
+
+.statusText {
+  width: 75px;
+  height: 15px;
+  font-family: "Karla", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 150%;
+  letter-spacing: 0%;
+  color: #b93b3b;
+  opacity: 1;
+  transform: rotate(0deg);
+}

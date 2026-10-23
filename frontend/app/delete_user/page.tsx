@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import styles from "./delete_user_page.module.css";
+import styles from "./delete_user.module.css";
 
 type Member = {
   _id: string;
@@ -48,16 +48,16 @@ export default function DeleteUserPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-4xl font-bold mb-4">Delete User Page</h1>
-      <p className="text-lg text-gray-600">Note that only admin should be able to delete users.</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Delete User Page</h1>
+      <p className={styles.description}>Note that only admin should be able to delete users.</p>
       <table className={styles.table}>
         <colgroup>
-          <col style={{ width: "36%" }} />
-          <col style={{ width: "18%" }} />
-          <col style={{ width: "18%" }} />
-          <col style={{ width: "14%" }} />
-          <col style={{ width: "14%" }} />
+          <col className={styles.colName} />
+          <col className={styles.colTeam} />
+          <col className={styles.colRole} />
+          <col className={styles.colPvp} />
+          <col className={styles.colAction} />
         </colgroup>
         <thead>
           <tr>

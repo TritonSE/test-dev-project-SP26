@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import styles from "./new_user_page.module.css";
+import styles from "./new_user.module.css";
 
 export default function NewUserPage() {
   const [name, setName] = useState("");
@@ -38,14 +38,14 @@ export default function NewUserPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-4xl font-bold mb-4">Welcome to the New User Page!</h1>
-      <p className="text-lg text-gray-600">Note that only admin should be able to add new users.</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Welcome to the New User Page!</h1>
+      <p className={styles.description}>Note that only admin should be able to add new users.</p>
       <form
         onSubmit={(e) => {
           void handleSubmit(e);
         }}
-        className="flex flex-col items-center gap-2"
+        className={styles.form}
       >
         <span>Name</span>
         <input
@@ -84,9 +84,7 @@ export default function NewUserPage() {
         <div onClick={() => setIsPVP(!isPVP)} className={styles.textBox}>
           {String(isPVP)}
         </div>
-        <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
-          Add user
-        </button>
+        <button className={styles.submitButton}>Add user</button>
       </form>
     </div>
   );

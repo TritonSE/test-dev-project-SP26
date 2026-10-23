@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: #4b5563;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.textBox {
+  background-color: white;
+  color: black;
+  padding: 14px 16px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  border: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.submitButton {
+  margin-top: 1rem; /* mt-4 = 16px */
+  padding-left: 1rem; /* px-4 = 16px */
+  padding-right: 1rem;
+  padding-top: 0.5rem; /* py-2 = 8px */
+  padding-bottom: 0.5rem;
+  background-color: #3b82f6; /* bg-blue-500 */
+  color: #ffffff; /* text-white */
+  border-radius: 0.25rem; /* rounded = 4px */
+  border: none;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: #2563eb; /* Optional hover state */
+}

@@ -6,6 +6,11 @@ import { useEffect } from "react";
 
 import styles from "./welcome.module.css";
 
+import type { StaticImageData } from "next/image";
+
+import ellipse3819 from "@/public/Ellipse3819.svg";
+import epBack from "@/public/ep_back.svg";
+
 export default function WelcomePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,7 +37,7 @@ export default function WelcomePage() {
   return (
     <main className={styles.container}>
       <button className={styles.backButton} onClick={handleBack} type="button">
-        <Image src="/ep_back.svg" alt="Go back" width={24} height={24} />
+        <Image src={epBack as StaticImageData} alt="Go back" width={24} height={24} />
       </button>
 
       <h1 className={styles.greeting}>
@@ -44,7 +49,7 @@ export default function WelcomePage() {
       <p className={styles.loadMessage}>Logging you in now...</p>
 
       <div className={styles.avatar}>
-        <img src="/Ellipse3819.svg" alt={`${name} avatar`} />
+        <Image src={ellipse3819 as StaticImageData} alt={`${name} avatar`} loading="eager" />
       </div>
 
       <div className={styles.spinner} />
