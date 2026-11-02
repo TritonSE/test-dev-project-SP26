@@ -5,6 +5,8 @@ import express from "express";
 import { frontend_origin } from "./config";
 import configRouter from "./routes/configRoutes";
 import membersRouter from "./routes/memberRoutes";
+import submissionsRouter from "./routes/submissionRoutes";
+import teamsRouter from "./routes/teamRoutes";
 
 import type { Request, Response } from "express";
 
@@ -21,6 +23,9 @@ app.use(express.json());
 app.use("/api/members", membersRouter);
 
 app.use("/api/config", configRouter);
+
+app.use("/api/teams", teamsRouter);
+app.use("/api/submissions", submissionsRouter);
 
 app.get("/", (_req: Request, res: Response) => {
   res.json({ message: "TSE Social Points API is running!" });
