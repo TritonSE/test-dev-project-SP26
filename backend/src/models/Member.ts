@@ -7,9 +7,9 @@ const memberSchema = new Schema({
   team: { type: Schema.Types.ObjectId, ref: "Team", required: true },
   role: { type: String, required: true },
   isPVP: { type: Boolean, required: true },
-  photoKey: { type: String, required: false },
+  photoKey: { type: String, required: false, default: null },
 });
 
-type Member = InferSchemaType<typeof memberSchema>;
+export type Member = InferSchemaType<typeof memberSchema>;
 
 export default model<Member>("Member", memberSchema);
