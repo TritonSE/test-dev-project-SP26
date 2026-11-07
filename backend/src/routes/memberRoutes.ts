@@ -5,6 +5,7 @@ import {
   addMember,
   deleteMember,
   getMembers,
+  updateMember,
   uploadProfilePicture,
 } from "../controllers/memberControllers";
 
@@ -18,6 +19,7 @@ router.get("/", getMembers);
 router.post("/upload-profile-picture", upload.single("image"), uploadProfilePicture);
 router.post("/", addMember);
 
+router.patch("/:id", updateMember);
 router.delete("/:id", deleteMember);
 
 export default router;

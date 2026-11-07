@@ -73,6 +73,37 @@ type AuthenticatedRequest = {
   };
 } & Request;
 
+type UpdateMemberBody = Partial<{
+  name: string;
+  team: string;
+  role: string;
+  isPVP: boolean;
+  photoKey: string;
+}>;
+
+export const updateMember = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updatedMember = await Member.findByIdAndUpdate(id, req.body as UpdateMemberBody, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedMember) {
+      return res.status(404).json({ error: "Member not found." });
+    }
+
+    let photoUrl = null;
+    if (updatedMember.photoKey) {
+      photoUrl = await getPresignedImageUrl(updatedMember.photoKey);
+    }
+
+    res.status(200).json({ ...updatedMember.toObject(), photoUrl });
+  } catch (error) {
+    console.error("Error updating member:", error);
+    res.status(500).json({ error: "Failed to update member" });
+  }
+};
+
 export const uploadProfilePicture = async (req: AuthenticatedRequest, res: Response) => {
   try {
     if (!req.file) {
