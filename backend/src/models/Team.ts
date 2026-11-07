@@ -5,7 +5,7 @@ import type { InferSchemaType } from "mongoose";
 const teamSchema = new Schema({
   teamName: { type: String, required: true },
   points: { type: Number, required: true, default: 0 },
-  avatarKey: { type: String, required: false },
+  avatarKey: { type: String, required: false, default: null },
 });
 
 type Team = InferSchemaType<typeof teamSchema>;
