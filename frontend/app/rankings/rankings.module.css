@@ -89,6 +89,7 @@
 .navText {
   display: flex;
 
+  font-family: "Rubik", sans-serif;
   align-items: center;
   justify-content: center;
 
@@ -102,6 +103,10 @@
   cursor: pointer;
 }
 
+.navText:last-child {
+  transform: translateX(-0.25rem);
+}
+
 .activeTab {
   display: flex;
 
@@ -113,6 +118,8 @@
   padding: 0.125rem 0.9375rem;
 
   border-radius: 2.5rem;
+
+  transform: translateX(-0.3rem);
 
   background-color: var(--tse-blue);
 
@@ -333,14 +340,14 @@
 }
 
 .mainLabel {
-  padding: 0.75rem 1.25rem;
+  padding: 0.4rem 1.25rem;
 
   font-family: "Rubik", sans-serif;
   text-align: left;
 
   color: black;
 
-  font-size: 1.5625rem;
+  font-size: 1.5rem;
   font-weight: 700;
 
   line-height: 1.87806rem;
