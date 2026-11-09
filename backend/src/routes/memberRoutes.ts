@@ -16,7 +16,7 @@ const upload = multer({ storage });
 
 router.get("/", getMembers);
 
-router.post("/upload-profile-picture", upload.single("image"), uploadProfilePicture);
+router.post("/:id/upload-profile-picture", upload.single("image"), uploadProfilePicture);
 router.post("/", addMember);
 
 router.patch("/:id", updateMember);
