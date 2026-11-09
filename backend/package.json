@@ -9,7 +9,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
-    "seed": "ts-node src/scripts/seed.ts",
+    "membersSeed": "ts-node src/scripts/membersSeed.ts",
+    "rankingsSeed": "ts-node src/scripts/rankingsSeed.ts",
+    "submissionsSeed": "ts-node src/scripts/submissionsSeed.ts",
+    "teamsSeed": "ts-node src/scripts/teamsSeed.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "lint": "eslint src --ext .ts",
