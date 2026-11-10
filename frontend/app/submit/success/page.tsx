@@ -14,10 +14,11 @@ export default function ConfirmationPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/leaderboard");
+      router.push(`/leaderboard?name=${encodeURIComponent(name)}`);
     }, 3000);
+
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [name, router]);
 
   return (
     <div className={styles.confirmationContainer}>
