@@ -46,7 +46,7 @@
 
 .card {
   width: var(--card-width);
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
   box-sizing: border-box;
 
   background-color: var(--color-surface);
@@ -105,8 +105,8 @@
 
 .weekHeader {
   display: flex;
-  align-items: baseline;
-  gap: var(--space-md);
+  align-items: center;
+  gap: var(--space-lg);
 }
 
 .weekRange,
