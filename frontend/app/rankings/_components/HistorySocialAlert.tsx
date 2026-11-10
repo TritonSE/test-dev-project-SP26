@@ -36,7 +36,8 @@ export default function HistorySocialAlert({
         <span className={styles.alertText}>
           <strong>New Social Alert:</strong>
           <br />
-          {teams}&apos;s {eventName}. <span className={styles.points}>+{points} points.</span>
+          {teams}&apos;s {eventName}.
+          <br />+{points} points.
         </span>
 
         <span className={styles.alertDate}>{date}</span>

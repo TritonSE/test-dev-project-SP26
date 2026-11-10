@@ -23,6 +23,12 @@ type Ranking = {
   createdAt: string;
 };
 
+// What GET /api/teams returns (see backend/src/models/Team.ts)
+type Team = {
+  _id: string;
+  teamName: string;
+};
+
 // One item in the feed: a social alert or a ranking alert
 type Alert =
   | { type: "social"; id: string; date: Date; submission: Submission }
@@ -54,28 +60,34 @@ function getTotalPoints(submission: Submission) {
   return submission.pointAllocation.reduce((sum, p) => sum + p.points, 0);
 }
 
-function getTeamNames(submission: Submission) {
+function getTeamNames(submission: Submission, teams: Team[]) {
   return submission.pointAllocation
-    .map((p) => (typeof p.team === "string" ? "A team" : p.team.teamName))
+    .map((p) => {
+      if (typeof p.team !== "string") return p.team.teamName;
+      return teams.find((t) => t._id === p.team)?.teamName ?? "Unknown team";
+    })
     .join(", ");
 }
 
 export default function HistoryTab() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [rankings, setRankings] = useState<Ranking[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
 
   useEffect(() => {
     async function loadHistory() {
       try {
-        const [submissionsRes, rankingsRes] = await Promise.all([
+        const [submissionsRes, rankingsRes, teamsRes] = await Promise.all([
           fetch("/api/submissions"),
           fetch("/api/rankings"),
+          fetch("/api/teams"),
         ]);
-        if (!submissionsRes.ok || !rankingsRes.ok) {
+        if (!submissionsRes.ok || !rankingsRes.ok || !teamsRes.ok) {
           throw new Error("Failed to fetch history");
         }
         setSubmissions((await submissionsRes.json()) as Submission[]);
         setRankings((await rankingsRes.json()) as Ranking[]);
+        setTeams((await teamsRes.json()) as Team[]);
       } catch (error) {
         console.error("Error fetching history:", error);
       }
@@ -182,7 +194,7 @@ export default function HistoryTab() {
                 alert.type === "social" ? (
                   <HistorySocialAlert
                     key={alert.id}
-                    teams={getTeamNames(alert.submission)}
+                    teams={getTeamNames(alert.submission, teams)}
                     eventName={alert.submission.eventName}
                     points={getTotalPoints(alert.submission)}
                     date={formatMonthDay(alert.date)}

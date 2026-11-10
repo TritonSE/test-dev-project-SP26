@@ -685,3 +685,7 @@
     padding-right: 1rem;
   }
 }
+
+.historyWrapper {
+  width: 100%;
+}

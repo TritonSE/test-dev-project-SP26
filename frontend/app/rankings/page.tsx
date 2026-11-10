@@ -104,7 +104,7 @@ export default function RankingsPage() {
     <main className={styles.leaderboardContainer}>
       <TabSwitch activeTab={activeTab} onTabSwitch={setActiveTab} />
 
-      {activeTab === "ranks" ? (
+      {activeTab === "ranks" && (
         <>
           <div className={styles.topThree}>
             {updatedPodiumTeams.map((team) => (
@@ -144,9 +144,11 @@ export default function RankingsPage() {
             ))}
           </div>
         </>
-      ) : (
-        <HistoryTab />
       )}
+
+      <div hidden={activeTab !== "history"} className={styles.historyWrapper}>
+        <HistoryTab />
+      </div>
     </main>
   );
 }

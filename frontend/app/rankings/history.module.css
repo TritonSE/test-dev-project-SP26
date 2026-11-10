@@ -157,11 +157,6 @@
   font-size: var(--font-size-md);
 }
 
-.points {
-  font-weight: bold;
-  color: var(--color-points);
-}
-
 .socialIcon {
   background-color: var(--color-social-accent);
 }
