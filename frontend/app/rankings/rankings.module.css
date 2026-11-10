@@ -29,7 +29,7 @@
 
   background-color: var(--tse-blue);
 
-  font-family: var(--rubik), Arial, Helvetica, sans-serif;
+  font-family: var(--font-rubik), Arial, Helvetica, sans-serif;
 
   animation: rankingsFadeIn 0.8s ease-out forwards;
 }
