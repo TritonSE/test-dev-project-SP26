@@ -1,0 +1,248 @@
+.preview {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  padding-top: 40px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.submitterRow {
+  display: flex;
+  min-height: 48px;
+  margin: 0 37px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+}
+
+.avatar {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #858585;
+  color: #333;
+}
+
+.avatar svg {
+  width: 32px;
+  height: 32px;
+}
+
+.submitterName {
+  overflow: hidden;
+  color: #1f1f1f;
+  font:
+    400 12px/1.2 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.submitterTeam {
+  flex: 0 0 auto;
+}
+
+.submitterTeam > div {
+  min-width: 88px;
+  height: 33px;
+}
+
+.eventMeta {
+  display: flex;
+  margin: 18px 37px 22px;
+  justify-content: space-between;
+  gap: 12px;
+  color: #527d8d;
+  font:
+    400 12px/1.2 var(--font-inter),
+    Inter,
+    sans-serif;
+}
+
+.eventMeta > span {
+  min-width: 0;
+}
+
+.location {
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photoCarousel {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  padding: 0 34px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.photoCarousel::-webkit-scrollbar {
+  display: none;
+}
+
+.photoSlide {
+  position: relative;
+  width: min(332px, calc(100vw - 70px));
+  height: min(347px, calc(100vw - 55px));
+  flex: 0 0 min(332px, calc(100vw - 70px));
+  overflow: hidden;
+  background: #e7ecee;
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.photoTag {
+  position: absolute;
+  max-width: 90%;
+  padding: 4px 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(20 20 20 / 78%);
+  color: white;
+  font:
+    500 10px/1.1 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+}
+
+.eventName {
+  margin: 24px 24px 21px;
+  color: #111;
+  font:
+    600 16px/1.2 var(--font-inter),
+    Inter,
+    sans-serif;
+  text-align: center;
+}
+
+.teamScores {
+  display: flex;
+  margin: 0 37px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teamScore {
+  display: flex;
+  min-height: 33px;
+  align-items: center;
+  gap: 8px;
+}
+
+.teamScore > :first-child {
+  flex: 0 1 auto;
+}
+
+.calculation {
+  margin-left: auto;
+  color: #8fa7b0;
+  font:
+    400 12px/1 var(--font-rubik),
+    Rubik,
+    sans-serif;
+  white-space: nowrap;
+}
+
+.points {
+  background: var(--team-chip-border, #0c2b35);
+}
+
+.pointsLabel {
+  width: 22px;
+  color: #8fa7b0;
+  font:
+    500 10px/1 var(--font-rubik),
+    Rubik,
+    sans-serif;
+}
+
+.reviewFooter {
+  display: flex;
+  margin: auto 37px 0;
+  padding-top: 20px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.flaggedStatus,
+.readyStatus {
+  margin: 0;
+  font:
+    500 10px/1 var(--font-inter),
+    Inter,
+    sans-serif;
+}
+
+.flaggedStatus {
+  color: #b93b3b;
+}
+
+.readyStatus {
+  color: #548d33;
+}
+
+.submitButton {
+  display: flex;
+  width: min(263px, 100%);
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 999px;
+  background: #438fd0;
+  color: white;
+  cursor: pointer;
+  font:
+    600 20px/1.1 var(--font-inter),
+    Inter,
+    sans-serif;
+}
+
+.submitButton svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+
+@media (max-height: 820px) {
+  .preview {
+    padding-bottom: 12px;
+  }
+
+  .photoSlide {
+    height: min(300px, calc(100vw - 55px));
+  }
+
+  .eventName {
+    margin-top: 18px;
+    margin-bottom: 14px;
+  }
+
+  .reviewFooter {
+    padding-top: 12px;
+  }
+}

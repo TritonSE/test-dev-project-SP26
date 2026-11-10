@@ -6,6 +6,7 @@ import styles from "./teamHosting.module.css";
 type Team = {
   id: string;
   name: string;
+  members: number;
 };
 
 type Props = {
@@ -13,10 +14,6 @@ type Props = {
 };
 
 export default function TeamsHosting({ teams }: Props) {
-  const featuredTeams = ["dbc", "homestart"]
-    .map((teamId) => teams.find((team) => team.id === teamId))
-    .filter((team): team is Team => Boolean(team));
-
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Teams Hosting</h2>
@@ -39,28 +36,11 @@ export default function TeamsHosting({ teams }: Props) {
       </div>
 
       <div className={styles.featuredList}>
-        {featuredTeams.map((team) => (
+        {teams.map((team) => (
           <div key={team.id} className={styles.featuredRow}>
             <TeamChip team={team} />
             <div className={styles.scoreGroup}>
-              <div
-                className={[
-                  teamChipStyles.scoreBubble,
-                  team.id === "dbc"
-                    ? teamChipStyles.dbcScore
-                    : team.id === "f3"
-                      ? teamChipStyles.f3Score
-                      : team.id === "homestart"
-                        ? teamChipStyles.homestartScore
-                        : team.id === "test"
-                          ? teamChipStyles.testScore
-                          : teamChipStyles.pvpScore,
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-              >
-                {team.id === "dbc" ? 1 : 2}
-              </div>
+              <div className={teamChipStyles.scoreBubble}>{team.members}</div>
               <span className={styles.membersLabel}>members</span>
             </div>
           </div>
