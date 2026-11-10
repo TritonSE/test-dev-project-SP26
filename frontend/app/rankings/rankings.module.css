@@ -29,7 +29,7 @@
 
   background-color: var(--tse-blue);
 
-  font-family: var(--rubik), Arial, Helvetica, sans-serif;
+  font-family: var(--font-rubik), Arial, Helvetica, sans-serif;
 
   animation: rankingsFadeIn 0.8s ease-out forwards;
 }
@@ -53,7 +53,7 @@
   align-items: center;
   justify-content: center;
 
-  width: 14.0625rem;
+  width: fit-content;
   height: 3.5rem;
 
   padding: 0.5rem 0.625rem;
@@ -92,6 +92,12 @@
   align-items: center;
   justify-content: center;
 
+  height: 2.5rem;
+
+  padding: 0.125rem 0.9375rem;
+
+  border-radius: 2.5rem;
+
   color: var(--tse-blue);
 
   font-size: 1.5rem;
@@ -103,17 +109,6 @@
 }
 
 .activeTab {
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  height: 2.5rem;
-
-  padding: 0.125rem 0.9375rem;
-
-  border-radius: 2.5rem;
-
   background-color: var(--tse-blue);
 
   color: var(--white);
@@ -684,4 +679,8 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
+}
+
+.historyWrapper {
+  width: 100%;
 }

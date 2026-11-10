@@ -1,0 +1,221 @@
+.history {
+  /* colors */
+  --color-primary: #0c2b35;
+  --color-surface: #f5f7f9;
+  --color-text: #000;
+  --color-text-muted: #555;
+  --color-divider: #c9ced3;
+  --color-points: #1f8a4c;
+  --color-social-accent: #dbe9fb;
+  --color-overlay: rgb(0 0 0 / 60%);
+
+  /* spacing */
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1.25rem;
+  --space-xl: 2rem;
+
+  /* font sizes */
+  --font-size-sm: 0.75rem;
+  --font-size-md: 0.875rem;
+  --font-size-lg: 1.5625rem;
+  --font-size-xl: 1.75rem;
+
+  /* sizes */
+  --card-width: min(22rem, 90vw);
+  --popup-max-height: 85dvh;
+  --icon-size: 2rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1.5rem;
+  --z-index-popup: 50;
+
+  --month-card-min-height: 7rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+
+  width: 100%;
+  padding: var(--space-xl) 0;
+}
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
+
+.card {
+  width: var(--card-width);
+  padding: var(--space-lg) var(--space-xl);
+  box-sizing: border-box;
+
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+
+  color: var(--color-text);
+  text-align: left;
+}
+
+.monthTitle,
+.weekTitle,
+.popupTitle {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
+.monthTitle,
+.monthStats,
+.emptyText {
+  text-align: center;
+}
+
+.monthNumber {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.monthCard {
+  min-height: var(--month-card-min-height);
+}
+
+.monthStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: var(--space-sm);
+}
+
+.monthStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.monthPoints {
+  color: var(--color-points);
+}
+
+.monthLabel {
+  font-size: var(--font-size-md);
+}
+
+.week + .week {
+  margin-top: var(--space-lg);
+}
+
+.weekHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.weekRange,
+.alertDate,
+.emptyText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ============================================================================
+   ALERTS
+   ============================================================================ */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+
+  width: 100%;
+  padding: var(--space-md) 0;
+
+  /* reset default <button> styles so social and ranking alerts look the same */
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-divider);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.alertIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: var(--radius-sm);
+}
+
+.alertText {
+  flex: 1;
+  font-size: var(--font-size-md);
+}
+
+.socialIcon {
+  background-color: var(--color-social-accent);
+}
+
+/* ============================================================================
+   SOCIAL POPUP
+   ============================================================================ */
+
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-index-popup);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-overlay);
+}
+
+.popup {
+  position: relative;
+
+  width: var(--card-width);
+  max-height: var(--popup-max-height);
+  overflow-y: auto;
+
+  padding: var(--space-lg);
+  box-sizing: border-box;
+
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+
+  color: var(--color-text);
+}
+
+.popupClose {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.popupTitle {
+  margin-bottom: var(--space-md);
+}
+
+.popupPhotos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.popupPhoto {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}

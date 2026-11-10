@@ -1,7 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
+import HistoryTab from "./_components/HistoryTab";
 import IndividualTeam from "./_components/IndividualTeam";
 import PodiumProfile from "./_components/PodiumProfile";
 import TabSwitch from "./_components/TabSwitch";
@@ -87,6 +89,8 @@ export default function RankingsPage() {
 
   const selectedName = searchParams.get("name") ?? "Eshaan";
 
+  const [activeTab, setActiveTab] = useState<"ranks" | "history">("ranks");
+
   const updatedPodiumTeams = podiumTeams.map((team) =>
     team.rank === 1
       ? {
@@ -98,44 +102,52 @@ export default function RankingsPage() {
 
   return (
     <main className={styles.leaderboardContainer}>
-      <TabSwitch activeTab="ranks" onTabSwitch={(tab) => console.info(tab)} />
+      <TabSwitch activeTab={activeTab} onTabSwitch={setActiveTab} />
 
-      <div className={styles.topThree}>
-        {updatedPodiumTeams.map((team) => (
-          <PodiumProfile
-            key={team.rank}
-            rank={team.rank}
-            points={team.points}
-            name={team.name}
-            imageSrc={team.imageSrc}
-          />
-        ))}
-      </div>
+      {activeTab === "ranks" && (
+        <>
+          <div className={styles.topThree}>
+            {updatedPodiumTeams.map((team) => (
+              <PodiumProfile
+                key={team.rank}
+                rank={team.rank}
+                points={team.points}
+                name={team.name}
+                imageSrc={team.imageSrc}
+              />
+            ))}
+          </div>
 
-      <div className={styles.leaderboard}>
-        <h2 className={styles.mainLabel}>Top 3 Teams</h2>
+          <div className={styles.leaderboard}>
+            <h2 className={styles.mainLabel}>Top 3 Teams</h2>
 
-        {topThreeList.map((team) => (
-          <IndividualTeam
-            key={team.rank}
-            rank={team.rank}
-            name={team.name}
-            points={team.points}
-            containerStyle={team.containerStyle}
-          />
-        ))}
+            {topThreeList.map((team) => (
+              <IndividualTeam
+                key={team.rank}
+                rank={team.rank}
+                name={team.name}
+                points={team.points}
+                containerStyle={team.containerStyle}
+              />
+            ))}
 
-        <h2 className={styles.mainLabel}>Runner Ups</h2>
+            <h2 className={styles.mainLabel}>Runner Ups</h2>
 
-        {runnerUpsList.map((team) => (
-          <IndividualTeam
-            key={team.rank}
-            rank={team.rank}
-            name={team.name}
-            points={team.points}
-            containerStyle={team.containerStyle}
-          />
-        ))}
+            {runnerUpsList.map((team) => (
+              <IndividualTeam
+                key={team.rank}
+                rank={team.rank}
+                name={team.name}
+                points={team.points}
+                containerStyle={team.containerStyle}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      <div hidden={activeTab !== "history"} className={styles.historyWrapper}>
+        <HistoryTab />
       </div>
     </main>
   );
