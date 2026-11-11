@@ -68,10 +68,38 @@ export const deleteMember = async (req: Request, res: Response) => {
 
 type AuthenticatedRequest = {
   file?: Express.Multer.File;
-  user?: {
-    id: string;
-  };
 } & Request;
+
+type UpdateMemberBody = Partial<{
+  name: string;
+  team: string;
+  role: string;
+  isPVP: boolean;
+  photoKey: string;
+}>;
+
+export const updateMember = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updatedMember = await Member.findByIdAndUpdate(id, req.body as UpdateMemberBody, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedMember) {
+      return res.status(404).json({ error: "Member not found." });
+    }
+
+    let photoUrl = null;
+    if (updatedMember.photoKey) {
+      photoUrl = await getPresignedImageUrl(updatedMember.photoKey);
+    }
+
+    res.status(200).json({ ...updatedMember.toObject(), photoUrl });
+  } catch (error) {
+    console.error("Error updating member:", error);
+    res.status(500).json({ error: "Failed to update member" });
+  }
+};
 
 export const uploadProfilePicture = async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -80,19 +108,11 @@ export const uploadProfilePicture = async (req: AuthenticatedRequest, res: Respo
       return;
     }
 
-    const userId = req.user?.id;
-    if (!userId) {
-      res.status(401).json({ error: "Unauthorized user" });
-      return;
-    }
+    const { id } = req.params;
 
     const fileKey = await uploadFileToS3(req.file.buffer, req.file.originalname, req.file.mimetype);
 
-    const updatedUser = await Member.findByIdAndUpdate(
-      userId,
-      { photoKey: fileKey },
-      { new: true },
-    );
+    const updatedUser = await Member.findByIdAndUpdate(id, { photoKey: fileKey }, { new: true });
 
     const presignedUrl = await getPresignedImageUrl(fileKey);
 
