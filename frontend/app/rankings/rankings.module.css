@@ -34,6 +34,40 @@
   animation: rankingsFadeIn 0.8s ease-out forwards;
 }
 
+.submitButton {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4.8rem;
+  height: 4.8rem;
+
+  border-radius: 50%;
+  background-color: var(--tse-blue);
+  color: var(--white);
+
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 300;
+  font-size: 4rem;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.submitPlus {
+  display: inline-block;
+  transform: translateY(-0.07em);
+}
+
+.submitButton:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
 @keyframes rankingsFadeIn {
   from {
     opacity: 0;

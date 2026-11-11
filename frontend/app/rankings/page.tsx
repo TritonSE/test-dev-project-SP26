@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import IndividualTeam from "./_components/IndividualTeam";
@@ -122,6 +123,10 @@ export default function RankingsPage() {
           />
         ))}
       </div>
+
+      <Link className={styles.submitButton} href="/submit/select" aria-label="Submit social points">
+        <span className={styles.submitPlus}>+</span>
+      </Link>
     </main>
   );
 }
