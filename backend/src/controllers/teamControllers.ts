@@ -1,11 +1,24 @@
 import Team from "../models/Team";
+import { getPresignedImageUrl } from "../utils/s3";
 
 import type { Request, Response } from "express";
 
 export const getTeams = async (_req: Request, res: Response) => {
   try {
     const teams = await Team.find();
-    res.status(200).json(teams);
+
+    const teamsWithUrls = await Promise.all(
+      teams.map(async (team) => {
+        const avatarUrl = team.avatarKey ? await getPresignedImageUrl(team.avatarKey) : null;
+
+        return {
+          ...team.toObject(),
+          avatarUrl,
+        };
+      }),
+    );
+
+    res.status(200).json(teamsWithUrls);
   } catch (error) {
     console.error("Error fetching teams:", error);
     res.status(500).json({ error: "Failed to fetch teams" });
