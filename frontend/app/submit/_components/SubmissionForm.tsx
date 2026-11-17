@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 
-import type { EventDetails } from "./EventDetailsStep";
 import EventDetailsStep from "./EventDetailsStep";
 import PointAllocation from "./PointAllocation";
-import TeamHosting from "./TeamHosting";
 import styles from "./submissionForm.module.css";
+import TeamHosting from "./TeamHosting";
+
+import type { EventDetails } from "./EventDetailsStep";
 
 type TaggedMember = {
   id: string;

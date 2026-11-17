@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 
-import type { EventDetails } from "./EventDetailsStep";
 import TeamChip, { getTeamVariantClassName } from "./TeamChip";
-import teamChipStyles from "./teamChip.module.css";
 import styles from "./submissionPreview.module.css";
+import teamChipStyles from "./teamChip.module.css";
+
+import type { EventDetails } from "./EventDetailsStep";
 
 type TaggedMember = {
   id: string;

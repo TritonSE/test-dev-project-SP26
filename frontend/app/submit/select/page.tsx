@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { savePendingPhotos } from "../photoStorage";
+
 import styles from "./page.module.css";
 
 export default function SelectPhotosPage() {
@@ -180,7 +181,9 @@ export default function SelectPhotosPage() {
 
         <button
           disabled={photos.length === 0 || isSaving}
-          onClick={handleNext}
+          onClick={() => {
+            void handleNext();
+          }}
           className={styles.nextButton}
         >
           <span className={styles.nextButtonLabel}>{isSaving ? "Saving..." : "Next"}</span>

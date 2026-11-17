@@ -4,11 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import type { EventDetails } from "./_components/EventDetailsStep";
 import SubmissionForm from "./_components/SubmissionForm";
 import SubmissionPreview from "./_components/SubmissionPreview";
 import { clearPendingPhotos, loadPendingPhotos } from "./photoStorage";
 import styles from "./submit.module.css";
+
+import type { EventDetails } from "./_components/EventDetailsStep";
 
 type Member = { id: string; name: string; team: string; teamName: string; isPvp: boolean };
 
@@ -737,7 +738,9 @@ export default function SubmitPage() {
           eventDetails={eventDetails}
           isSubmitting={isSubmitting}
           submitError={submitError}
-          onSubmit={handleSubmit}
+          onSubmit={() => {
+            void handleSubmit();
+          }}
         />
       )}
 

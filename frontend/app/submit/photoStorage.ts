@@ -3,8 +3,8 @@ const DATABASE_VERSION = 1;
 const STORE_NAME = "photos";
 const PENDING_PHOTOS_KEY = "pending";
 
-function openPhotoDatabase(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+async function openPhotoDatabase(): Promise<IDBDatabase> {
+  return await new Promise((resolve, reject) => {
     const request = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
 
     request.onupgradeneeded = () => {
