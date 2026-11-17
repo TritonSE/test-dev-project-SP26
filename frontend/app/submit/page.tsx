@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { EventDetails } from "./_components/EventDetailsStep";
 import SubmissionForm from "./_components/SubmissionForm";
 import SubmissionPreview from "./_components/SubmissionPreview";
+import { clearPendingPhotos, loadPendingPhotos } from "./photoStorage";
 import styles from "./submit.module.css";
 
 type Member = { id: string; name: string; team: string; teamName: string; isPvp: boolean };
@@ -35,10 +36,15 @@ export default function SubmitPage() {
     eventDate: new Date().toISOString().slice(0, 10),
     location: "",
   });
+  const [pvpHandling, setPvpHandling] = useState<"no" | "assign" | "exclude">("no");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const [loading, setLoading] = useState(true);
+  const [photoLoadError, setPhotoLoadError] = useState("");
   const [members, setMembers] = useState<Member[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [scrollX, setScrollX] = useState(0);
   const [tagsByPhoto, setTagsByPhoto] = useState<Tag[][]>([]);
   const [pendingTag, setPendingTag] = useState<{ x: number; y: number } | null>(null);
@@ -54,33 +60,34 @@ export default function SubmitPage() {
   const carouselStartRef = useRef<{ x: number; y: number; baseScrollX: number } | null>(null);
   const isCarouselDragging = useRef(false);
   const hasLoaded = useRef(false);
+  const photoUrlsRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (hasLoaded.current) return;
     hasLoaded.current = true;
 
-    const raw = sessionStorage.getItem("pendingPhotos");
-    sessionStorage.removeItem("pendingPhotos");
+    void (async () => {
+      try {
+        const stored = await loadPendingPhotos();
+        if (stored.length === 0) {
+          router.replace("/submit/select");
+          return;
+        }
 
-    let stored: string[] = [];
-    try {
-      const parsed = raw ? (JSON.parse(raw) as string[]) : [];
-      if (Array.isArray(parsed)) {
-        stored = parsed.filter(
-          (url): url is string => typeof url === "string" && url.trim() !== "",
+        await clearPendingPhotos();
+        const urls = stored.map((file) => URL.createObjectURL(file));
+        photoUrlsRef.current = urls;
+        setPhotoFiles(stored);
+        setPhotos(urls);
+        setTagsByPhoto(stored.map(() => []));
+      } catch (error) {
+        setPhotoLoadError(
+          error instanceof Error ? error.message : "Could not load the selected photos.",
         );
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      stored = [];
-    }
-
-    if (stored.length > 0) {
-      setPhotos(stored);
-      setTagsByPhoto(stored.map(() => []));
-    } else {
-      router.replace("/submit/select");
-    }
-    setLoading(false);
+    })();
 
     void (async () => {
       try {
@@ -108,6 +115,13 @@ export default function SubmitPage() {
       }
     })();
   }, []);
+
+  useEffect(
+    () => () => {
+      photoUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    },
+    [],
+  );
 
   function getPercentPosition(clientX: number, clientY: number) {
     if (!photoRef.current) return { x: 50, y: 50 };
@@ -192,7 +206,61 @@ export default function SubmitPage() {
     [members, search],
   );
 
+  async function handleSubmit() {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const formData = new FormData();
+      const tags = tagsByPhoto.flatMap((photoTags, photoIndex) =>
+        photoTags.map(({ memberId, x, y }) => ({ memberId, photoIndex, x, y })),
+      );
+      formData.append(
+        "submission",
+        JSON.stringify({
+          eventName: eventDetails.eventName,
+          date: eventDetails.eventDate,
+          location: eventDetails.location,
+          pvpHandling,
+          tags,
+        }),
+      );
+
+      for (const [index, photo] of photoFiles.entries()) {
+        formData.append("photos", photo, photo.name || `photo-${index + 1}`);
+      }
+
+      const response = await fetch("/api/submissions", {
+        method: "POST",
+        body: formData,
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(result.error ?? "Failed to submit event.");
+      }
+
+      router.push(
+        `/submit/success?name=${encodeURIComponent(allTaggedMembers[0]?.memberName ?? "")}`,
+      );
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Failed to submit event.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   if (loading) return null;
+  if (photoLoadError) {
+    return (
+      <div className={styles.mainContainer}>
+        <p role="alert">{photoLoadError}</p>
+        <button className={styles.nextButton} onClick={() => router.replace("/submit/select")}>
+          Back to photo selection
+        </button>
+      </div>
+    );
+  }
 
   function getPositionInCarousel(clientX: number, clientY: number) {
     if (!carouselContainerRef.current) return null;
@@ -448,6 +516,7 @@ export default function SubmitPage() {
                     fill
                     sizes="328px"
                     className={styles.carouselImage}
+                    unoptimized
                     draggable={false}
                   />
 
@@ -653,6 +722,8 @@ export default function SubmitPage() {
           tagsByPhoto={tagsByPhoto}
           teams={teams}
           eventDetails={eventDetails}
+          pvpHandling={pvpHandling}
+          onPvpHandlingChange={setPvpHandling}
           onEventDetailsChange={(field, value) =>
             setEventDetails((details) => ({ ...details, [field]: value }))
           }
@@ -664,6 +735,9 @@ export default function SubmitPage() {
           tagsByPhoto={tagsByPhoto}
           teams={teams}
           eventDetails={eventDetails}
+          isSubmitting={isSubmitting}
+          submitError={submitError}
+          onSubmit={handleSubmit}
         />
       )}
 

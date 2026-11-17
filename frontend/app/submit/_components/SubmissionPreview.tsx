@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import type { EventDetails } from "./EventDetailsStep";
 import TeamChip, { getTeamVariantClassName } from "./TeamChip";
@@ -29,13 +28,22 @@ type Props = {
   tagsByPhoto: TaggedMember[][];
   teams: Team[];
   eventDetails: EventDetails;
+  isSubmitting: boolean;
+  submitError: string;
+  onSubmit: () => void;
 };
 
-export default function SubmissionPreview({ photos, tagsByPhoto, teams, eventDetails }: Props) {
-  const router = useRouter();
+export default function SubmissionPreview({
+  photos,
+  tagsByPhoto,
+  teams,
+  eventDetails,
+  isSubmitting,
+  submitError,
+  onSubmit,
+}: Props) {
   const taggedMembers = tagsByPhoto.flat();
   const submitter = taggedMembers[0];
-  const isFlagged = taggedMembers.some((tag) => tag.isPvp);
   const formattedDate = eventDetails.eventDate
     ? new Date(`${eventDetails.eventDate}T00:00:00`).toLocaleDateString(undefined, {
         month: "numeric",
@@ -82,6 +90,7 @@ export default function SubmissionPreview({ photos, tagsByPhoto, teams, eventDet
               fill
               sizes="(max-width: 402px) calc(100vw - 70px), 332px"
               className={styles.photo}
+              unoptimized
               draggable={false}
             />
             {(tagsByPhoto[photoIndex] ?? []).map((tag) => (
@@ -114,15 +123,16 @@ export default function SubmissionPreview({ photos, tagsByPhoto, teams, eventDet
       </div>
 
       <div className={styles.reviewFooter}>
-        <p className={isFlagged ? styles.flaggedStatus : styles.readyStatus}>
-          {isFlagged ? "⚑ Status: Flagged" : "Status: Ready"}
-        </p>
+        {submitError && (
+          <p className={styles.submitError} role="alert">
+            {submitError}
+          </p>
+        )}
         <button
           type="button"
           className={styles.submitButton}
-          onClick={() =>
-            router.push(`/submit/success?name=${encodeURIComponent(submitter?.memberName ?? "")}`)
-          }
+          onClick={onSubmit}
+          disabled={isSubmitting}
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -133,7 +143,7 @@ export default function SubmissionPreview({ photos, tagsByPhoto, teams, eventDet
             />
             <path d="m9.9 13.8 5-5" stroke="currentColor" strokeWidth="2" />
           </svg>
-          <span>Submit for Review</span>
+          <span>{isSubmitting ? "Submitting..." : "Submit for Review"}</span>
         </button>
       </div>
     </section>

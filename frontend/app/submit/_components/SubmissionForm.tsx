@@ -23,6 +23,8 @@ type SubmissionFormProps = {
   tagsByPhoto: TaggedMember[][];
   teams: { id: string; name: string; members: number }[];
   eventDetails: EventDetails;
+  pvpHandling: "no" | "assign" | "exclude";
+  onPvpHandlingChange: (value: "no" | "assign" | "exclude") => void;
   onEventDetailsChange: (field: keyof EventDetails, value: string) => void;
 };
 
@@ -31,6 +33,8 @@ export default function SubmissionForm({
   tagsByPhoto,
   teams,
   eventDetails,
+  pvpHandling,
+  onPvpHandlingChange,
   onEventDetailsChange,
 }: SubmissionFormProps) {
   const allTags = tagsByPhoto.flat();
@@ -50,6 +54,7 @@ export default function SubmissionForm({
               fill
               sizes="144px"
               className={styles.photoImage}
+              unoptimized
               draggable={false}
             />
             {(tagsByPhoto[photoIndex] ?? []).map((tag) => (
@@ -70,15 +75,33 @@ export default function SubmissionForm({
         <h2 className={styles.sectionTitle}>PVP members present?</h2>
         <div className={styles.pvpChoices}>
           <label>
-            <input type="radio" name="pvpHandling" value="no" defaultChecked />
+            <input
+              type="radio"
+              name="pvpHandling"
+              value="no"
+              checked={pvpHandling === "no"}
+              onChange={() => onPvpHandlingChange("no")}
+            />
             No
           </label>
           <label>
-            <input type="radio" name="pvpHandling" value="assign" />
+            <input
+              type="radio"
+              name="pvpHandling"
+              value="assign"
+              checked={pvpHandling === "assign"}
+              onChange={() => onPvpHandlingChange("assign")}
+            />
             Yes (assign PVP pts to a team)
           </label>
           <label>
-            <input type="radio" name="pvpHandling" value="exclude" />
+            <input
+              type="radio"
+              name="pvpHandling"
+              value="exclude"
+              checked={pvpHandling === "exclude"}
+              onChange={() => onPvpHandlingChange("exclude")}
+            />
             Yes (do not count PVP pts)
           </label>
           {pvpMembers.length > 0 && (

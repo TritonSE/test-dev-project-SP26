@@ -1,4 +1,11 @@
-import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { randomUUID } from "node:crypto";
+
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import {
@@ -24,7 +31,8 @@ export const uploadFileToS3 = async (
   originalFilename: string,
   mimeType: string,
 ): Promise<string> => {
-  const uniqueFilename = `uploads/${Date.now()}-${originalFilename}`;
+  const extension = /\.[a-z0-9]{1,10}$/i.exec(originalFilename)?.[0] ?? "";
+  const uniqueFilename = `uploads/${randomUUID()}${extension}`;
 
   const command = new PutObjectCommand({
     Bucket: aws_s3_bucket_name,
@@ -35,7 +43,16 @@ export const uploadFileToS3 = async (
 
   await s3Client.send(command);
 
-  return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uniqueFilename}`;
+  return uniqueFilename;
+};
+
+export const deleteFileFromS3 = async (fileKey: string): Promise<void> => {
+  const command = new DeleteObjectCommand({
+    Bucket: aws_s3_bucket_name,
+    Key: fileKey,
+  });
+
+  await s3Client.send(command);
 };
 
 export const getPresignedImageUrl = async (fileKey: string): Promise<string> => {
