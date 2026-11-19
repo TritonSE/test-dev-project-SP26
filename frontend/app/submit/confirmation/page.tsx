@@ -8,7 +8,6 @@
 //   - Summary of the submission (event name, date, attendees)
 //   - Point preview breakdown per team
 //     e.g. F3 Global +3 pts, CRED +2 pts
-//   - Note if the submission is flagged for review (PVP manual assignment)
 //   - Button to go back to the leaderboard
 //
 // DATA:
@@ -25,7 +24,6 @@ export default function ConfirmationPage() {
       <h1>Submission Received!</h1>
       {/* TODO: Show event name, date, attendee count */}
       {/* TODO: Show point breakdown per team */}
-      {/* TODO: If flagged, show "Pending admin review" notice */}
       {/* TODO: Button → go back to /leaderboard */}
       <p>Confirmation details go here.</p>
     </main>

@@ -2,14 +2,26 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { savePendingPhotos } from "../photoStorage";
 
 import styles from "./page.module.css";
 
 export default function SelectPhotosPage() {
   const router = useRouter();
-  const [photos, setPhotos] = useState<{ id: string; url: string }[]>([]);
+  const [photos, setPhotos] = useState<{ id: string; url: string; file: File }[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const objectUrls = useRef(new Set<string>());
+
+  useEffect(
+    () => () => {
+      objectUrls.current.forEach((url) => URL.revokeObjectURL(url));
+    },
+    [],
+  );
 
   function readFiles() {
     const el = inputRef.current;
@@ -17,28 +29,36 @@ export default function SelectPhotosPage() {
     const files = Array.from(el.files ?? []);
     if (files.length === 0) return;
     el.value = "";
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const result = ev.target?.result as string;
-        if (!result) return;
-        const newPhoto = { id: crypto.randomUUID(), url: result };
-
-        setPhotos((prev) => (prev.length < 24 ? [...prev, newPhoto] : prev));
-      };
-      reader.readAsDataURL(file);
+    const availableSlots = Math.max(0, 24 - photos.length);
+    const addedPhotos = files.slice(0, availableSlots).map((file) => {
+      const url = URL.createObjectURL(file);
+      objectUrls.current.add(url);
+      return { id: crypto.randomUUID(), url, file };
     });
+    setPhotos((prev) => [...prev, ...addedPhotos]);
   }
 
   function removePhoto(id: string) {
-    setPhotos((prev) => prev.filter((photo) => photo.id !== id));
+    const photo = photos.find((item) => item.id === id);
+    if (photo) {
+      URL.revokeObjectURL(photo.url);
+      objectUrls.current.delete(photo.url);
+    }
+    setPhotos((prev) => prev.filter((item) => item.id !== id));
   }
 
-  function handleNext() {
+  async function handleNext() {
     if (photos.length === 0) return;
-    const photoUrls = photos.map((p) => p.url);
-    sessionStorage.setItem("pendingPhotos", JSON.stringify(photoUrls));
-    router.push("/submit");
+    setIsSaving(true);
+    setSaveError("");
+
+    try {
+      await savePendingPhotos(photos.map((photo) => photo.file));
+      router.push("/submit");
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Could not save selected photos.");
+      setIsSaving(false);
+    }
   }
 
   const gridItems = Array.from({ length: 24 }, (_, i) => photos[i] ?? null);
@@ -101,6 +121,7 @@ export default function SelectPhotosPage() {
                 sizes="100px"
                 loading={i === 0 ? "eager" : "lazy"}
                 className={styles.photoImage}
+                unoptimized
                 draggable={false}
               />
             </div>
@@ -122,6 +143,7 @@ export default function SelectPhotosPage() {
                   sizes="48px"
                   loading={i === 0 ? "eager" : "lazy"}
                   className={styles.thumbnailImage}
+                  unoptimized
                   draggable={false}
                 />
                 <button
@@ -157,9 +179,20 @@ export default function SelectPhotosPage() {
           </div>
         </div>
 
-        <button disabled={photos.length === 0} onClick={handleNext} className={styles.nextButton}>
-          <span className={styles.nextButtonLabel}>Next</span>
+        <button
+          disabled={photos.length === 0 || isSaving}
+          onClick={() => {
+            void handleNext();
+          }}
+          className={styles.nextButton}
+        >
+          <span className={styles.nextButtonLabel}>{isSaving ? "Saving..." : "Next"}</span>
         </button>
+        {saveError && (
+          <p className={styles.saveError} role="alert">
+            {saveError}
+          </p>
+        )}
       </div>
     </main>
   );

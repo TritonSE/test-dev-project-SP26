@@ -5,9 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import SubmissionForm from "./_components/SubmissionForm";
+import SubmissionPreview from "./_components/SubmissionPreview";
+import { clearPendingPhotos, loadPendingPhotos } from "./photoStorage";
 import styles from "./submit.module.css";
 
-type Member = { id: string; name: string; team: string };
+import type { EventDetails } from "./_components/EventDetailsStep";
+
+type Member = { id: string; name: string; team: string; teamName: string; isPvp: boolean };
 
 type Tag = {
   id: string;
@@ -15,6 +19,8 @@ type Tag = {
   y: number;
   memberId: string;
   memberName: string;
+  teamId: string;
+  teamName: string;
   isPvp: boolean;
 };
 
@@ -26,10 +32,20 @@ export default function SubmitPage() {
   const router = useRouter();
 
   const [pageState, setPageState] = useState<number>(0);
+  const [eventDetails, setEventDetails] = useState<EventDetails>({
+    eventName: "",
+    eventDate: new Date().toISOString().slice(0, 10),
+    location: "",
+  });
+  const [pvpHandling, setPvpHandling] = useState<"no" | "assign" | "exclude">("no");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const [loading, setLoading] = useState(true);
+  const [photoLoadError, setPhotoLoadError] = useState("");
   const [members, setMembers] = useState<Member[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [scrollX, setScrollX] = useState(0);
   const [tagsByPhoto, setTagsByPhoto] = useState<Tag[][]>([]);
   const [pendingTag, setPendingTag] = useState<{ x: number; y: number } | null>(null);
@@ -45,46 +61,68 @@ export default function SubmitPage() {
   const carouselStartRef = useRef<{ x: number; y: number; baseScrollX: number } | null>(null);
   const isCarouselDragging = useRef(false);
   const hasLoaded = useRef(false);
+  const photoUrlsRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (hasLoaded.current) return;
     hasLoaded.current = true;
 
-    const raw = sessionStorage.getItem("pendingPhotos");
-    sessionStorage.removeItem("pendingPhotos");
+    void (async () => {
+      try {
+        const stored = await loadPendingPhotos();
+        if (stored.length === 0) {
+          router.replace("/submit/select");
+          return;
+        }
 
-    let stored: string[] = [];
-    try {
-      const parsed = raw ? (JSON.parse(raw) as string[]) : [];
-      if (Array.isArray(parsed)) {
-        stored = parsed.filter(
-          (url): url is string => typeof url === "string" && url.trim() !== "",
+        await clearPendingPhotos();
+        const urls = stored.map((file) => URL.createObjectURL(file));
+        photoUrlsRef.current = urls;
+        setPhotoFiles(stored);
+        setPhotos(urls);
+        setTagsByPhoto(stored.map(() => []));
+      } catch (error) {
+        setPhotoLoadError(
+          error instanceof Error ? error.message : "Could not load the selected photos.",
         );
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      stored = [];
-    }
-
-    if (stored.length > 0) {
-      setPhotos(stored);
-      setTagsByPhoto(stored.map(() => []));
-    } else {
-      router.replace("/submit/select");
-    }
-    setLoading(false);
+    })();
 
     void (async () => {
       try {
         const r = await fetch("/api/members");
-        const data = (await r.json()) as Array<{ _id: string; name: string; team: string }>;
+        const data = (await r.json()) as Array<{
+          _id: string;
+          name: string;
+          team: string;
+          teamName: string;
+          isPVP?: boolean;
+        }>;
         if (Array.isArray(data) && data.length > 0) {
-          setMembers(data.map((m) => ({ id: m._id, name: m.name, team: m.team })));
+          setMembers(
+            data.map((m) => ({
+              id: m._id,
+              name: m.name,
+              team: m.team,
+              teamName: m.teamName,
+              isPvp: m.isPVP === true,
+            })),
+          );
         }
       } catch {
         /* keep fallback list */
       }
     })();
   }, []);
+
+  useEffect(
+    () => () => {
+      photoUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    },
+    [],
+  );
 
   function getPercentPosition(clientX: number, clientY: number) {
     if (!photoRef.current) return { x: 50, y: 50 };
@@ -150,12 +188,80 @@ export default function SubmitPage() {
     return result;
   }, [tagsByPhoto]);
 
+  const teams = useMemo(() => {
+    const teamMap = new Map<string, { id: string; name: string; members: number }>();
+    for (const tag of allTaggedMembers) {
+      const team = teamMap.get(tag.teamId) ?? {
+        id: tag.teamId,
+        name: tag.isPvp ? "PVP" : tag.teamName,
+        members: 0,
+      };
+      team.members += 1;
+      teamMap.set(tag.teamId, team);
+    }
+    return Array.from(teamMap.values());
+  }, [allTaggedMembers]);
+
   const filteredMembers = useMemo(
     () => members.filter((m) => m.name.toLowerCase().includes(search.toLowerCase())),
     [members, search],
   );
 
+  async function handleSubmit() {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const formData = new FormData();
+      const tags = tagsByPhoto.flatMap((photoTags, photoIndex) =>
+        photoTags.map(({ memberId, x, y }) => ({ memberId, photoIndex, x, y })),
+      );
+      formData.append(
+        "submission",
+        JSON.stringify({
+          eventName: eventDetails.eventName,
+          date: eventDetails.eventDate,
+          location: eventDetails.location,
+          pvpHandling,
+          tags,
+        }),
+      );
+
+      for (const [index, photo] of photoFiles.entries()) {
+        formData.append("photos", photo, photo.name || `photo-${index + 1}`);
+      }
+
+      const response = await fetch("/api/submissions", {
+        method: "POST",
+        body: formData,
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(result.error ?? "Failed to submit event.");
+      }
+
+      router.push(
+        `/submit/success?name=${encodeURIComponent(allTaggedMembers[0]?.memberName ?? "")}`,
+      );
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Failed to submit event.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   if (loading) return null;
+  if (photoLoadError) {
+    return (
+      <div className={styles.mainContainer}>
+        <p role="alert">{photoLoadError}</p>
+        <button className={styles.nextButton} onClick={() => router.replace("/submit/select")}>
+          Back to photo selection
+        </button>
+      </div>
+    );
+  }
 
   function getPositionInCarousel(clientX: number, clientY: number) {
     if (!carouselContainerRef.current) return null;
@@ -262,7 +368,9 @@ export default function SubmitPage() {
         y: pendingTag.y,
         memberId: member.id,
         memberName: member.name,
-        isPvp: member.team === "PVP",
+        teamId: member.team,
+        teamName: member.teamName,
+        isPvp: member.isPvp,
       },
     ]);
     setPendingTag(null);
@@ -340,7 +448,10 @@ export default function SubmitPage() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.submissionHeader}>
-        <button className={styles.backButton} onClick={() => router.back()}>
+        <button
+          className={styles.backButton}
+          onClick={() => (pageState === 0 ? router.back() : setPageState((state) => state - 1))}
+        >
           <svg width="9" height="18" viewBox="0 0 9 18" fill="none">
             <path
               d="M8 1L1 9L8 17"
@@ -354,17 +465,19 @@ export default function SubmitPage() {
 
         <div className={styles.upperBox}>
           <h1 className={styles.submissionFormText}>Submission Form</h1>
-          <p className={styles.tagMembersText}> Tag members attended </p>
+          <p className={styles.tagMembersText}>
+            {pageState === 0 ? "Tag members attended" : pageState === 1 ? "Event Info" : "Preview"}
+          </p>
         </div>
       </div>
 
       <div className={styles.progressBar}>
         <div className={styles.yellowBar} />
-        <div className={styles.whiteBar} />
-        <div className={styles.whiteBar} />
+        <div className={pageState >= 1 ? styles.yellowBar : styles.whiteBar} />
+        <div className={pageState >= 2 ? styles.yellowBar : styles.whiteBar} />
       </div>
 
-      <div className={styles.taggingSection}>
+      <div className={pageState === 0 ? styles.taggingSection : styles.taggingSectionHidden}>
         <>
           {/* Carousel container — tags are rendered here so they stay mounted across photo changes */}
           <div
@@ -404,6 +517,7 @@ export default function SubmitPage() {
                     fill
                     sizes="328px"
                     className={styles.carouselImage}
+                    unoptimized
                     draggable={false}
                   />
 
@@ -440,7 +554,6 @@ export default function SubmitPage() {
                     onTouchStart={(e) => handleTagTouchStart(e, tag.id)}
                   >
                     <div className={styles.tagLabel}>
-                      {tag.isPvp && <span className={styles.pvpTag}>PP</span>}
                       <span>{tag.memberName}</span>
                     </div>
                     <div className={styles.tagDot} />
@@ -464,7 +577,7 @@ export default function SubmitPage() {
               {allTaggedMembers.length > 0 && (
                 <div className={styles.taggedMembersList}>
                   {allTaggedMembers.map((tag) => {
-                    const member = members.find((m) => m.id === tag.memberId);
+                    const teamName = tag.isPvp ? "PVP" : tag.teamName;
                     return (
                       <div key={tag.memberId} className={styles.taggedMemberRow}>
                         <div className={styles.memberIdentity}>
@@ -477,8 +590,15 @@ export default function SubmitPage() {
                           </div>
                           <span className={styles.taggedMemberName}>{tag.memberName}</span>
                         </div>
-                        <div className={styles.teamBadge}>
-                          <span className={styles.teamText}>{member?.team ?? ""}</span>
+                        <div className={styles.teamBadge} title={teamName}>
+                          <span
+                            className={styles.teamText}
+                            style={{
+                              fontSize: `${Math.max(7, 12 - Math.max(0, teamName.length - 12) * 0.25)}px`,
+                            }}
+                          >
+                            {teamName}
+                          </span>
                         </div>
                       </div>
                     );
@@ -490,7 +610,7 @@ export default function SubmitPage() {
         </>
       </div>
 
-      {pendingTag && (
+      {pendingTag && pageState === 0 && (
         <div className={styles.bottomSheetOverlay} onClick={() => setPendingTag(null)}>
           <div
             className={styles.bottomSheet}
@@ -573,7 +693,7 @@ export default function SubmitPage() {
                       </div>
                       <div className={styles.resultMemberInfo}>
                         <span className={styles.resultMemberName}>{m.name}</span>
-                        {m.team === "PVP" && <span className={styles.pvpIndicator}>PVP</span>}
+                        {m.teamName === "PVP" && <span className={styles.pvpIndicator}>PVP</span>}
                       </div>
                       <button
                         className={styles.memberActionButton}
@@ -597,21 +717,52 @@ export default function SubmitPage() {
         </div>
       )}
 
-      {pageState >= 1 && <SubmissionForm />}
-
-      <div className={styles.nextButtonWrapper}>
-        <button
-          disabled={!canContinue}
-          onClick={() => setPageState((prev) => prev + 1)}
-          className={styles.nextButton}
-          style={{
-            opacity: canContinue ? 1 : 0.4,
-            cursor: canContinue ? "pointer" : "default",
+      {pageState === 1 && (
+        <SubmissionForm
+          photos={photos}
+          tagsByPhoto={tagsByPhoto}
+          teams={teams}
+          eventDetails={eventDetails}
+          pvpHandling={pvpHandling}
+          onPvpHandlingChange={setPvpHandling}
+          onEventDetailsChange={(field, value) =>
+            setEventDetails((details) => ({ ...details, [field]: value }))
+          }
+        />
+      )}
+      {pageState === 2 && (
+        <SubmissionPreview
+          photos={photos}
+          tagsByPhoto={tagsByPhoto}
+          teams={teams}
+          eventDetails={eventDetails}
+          isSubmitting={isSubmitting}
+          submitError={submitError}
+          onSubmit={() => {
+            void handleSubmit();
           }}
-        >
-          <span className={styles.nextButtonText}>Next</span>
-        </button>
-      </div>
+        />
+      )}
+
+      {pageState < 2 && (
+        <div className={styles.nextButtonWrapper}>
+          <button
+            disabled={!canContinue}
+            onClick={() => {
+              if (!canContinue) return;
+              if (pageState === 0) setPendingTag(null);
+              setPageState((state) => state + 1);
+            }}
+            className={styles.nextButton}
+            style={{
+              opacity: canContinue ? 1 : 0.4,
+              cursor: canContinue ? "pointer" : "default",
+            }}
+          >
+            <span className={styles.nextButtonText}>Next</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

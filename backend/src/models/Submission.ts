@@ -18,6 +18,21 @@ const submissionSchema = new Schema(
         _id: false,
       },
     ],
+    tags: [
+      {
+        photoIndex: { type: Number, required: true },
+        member: { type: Schema.Types.ObjectId, ref: "Member", required: true },
+        x: { type: Number, required: true, min: 0, max: 100 },
+        y: { type: Number, required: true, min: 0, max: 100 },
+        _id: false,
+      },
+    ],
+    pvpHandling: {
+      type: String,
+      enum: ["no", "assign", "exclude"],
+      default: "no",
+      required: true,
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
