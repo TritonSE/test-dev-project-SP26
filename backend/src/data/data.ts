@@ -195,7 +195,7 @@ const submissions: Submission[] = [
   {
     photoKeys: ["uploads/San Diego 1.png", "uploads/San Diego 2.png"],
     eventName: "Event 2",
-    date: new Date(),
+    date: new Date(Date.now() + 1),
     location: "San Diego, CA",
     pointAllocation: [
       { team: "Homestart", points: 6 },
@@ -207,7 +207,7 @@ const submissions: Submission[] = [
   {
     photoKeys: ["uploads/Venice.png"],
     eventName: "Event 3",
-    date: new Date(),
+    date: new Date(Date.now() + 2),
     location: "Venice, Italy",
     pointAllocation: [{ team: "International Health Collective", points: 8 }],
     status: "pending",
@@ -264,8 +264,8 @@ const teams: Team[] = [
   { teamName: "Sharia's Closet", points: 30, avatarKey: "uploads/Sharia's Closet.jpg" },
   { teamName: "Simplified PLC", points: 0, avatarKey: "uploads/Simplified PLC.jpg" },
   { teamName: "Tecate Horse Rescue", points: 44, avatarKey: "uploads/Tecate Horse Rescue.jpg" },
-  { teamName: "PVP", points: 1, avatarKey: "uploads/Eshaan.jpg" },
-  { teamName: "TEST", points: 100, avatarKey: "uploads/TEST.jpg" },
+  { teamName: "PVP", points: 1, avatarKey: "uploads/Eshaan Sharma.jpg" },
+  { teamName: "TEST", points: 100, avatarKey: "uploads/TEST.png" },
 ];
 
 export { teams, members, submissions, rankings };
