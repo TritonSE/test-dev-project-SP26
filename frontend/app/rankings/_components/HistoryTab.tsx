@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import styles from "../history.module.css";
 
-import HistoryRankingAlert from "./HistoryRankingAlert";
-import HistorySocialAlert from "./HistorySocialAlert";
+import HistorySocialPopup from "./HistorySocialPopup";
 
 type Submission = {
   _id: string;
@@ -34,7 +34,15 @@ type Alert =
   | { type: "social"; id: string; date: Date; submission: Submission }
   | { type: "ranking"; id: string; date: Date; message: string };
 
+// Track which popup is open, and the data it needs
+type OpenPopup = { type: "social"; submission: Submission } | null;
+
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const SOCIAL_ICON_SIZE = 20;
+const TROPHY_ICON_SIZE = 30;
+
+// Splits "TEST is now in 1st Place!" into ["TEST", " is now in ", "1st", " Place!"]
+const PLACEMENT_PATTERN = /^(.+?)( is now (?:in )?)(\d+(?:st|nd|rd|th))(.*)$/i;
 
 // Sunday 00:00 of the week the date is in (weeks run Sunday-Saturday)
 function startOfWeek(date: Date) {
@@ -44,12 +52,12 @@ function startOfWeek(date: Date) {
   return d;
 }
 
-// "19 Apr"
+// Format day and month as "19 Apr"
 function formatDayMonth(date: Date) {
   return `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}`;
 }
 
-// "04/25"
+// Format month and day as "04/25"
 function formatMonthDay(date: Date) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
@@ -73,6 +81,7 @@ export default function HistoryTab() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
+  const [openPopup, setOpenPopup] = useState<OpenPopup>(null);
 
   useEffect(() => {
     async function loadHistory() {
@@ -103,7 +112,7 @@ export default function HistoryTab() {
 
   const approvedSubmissions = submissions.filter((s) => s.status === "approved");
 
-  // 1. Put social alerts and ranking alerts into one list, newest first
+  // Put social alerts and ranking alerts into one list, newest first
   const alerts: Alert[] = [
     ...approvedSubmissions.map((s): Alert => ({
       type: "social",
@@ -119,7 +128,7 @@ export default function HistoryTab() {
     })),
   ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
-  // 2. Group the alerts by week
+  // Group the alerts by week
   const weeks: { start: Date; alerts: Alert[] }[] = [];
   for (const alert of alerts) {
     const start = startOfWeek(alert.date);
@@ -132,7 +141,7 @@ export default function HistoryTab() {
     }
   }
 
-  // 3. Numbers for the "This Month" card
+  // Numbers for the "This Month" card
   const now = new Date();
   const socialsThisMonth = approvedSubmissions.filter((s) => {
     const date = new Date(s.date);
@@ -184,29 +193,79 @@ export default function HistoryTab() {
                 {title !== range && <span className={styles.weekRange}>{range}</span>}
               </div>
 
-              {/* Keys are database ids, so React only adds new alerts instead of redrawing all */}
-              {week.alerts.map((alert) =>
-                alert.type === "social" ? (
-                  <HistorySocialAlert
-                    key={alert.id}
-                    teams={getTeamNames(alert.submission, teams)}
-                    eventName={alert.submission.eventName}
-                    points={getTotalPoints(alert.submission)}
-                    date={formatMonthDay(alert.date)}
-                    photoUrls={alert.submission.photoUrls ?? []}
-                  />
-                ) : (
-                  <HistoryRankingAlert
-                    key={alert.id}
-                    message={alert.message}
-                    date={formatMonthDay(alert.date)}
-                  />
-                ),
-              )}
+              {/* Keys are database ids, so React only adds new alerts instead of redrawing all of them */}
+              {week.alerts.map((alert) => {
+                if (alert.type === "social") {
+                  return (
+                    <button
+                      key={alert.id}
+                      type="button"
+                      className={`${styles.alert} ${styles.clickable}`}
+                      onClick={() => setOpenPopup({ type: "social", submission: alert.submission })}
+                    >
+                      <span className={`${styles.alertIcon} ${styles.socialIcon}`}>
+                        <Image
+                          src="/social-icon.svg"
+                          alt=""
+                          width={SOCIAL_ICON_SIZE}
+                          height={SOCIAL_ICON_SIZE}
+                        />
+                      </span>
+
+                      <span className={styles.alertText}>
+                        <strong>New Social Alert:</strong>
+                        <br />
+                        {getTeamNames(alert.submission, teams)}&apos;s {alert.submission.eventName}.
+                        <br />+{getTotalPoints(alert.submission)} points.
+                      </span>
+
+                      <span className={styles.alertDate}>{formatMonthDay(alert.date)}</span>
+                    </button>
+                  );
+                }
+
+                const match = PLACEMENT_PATTERN.exec(alert.message);
+
+                return (
+                  <div key={alert.id} className={styles.alert}>
+                    <span className={styles.alertIcon}>
+                      <Image
+                        src="/trophy-icon.svg"
+                        alt=""
+                        width={TROPHY_ICON_SIZE}
+                        height={TROPHY_ICON_SIZE}
+                      />
+                    </span>
+
+                    <p className={styles.alertText}>
+                      {match ? (
+                        <>
+                          <strong>{match[1]}</strong>
+                          {match[2]}
+                          <strong>{match[3]}</strong>
+                          {match[4]}
+                        </>
+                      ) : (
+                        alert.message
+                      )}
+                    </p>
+
+                    <p className={styles.alertDate}>{formatMonthDay(alert.date)}</p>
+                  </div>
+                );
+              })}
             </div>
           );
         })}
       </div>
+
+      {openPopup?.type === "social" && (
+        <HistorySocialPopup
+          eventName={openPopup.submission.eventName}
+          photoUrls={openPopup.submission.photoUrls ?? []}
+          onClose={() => setOpenPopup(null)}
+        />
+      )}
     </div>
   );
 }
