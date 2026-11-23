@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import styles from "../history.module.css";
 
-const CLOSE_ICON_SIZE = 15;
+const CLOSE_ICON_SIZE = 32;
 
 type HistorySocialPopupProps = {
   eventName: string;
@@ -17,18 +17,19 @@ export default function HistorySocialPopup({
 }: HistorySocialPopupProps) {
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
-      {/* stopPropagation so clicks inside the white box don't close it */}
       <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-        <button type="button" className={styles.popupClose} onClick={onClose}>
-          <Image
-            src="/close-icon.svg"
-            alt="Close"
-            width={CLOSE_ICON_SIZE}
-            height={CLOSE_ICON_SIZE}
-          />
-        </button>
+        <div className={styles.popupHeader}>
+          <h2 className={styles.popupTitle}>{eventName}</h2>
 
-        <h2 className={styles.popupTitle}>{eventName}</h2>
+          <button type="button" className={styles.popupClose} onClick={onClose} aria-label="Close">
+            <Image
+              src="/red-close-icon.svg"
+              alt=""
+              width={CLOSE_ICON_SIZE}
+              height={CLOSE_ICON_SIZE}
+            />
+          </button>
+        </div>
 
         <div className={styles.popupPhotos}>
           {photoUrls.map((url) => (

@@ -8,6 +8,8 @@
   --color-points: #1f8a4c;
   --color-social-accent: #dbe9fb;
   --color-overlay: rgb(0 0 0 / 60%);
+  --color-white: #fff;
+  --color-photo-placeholder: #e2e6ea;
 
   /* spacing */
   --space-sm: 0.5rem;
@@ -20,16 +22,21 @@
   --font-size-md: 0.875rem;
   --font-size-lg: 1.5625rem;
   --font-size-xl: 1.75rem;
+  --font-size-popup-title: 1.125rem;
 
   /* sizes */
   --card-width: min(22rem, 90vw);
-  --popup-max-height: 85dvh;
+  --popup-width: min(20rem, 75vw);
+  --popup-max-height: 70dvh;
+  --popup-drop-distance: -100dvh;
+  --popup-animation-duration: 0.3s;
   --icon-size: 2rem;
   --radius-sm: 0.5rem;
   --radius-lg: 1.5rem;
   --z-index-popup: 50;
 
   --month-card-min-height: 7rem;
+  --photo-aspect-ratio: 4 / 3;
 
   display: flex;
   flex-direction: column;
@@ -57,8 +64,7 @@
 }
 
 .monthTitle,
-.weekTitle,
-.popupTitle {
+.weekTitle {
   font-size: var(--font-size-lg);
   font-weight: bold;
 }
@@ -180,42 +186,71 @@
 .popup {
   position: relative;
 
-  width: var(--card-width);
+  width: var(--popup-width);
   max-height: var(--popup-max-height);
   overflow-y: auto;
+  scrollbar-width: none;
 
-  padding: var(--space-lg);
   box-sizing: border-box;
 
-  background-color: var(--color-surface);
+  background-color: var(--color-white);
   border-radius: var(--radius-lg);
 
   color: var(--color-text);
+
+  animation: popup-drop var(--popup-animation-duration) ease-out;
 }
 
-.popupClose {
-  position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
+/* Hide scrollbar for WebKit-based browsers */
+.popup::-webkit-scrollbar {
+  display: none;
+}
 
-  background: none;
-  border: none;
-  cursor: pointer;
+@keyframes popup-drop {
+  from {
+    transform: translateY(var(--popup-drop-distance));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    animation: none;
+  }
+}
+
+.popupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-divider);
 }
 
 .popupTitle {
-  margin-bottom: var(--space-md);
+  font-size: var(--font-size-popup-title);
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.popupClose {
+  display: flex;
+  cursor: pointer;
 }
 
 .popupPhotos {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+
+  padding: var(--space-lg);
 }
 
 .popupPhoto {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: var(--photo-aspect-ratio);
   object-fit: cover;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-photo-placeholder);
 }
