@@ -30,8 +30,8 @@
   --font-size-ranking-title: 1.375rem;
 
   /* sizes */
-  --card-width: min(22rem, 90vw);
-  --popup-width: min(24rem, 85vw);
+  --card-width: min(22rem, 80vw);
+  --popup-width: min(24rem, 75vw);
   --popup-max-height: 85dvh;
   --popup-drop-distance: -100dvh;
   --popup-animation-duration: 0.3s;
