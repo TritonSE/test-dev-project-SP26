@@ -31,8 +31,8 @@
 
   /* sizes */
   --card-width: min(22rem, 90vw);
-  --popup-width: min(20rem, 75vw);
-  --popup-max-height: 70dvh;
+  --popup-width: min(24rem, 85vw);
+  --popup-max-height: 85dvh;
   --popup-drop-distance: -100dvh;
   --popup-animation-duration: 0.3s;
   --icon-size: 2rem;
@@ -265,9 +265,9 @@
 .popupPhotos {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
 }
 
 .popupPhoto {
