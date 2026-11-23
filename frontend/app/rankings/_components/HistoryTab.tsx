@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import styles from "../history.module.css";
 
+import HistoryRankChangePopup from "./HistoryRankChangePopup";
 import HistorySocialPopup from "./HistorySocialPopup";
 import HistoryWeeklyRankingPopup from "./HistoryWeeklyRankingPopup";
 
@@ -22,6 +23,7 @@ type Ranking = {
   _id: string;
   message: string;
   createdAt: string;
+  photoUrls?: string[];
 };
 
 // What GET /api/teams returns (see backend/src/models/Team.ts)
@@ -34,11 +36,14 @@ type Team = {
 // One item in the feed: a social alert or a ranking alert
 type Alert =
   | { type: "social"; id: string; date: Date; submission: Submission }
-  | { type: "ranking"; id: string; date: Date; message: string };
+  | { type: "ranking"; id: string; date: Date; message: string; photoUrls: string[] };
 
 // Track which popup is open, and the data it needs
 type OpenPopup =
-  { type: "social"; submission: Submission } | { type: "weeklyRanking"; weekRange: string } | null;
+  | { type: "social"; submission: Submission }
+  | { type: "weeklyRanking"; weekRange: string }
+  | { type: "rankChange"; photoUrls: string[] }
+  | null;
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const SOCIAL_ICON_SIZE = 20;
@@ -128,6 +133,7 @@ export default function HistoryTab() {
       id: r._id,
       date: new Date(r.createdAt),
       message: r.message,
+      photoUrls: r.photoUrls ?? [],
     })),
   ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
@@ -259,8 +265,14 @@ export default function HistoryTab() {
                   );
                 }
 
+                // "Team X is now in 3rd place!" opens the rank change popup
                 return (
-                  <div key={alert.id} className={styles.alert}>
+                  <button
+                    key={alert.id}
+                    type="button"
+                    className={`${styles.alert} ${styles.clickable}`}
+                    onClick={() => setOpenPopup({ type: "rankChange", photoUrls: alert.photoUrls })}
+                  >
                     <span className={styles.alertIcon}>
                       <Image
                         src="/trophy-icon.svg"
@@ -270,15 +282,15 @@ export default function HistoryTab() {
                       />
                     </span>
 
-                    <p className={styles.alertText}>
+                    <span className={styles.alertText}>
                       <strong>{match[1]}</strong>
                       {match[2]}
                       <strong>{match[3]}</strong>
                       {match[4]}
-                    </p>
+                    </span>
 
-                    <p className={styles.alertDate}>{formatMonthDay(alert.date)}</p>
-                  </div>
+                    <span className={styles.alertDate}>{formatMonthDay(alert.date)}</span>
+                  </button>
                 );
               })}
             </div>
@@ -298,6 +310,13 @@ export default function HistoryTab() {
         <HistoryWeeklyRankingPopup
           weekRange={openPopup.weekRange}
           standings={standings}
+          onClose={() => setOpenPopup(null)}
+        />
+      )}
+
+      {openPopup?.type === "rankChange" && (
+        <HistoryRankChangePopup
+          photoUrls={openPopup.photoUrls}
           onClose={() => setOpenPopup(null)}
         />
       )}

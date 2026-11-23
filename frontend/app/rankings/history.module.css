@@ -43,6 +43,19 @@
 
   --month-card-min-height: 7rem;
   --photo-aspect-ratio: 4 / 3;
+  --carousel-photo-width: 75%;
+  --carousel-side-space: calc((100% - var(--carousel-photo-width)) / 2);
+  --carousel-button-size: 1.75rem;
+  --shadow-photo: 0 4px 8px rgb(0 0 0 / 20%);
+  --carousel-transition-duration: 0.8s;
+  --carousel-easing: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --stack-offset: 16%;
+  --stack-scale: 0.9;
+  --stack-opacity: 0.5;
+  --stack-offset-far: 32%;
+  --stack-scale-far: 0.8;
+  --stack-opacity-far: 0.25;
+  --shadow-button: 0 2px 4px rgb(0 0 0 / 15%);
 
   display: flex;
   flex-direction: column;
@@ -222,6 +235,10 @@
   .popup {
     animation: none;
   }
+
+  .carouselPhoto {
+    transition: none;
+  }
 }
 
 .popupHeader {
@@ -330,4 +347,106 @@
 
 .thirdPlace {
   background-color: var(--color-bronze);
+}
+
+/* ============================================================================
+   RANK CHANGE POPUP
+   ============================================================================ */
+
+.recentSocialsTitle {
+  font-weight: normal;
+  color: var(--color-text);
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+
+  padding: var(--space-lg) 0;
+}
+
+.carouselStack {
+  position: relative;
+
+  width: var(--carousel-photo-width);
+  aspect-ratio: var(--photo-aspect-ratio);
+  margin: 0 auto;
+}
+
+.carouselPhoto {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  background-color: var(--color-photo-placeholder);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-photo);
+
+  transition:
+    transform var(--carousel-transition-duration) var(--carousel-easing),
+    opacity var(--carousel-transition-duration) var(--carousel-easing);
+  will-change: transform, opacity;
+}
+
+.carouselPhoto[data-position="current"] {
+  z-index: 3;
+}
+
+.carouselPhoto[data-position="next"] {
+  z-index: 2;
+  transform: translateX(var(--stack-offset)) scale(var(--stack-scale));
+  opacity: var(--stack-opacity);
+}
+
+.carouselPhoto[data-position="later"] {
+  z-index: 1;
+  transform: translateX(var(--stack-offset-far)) scale(var(--stack-scale-far));
+  opacity: var(--stack-opacity-far);
+}
+
+.carouselPhoto[data-position="previous"] {
+  z-index: 2;
+  transform: translateX(calc(-1 * var(--stack-offset))) scale(var(--stack-scale));
+  opacity: var(--stack-opacity);
+}
+
+.carouselPhoto[data-position="earlier"] {
+  z-index: 1;
+  transform: translateX(calc(-1 * var(--stack-offset-far))) scale(var(--stack-scale-far));
+  opacity: var(--stack-opacity-far);
+}
+
+.carouselButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--carousel-button-size);
+  height: var(--carousel-button-size);
+
+  background-color: var(--color-white);
+  border-radius: 50%;
+  box-shadow: var(--shadow-button);
+  cursor: pointer;
+
+  z-index: 4;
+}
+
+.carouselButton:disabled {
+  visibility: hidden;
+}
+
+.carouselPrevious {
+  left: calc(var(--carousel-side-space) - var(--carousel-button-size) / 2);
+}
+
+.carouselNext {
+  right: calc(var(--carousel-side-space) - var(--carousel-button-size) / 2);
 }
