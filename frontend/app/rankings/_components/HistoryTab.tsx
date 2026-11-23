@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import styles from "../history.module.css";
 
 import HistorySocialPopup from "./HistorySocialPopup";
+import HistoryWeeklyRankingPopup from "./HistoryWeeklyRankingPopup";
 
 type Submission = {
   _id: string;
@@ -27,6 +28,7 @@ type Ranking = {
 type Team = {
   _id: string;
   teamName: string;
+  points: number;
 };
 
 // One item in the feed: a social alert or a ranking alert
@@ -35,11 +37,12 @@ type Alert =
   | { type: "ranking"; id: string; date: Date; message: string };
 
 // Track which popup is open, and the data it needs
-type OpenPopup = { type: "social"; submission: Submission } | null;
+type OpenPopup =
+  { type: "social"; submission: Submission } | { type: "weeklyRanking"; weekRange: string } | null;
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const SOCIAL_ICON_SIZE = 20;
-const TROPHY_ICON_SIZE = 30;
+const RANKING_ICON_SIZE = 30;
 
 // Splits "TEST is now in 1st Place!" into ["TEST", " is now in ", "1st", " Place!"]
 const PLACEMENT_PATTERN = /^(.+?)( is now (?:in )?)(\d+(?:st|nd|rd|th))(.*)$/i;
@@ -151,6 +154,11 @@ export default function HistoryTab() {
 
   const thisWeekStart = startOfWeek(now).getTime();
 
+  // Teams from most to fewest points, for the weekly ranking popup
+  const standings = [...teams]
+    .sort((a, b) => b.points - a.points)
+    .map((team) => ({ id: team._id, name: team.teamName }));
+
   return (
     <div className={styles.history}>
       <div className={`${styles.card} ${styles.monthCard}`}>
@@ -226,28 +234,47 @@ export default function HistoryTab() {
 
                 const match = PLACEMENT_PATTERN.exec(alert.message);
 
+                // "View this week's rankings!" opens the weekly ranking popup
+                if (!match) {
+                  return (
+                    <button
+                      key={alert.id}
+                      type="button"
+                      className={`${styles.alert} ${styles.clickable}`}
+                      onClick={() => setOpenPopup({ type: "weeklyRanking", weekRange: range })}
+                    >
+                      <span className={styles.alertIcon}>
+                        <Image
+                          src="/week-ranking-icon.svg"
+                          alt=""
+                          width={RANKING_ICON_SIZE}
+                          height={RANKING_ICON_SIZE}
+                        />
+                      </span>
+
+                      <span className={styles.alertText}>{alert.message}</span>
+
+                      <span className={styles.alertDate}>{formatMonthDay(alert.date)}</span>
+                    </button>
+                  );
+                }
+
                 return (
                   <div key={alert.id} className={styles.alert}>
                     <span className={styles.alertIcon}>
                       <Image
                         src="/trophy-icon.svg"
                         alt=""
-                        width={TROPHY_ICON_SIZE}
-                        height={TROPHY_ICON_SIZE}
+                        width={RANKING_ICON_SIZE}
+                        height={RANKING_ICON_SIZE}
                       />
                     </span>
 
                     <p className={styles.alertText}>
-                      {match ? (
-                        <>
-                          <strong>{match[1]}</strong>
-                          {match[2]}
-                          <strong>{match[3]}</strong>
-                          {match[4]}
-                        </>
-                      ) : (
-                        alert.message
-                      )}
+                      <strong>{match[1]}</strong>
+                      {match[2]}
+                      <strong>{match[3]}</strong>
+                      {match[4]}
                     </p>
 
                     <p className={styles.alertDate}>{formatMonthDay(alert.date)}</p>
@@ -263,6 +290,14 @@ export default function HistoryTab() {
         <HistorySocialPopup
           eventName={openPopup.submission.eventName}
           photoUrls={openPopup.submission.photoUrls ?? []}
+          onClose={() => setOpenPopup(null)}
+        />
+      )}
+
+      {openPopup?.type === "weeklyRanking" && (
+        <HistoryWeeklyRankingPopup
+          weekRange={openPopup.weekRange}
+          standings={standings}
           onClose={() => setOpenPopup(null)}
         />
       )}
