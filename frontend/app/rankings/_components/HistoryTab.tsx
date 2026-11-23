@@ -132,12 +132,7 @@ export default function HistoryTab() {
     }
   }
 
-  // 3. Hide weeks where no socials happened
-  const weeksWithSocials = weeks.filter((week) =>
-    week.alerts.some((alert) => alert.type === "social"),
-  );
-
-  // 4. Numbers for the "This Month" card
+  // 3. Numbers for the "This Month" card
   const now = new Date();
   const socialsThisMonth = approvedSubmissions.filter((s) => {
     const date = new Date(s.date);
@@ -172,9 +167,9 @@ export default function HistoryTab() {
       </div>
 
       <div className={styles.card}>
-        {weeksWithSocials.length === 0 && <p className={styles.emptyText}>No socials yet.</p>}
+        {weeks.length === 0 && <p className={styles.emptyText}>No history yet.</p>}
 
-        {weeksWithSocials.map((week) => {
+        {weeks.map((week) => {
           const end = new Date(week.start);
           end.setDate(end.getDate() + 6);
           const range = `${formatDayMonth(week.start)}-${formatDayMonth(end)}`;
