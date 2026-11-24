@@ -26,7 +26,14 @@ type Tag = {
 
 let tagCounter = 0;
 
-const ITEM_WIDTH = 343; // 328px photo + 15px gap
+const ITEM_WIDTH = 343; 
+
+function getLocalDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
 export default function SubmitPage() {
   const router = useRouter();
@@ -34,7 +41,7 @@ export default function SubmitPage() {
   const [pageState, setPageState] = useState<number>(0);
   const [eventDetails, setEventDetails] = useState<EventDetails>({
     eventName: "",
-    eventDate: new Date().toISOString().slice(0, 10),
+    eventDate: getLocalDateString(),
     location: "",
   });
   const [pvpHandling, setPvpHandling] = useState<"no" | "assign" | "exclude">("no");
@@ -62,6 +69,7 @@ export default function SubmitPage() {
   const isCarouselDragging = useRef(false);
   const hasLoaded = useRef(false);
   const photoUrlsRef = useRef<string[]>([]);
+  const isSubmittingRef = useRef(false);
 
   useEffect(() => {
     if (hasLoaded.current) return;
@@ -208,7 +216,8 @@ export default function SubmitPage() {
   );
 
   async function handleSubmit() {
-    if (isSubmitting) return;
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
     setSubmitError("");
 
@@ -223,7 +232,6 @@ export default function SubmitPage() {
           eventName: eventDetails.eventName,
           date: eventDetails.eventDate,
           location: eventDetails.location,
-          pvpHandling,
           tags,
         }),
       );
@@ -246,7 +254,7 @@ export default function SubmitPage() {
       );
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Failed to submit event.");
-    } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   }
@@ -443,7 +451,17 @@ export default function SubmitPage() {
 
   const taggedIds = new Set(allTaggedMembers.map((t) => t.memberId));
   const needMore = Math.max(0, 3 - allTaggedMembers.length);
-  const canContinue = photos.length > 0 && allTaggedMembers.length >= 3;
+  const isEventDetailsValid =
+    eventDetails.eventName.trim().length > 0 &&
+    eventDetails.eventName.trim().length <= 100 &&
+    eventDetails.location.trim().length > 0 &&
+    eventDetails.location.trim().length <= 100 &&
+    Boolean(eventDetails.eventDate) &&
+    !Number.isNaN(Date.parse(eventDetails.eventDate));
+  const canContinue =
+    photos.length > 0 &&
+    allTaggedMembers.length >= 3 &&
+    (pageState === 0 || isEventDetailsValid);
 
   return (
     <div className={styles.mainContainer}>

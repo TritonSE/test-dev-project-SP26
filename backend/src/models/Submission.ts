@@ -27,12 +27,6 @@ const submissionSchema = new Schema(
         _id: false,
       },
     ],
-    pvpHandling: {
-      type: String,
-      enum: ["no", "assign", "exclude"],
-      default: "no",
-      required: true,
-    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
