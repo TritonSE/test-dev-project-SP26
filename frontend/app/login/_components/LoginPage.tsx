@@ -8,13 +8,14 @@ import { useEffect, useState } from "react";
 import BackIcon from "@/public/ep_back.svg";
 import DropdownArrow from "@/public/Vector.svg";
 
+import ProfilePicturePrompt from "./ProfilePicturePrompt";
 import styles from "./loginPage.module.css";
 /* eslint-enable perfectionist/sort-imports */
 
 type Member = {
   name: string;
-  [key: string]: unknown;
   _id: string;
+  photoUrl: string | null;
 };
 
 // Simple helper type to safely handle Next.js static asset imports
@@ -30,6 +31,7 @@ export default function LoginPage({ onBack }: LoginPageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [_selectedName, setSelectedName] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profileMember, setProfileMember] = useState<Member | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -80,9 +82,16 @@ export default function LoginPage({ onBack }: LoginPageProps) {
   });
 
   const handleContinue = () => {
-    if (!searchTerm.trim()) return;
+    if (!_selectedName) return;
 
-    router.push(`/welcome?name=${encodeURIComponent(searchTerm)}`);
+    const selectedMember = members.find((member) => member.name === _selectedName);
+    if (!selectedMember) return;
+
+    if (selectedMember.photoUrl) {
+      router.push(`/welcome?name=${encodeURIComponent(_selectedName)}`);
+    } else {
+      setProfileMember(selectedMember);
+    }
   };
 
   const handleBack = () => {
@@ -92,6 +101,18 @@ export default function LoginPage({ onBack }: LoginPageProps) {
       router.push("/login"); // Fallback to route navigation
     }
   };
+
+  if (profileMember) {
+    return (
+      <ProfilePicturePrompt
+        member={profileMember}
+        onBack={() => setProfileMember(null)}
+        onComplete={() => {
+          router.push(`/welcome?name=${encodeURIComponent(profileMember.name)}`);
+        }}
+      />
+    );
+  }
 
   return (
     <main className={styles.container}>

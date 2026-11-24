@@ -1,4 +1,9 @@
-import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import {
@@ -35,13 +40,18 @@ export const uploadFileToS3 = async (
 
   await s3Client.send(command);
 
-  return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uniqueFilename}`;
+  return uniqueFilename;
 };
 
 export const getPresignedImageUrl = async (fileKey: string): Promise<string> => {
+  const resolvedKey =
+    fileKey.startsWith("http://") || fileKey.startsWith("https://")
+      ? new URL(fileKey).pathname.replace(/^\/+/, "")
+      : fileKey;
+
   const command = new GetObjectCommand({
     Bucket: aws_s3_bucket_name,
-    Key: fileKey,
+    Key: resolvedKey,
   });
 
   const signedUrl = await getSignedUrl(s3Client, command, {
@@ -49,4 +59,18 @@ export const getPresignedImageUrl = async (fileKey: string): Promise<string> => 
   });
 
   return signedUrl;
+};
+
+export const deleteFileFromS3 = async (fileKey: string): Promise<void> => {
+  const resolvedKey =
+    fileKey.startsWith("http://") || fileKey.startsWith("https://")
+      ? new URL(fileKey).pathname.replace(/^\/+/, "")
+      : fileKey;
+
+  await s3Client.send(
+    new DeleteObjectCommand({
+      Bucket: aws_s3_bucket_name,
+      Key: resolvedKey,
+    }),
+  );
 };

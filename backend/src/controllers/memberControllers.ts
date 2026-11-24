@@ -1,5 +1,5 @@
 import Member from "../models/Member";
-import { getPresignedImageUrl, uploadFileToS3 } from "../utils/s3";
+import { deleteFileFromS3, getPresignedImageUrl, uploadFileToS3 } from "../utils/s3";
 
 import type { Request, Response } from "express";
 
@@ -102,6 +102,8 @@ export const updateMember = async (req: Request, res: Response) => {
 };
 
 export const uploadProfilePicture = async (req: AuthenticatedRequest, res: Response) => {
+  let newPhotoKey: string | null = null;
+
   try {
     if (!req.file) {
       res.status(400).json({ error: "No file provided" });
@@ -109,12 +111,51 @@ export const uploadProfilePicture = async (req: AuthenticatedRequest, res: Respo
     }
 
     const { id } = req.params;
+    const existingMember = await Member.findById(id);
 
-    const fileKey = await uploadFileToS3(req.file.buffer, req.file.originalname, req.file.mimetype);
+    if (!existingMember) {
+      res.status(404).json({ error: "Member not found." });
+      return;
+    }
 
-    const updatedUser = await Member.findByIdAndUpdate(id, { photoKey: fileKey }, { new: true });
+    const oldPhotoKey = existingMember.photoKey;
+    newPhotoKey = await uploadFileToS3(req.file.buffer, req.file.originalname, req.file.mimetype);
 
-    const presignedUrl = await getPresignedImageUrl(fileKey);
+    const updatedUser = await Member.findByIdAndUpdate(
+      id,
+      { photoKey: newPhotoKey },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      await deleteFileFromS3(newPhotoKey);
+      res.status(404).json({ error: "Member not found." });
+      return;
+    }
+
+    let presignedUrl: string;
+
+    try {
+      presignedUrl = await getPresignedImageUrl(newPhotoKey);
+    } catch (error) {
+      try {
+        await Member.findByIdAndUpdate(id, { photoKey: oldPhotoKey });
+      } catch (rollbackError) {
+        console.error("Failed to roll back MongoDB profile picture:", rollbackError);
+      }
+
+      await deleteFileFromS3(newPhotoKey);
+      newPhotoKey = null;
+      throw error;
+    }
+
+    if (oldPhotoKey && oldPhotoKey !== newPhotoKey) {
+      try {
+        await deleteFileFromS3(oldPhotoKey);
+      } catch (error) {
+        console.error("Failed to delete old profile picture:", error);
+      }
+    }
 
     res.status(200).json({
       message: "Profile picture updated successfully!",
@@ -123,6 +164,15 @@ export const uploadProfilePicture = async (req: AuthenticatedRequest, res: Respo
     });
   } catch (error) {
     console.error("S3 Upload/DB Error:", error);
+
+    if (newPhotoKey) {
+      try {
+        await deleteFileFromS3(newPhotoKey);
+      } catch (cleanupError) {
+        console.error("Failed to delete uploaded profile picture:", cleanupError);
+      }
+    }
+
     res.status(500).json({ error: "Failed to upload profile picture" });
   }
 };

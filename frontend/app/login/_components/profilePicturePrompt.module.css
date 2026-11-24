@@ -1,0 +1,121 @@
+:root {
+  --prompt-bg: #0c2b35;
+  --prompt-white: #ffffff;
+  --prompt-black: #000000;
+  --prompt-light-gray: #f5f5f5;
+  --prompt-error: #a62a2a;
+  --color-accent: #debb01;
+}
+
+.skipButton {
+  display: flex;
+  width: 345px;
+  height: 52px;
+  padding: 15px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 100px;
+  background: var(--Text-Tertiary, #afafaf);
+  box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.3) inset;
+
+  color: #000;
+  font-family: inherit;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.2px;
+}
+
+.uploadContinueButton {
+  background: var(--color-accent);
+  box-shadow:
+    0 4px 5px rgba(0, 0, 0, 0.28),
+    0 -4px 4px rgba(0, 0, 0, 0.22) inset;
+}
+
+.uploadContinueButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.card {
+  width: 100%;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 22.5rem;
+  box-sizing: border-box;
+  border-radius: 1.25rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+
+.container {
+  min-height: 100dvh;
+  background-color: var(--prompt-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--font-rubik), "Rubik", sans-serif;
+}
+
+.backButton {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.title {
+  color: var(--Secondary-Highlight1, #debb01);
+  text-align: center;
+  font-family: Rubik;
+  font-size: 44px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.uploadButton {
+  width: 173px;
+  height: 173px;
+  margin: 1.5rem 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.uploadButton img {
+  display: block;
+  width: 173px;
+  height: 173px;
+}
+
+.previewImage {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.fileInput {
+  display: none;
+}
+
+.error {
+  color: var(--prompt-error);
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+}
