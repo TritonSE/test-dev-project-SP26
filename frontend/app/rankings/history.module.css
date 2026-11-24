@@ -32,6 +32,7 @@
   /* sizes */
   --card-width: min(22rem, 80vw);
   --popup-width: min(24rem, 75vw);
+  --popup-width-large: min(26rem, 93vw);
   --popup-max-height: 85dvh;
   --popup-drop-distance: -100dvh;
   --popup-animation-duration: 0.3s;
@@ -281,6 +282,10 @@
 /* ============================================================================
    WEEKLY RANKING POPUP
    ============================================================================ */
+
+.largePopup {
+  width: var(--popup-width-large);
+}
 
 .centeredHeader {
   position: relative;

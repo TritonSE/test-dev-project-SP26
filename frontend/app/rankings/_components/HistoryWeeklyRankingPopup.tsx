@@ -30,7 +30,7 @@ export default function HistoryWeeklyRankingPopup({
 }: HistoryWeeklyRankingPopupProps) {
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
-      <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+      <div className={`${styles.popup} ${styles.largePopup}`} onClick={(e) => e.stopPropagation()}>
         <div className={`${styles.popupHeader} ${styles.centeredHeader}`}>
           <h2 className={`${styles.popupTitle} ${styles.rankingTitle}`}>{weekRange}</h2>
 
