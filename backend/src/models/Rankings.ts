@@ -1,17 +1,32 @@
 import { Schema, model } from "mongoose";
-
 import type { InferSchemaType } from "mongoose";
 
-const rankingSchema = new Schema(
+const rankingsSchema = new Schema(
   {
-    message: { type: String, required: true },
-    photoKeys: { type: [String], default: [] },
+    message: {
+      type: String,
+      required: true,
+    },
+    rankings: {
+      type: [String],
+      required: true,
+    },
+    source: {
+      type: String,
+      enum: ["submission", "pointsAdjustment"],
+      required: true,
+    },
+    submission: {
+      type: Schema.Types.ObjectId,
+      ref: "Submission",
+      default: null,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-type Ranking = InferSchemaType<typeof rankingSchema>;
+type Rankings = InferSchemaType<typeof rankingsSchema>;
 
-export default model<Ranking>("Ranking", rankingSchema);
+export default model<Rankings>("Rankings", rankingsSchema);

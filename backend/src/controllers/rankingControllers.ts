@@ -2,18 +2,32 @@ import Ranking from "../models/Rankings";
 import { getPresignedImageUrl } from "../utils/s3";
 
 import type { Request, Response } from "express";
+import type { Submission as SubmissionData } from "../models/Submission";
 
 export const getRankings = async (_req: Request, res: Response) => {
   try {
-    const rankings = await Ranking.find();
+    const rankings = await Ranking.find()
+      .populate<{ submission: SubmissionData | null }>("submission")
+      .lean();
 
     const rankingsWithUrls = await Promise.all(
-      rankings.map(async (ranking) => ({
-        ...ranking.toObject(),
-        photoUrls: await Promise.all(
-          ranking.photoKeys.map(async (key) => getPresignedImageUrl(key)),
-        ),
-      })),
+      rankings.map(async (ranking) => {
+        if (!ranking.submission) {
+          return ranking;
+        }
+
+        const photoUrls = await Promise.all(
+          ranking.submission.photoKeys.map(async (key) => getPresignedImageUrl(key)),
+        );
+
+        return {
+          ...ranking,
+          submission: {
+            ...ranking.submission,
+            photoUrls,
+          },
+        };
+      }),
     );
 
     res.status(200).json(rankingsWithUrls);
