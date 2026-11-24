@@ -1,6 +1,7 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import multer from "multer";
 
 import { frontend_origin } from "./config";
 import configRouter from "./routes/configRoutes";
@@ -9,7 +10,7 @@ import rankingsRouter from "./routes/rankingRoutes";
 import submissionsRouter from "./routes/submissionRoutes";
 import teamsRouter from "./routes/teamRoutes";
 
-import type { Request, Response } from "express";
+import type { ErrorRequestHandler, Request, Response } from "express";
 
 const app = express();
 
@@ -31,5 +32,22 @@ app.use("/api/config", configRouter);
 app.get("/", (_req: Request, res: Response) => {
   res.json({ message: "TSE Social Points API is running!" });
 });
+
+const handleError: ErrorRequestHandler = (error, _req, res, _next) => {
+  if (error instanceof multer.MulterError) {
+    res.status(400).json({ error: error.message });
+    return;
+  }
+
+  if (error instanceof Error && error.message === "Only image files are allowed.") {
+    res.status(400).json({ error: "Only image files up to 10 MB are allowed." });
+    return;
+  }
+
+  console.error(error);
+  res.status(500).json({ error: "Internal server error" });
+};
+
+app.use(handleError);
 
 export default app;

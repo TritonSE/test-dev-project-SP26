@@ -1,8 +1,7 @@
 .container {
-  width: 402px;
-  padding-top: 13px;
-  padding-right: 30px;
-  padding-left: 34px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 30px 16px 34px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -34,7 +33,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .spacer {
@@ -49,6 +48,7 @@
   line-height: 100%;
   letter-spacing: 0%;
   color: #8fa7b0;
+  white-space: nowrap;
 }
 
 .ptsLabel {
@@ -59,34 +59,4 @@
   line-height: 100%;
   letter-spacing: 0%;
   color: #8fa7b0;
-}
-
-.footer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  align-items: flex-end;
-}
-
-.statusWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  width: fit-content;
-}
-
-.statusText {
-  width: 75px;
-  height: 15px;
-  font-family: "Karla", sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  font-style: normal;
-  line-height: 150%;
-  letter-spacing: 0%;
-  color: #b93b3b;
-  opacity: 1;
-  transform: rotate(0deg);
 }

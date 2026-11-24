@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 
 import {
   addMember,
@@ -8,15 +7,13 @@ import {
   updateMember,
   uploadProfilePicture,
 } from "../controllers/memberControllers";
+import { uploadMemberImage } from "../multer/uploadMemberImage";
 
 const router = express.Router();
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
 router.get("/", getMembers);
 
-router.post("/:id/upload-profile-picture", upload.single("image"), uploadProfilePicture);
+router.post("/:id/upload-profile-picture", uploadMemberImage, uploadProfilePicture);
 router.post("/", addMember);
 
 router.patch("/:id", updateMember);

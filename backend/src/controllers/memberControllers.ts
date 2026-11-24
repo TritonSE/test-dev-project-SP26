@@ -1,4 +1,5 @@
 import Member from "../models/Member";
+import Team from "../models/Team";
 import { getPresignedImageUrl, uploadFileToS3 } from "../utils/s3";
 
 import type { Request, Response } from "express";
@@ -6,6 +7,10 @@ import type { Request, Response } from "express";
 export const getMembers = async (req: Request, res: Response) => {
   try {
     const members = await Member.find();
+    const teams = await Team.find({ _id: { $in: members.map((member) => member.team) } }).select(
+      "_id teamName",
+    );
+    const teamNames = new Map(teams.map((team) => [team._id.toString(), team.teamName]));
 
     const membersWithUrls = await Promise.all(
       members.map(async (member) => {
@@ -17,6 +22,7 @@ export const getMembers = async (req: Request, res: Response) => {
 
         return {
           ...member.toObject(),
+          teamName: teamNames.get(member.team.toString()) ?? "",
           photoUrl,
         };
       }),

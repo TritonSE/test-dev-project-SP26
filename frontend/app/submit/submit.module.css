@@ -10,7 +10,8 @@
   min-height: 874px;
   margin-left: auto;
   margin-right: auto;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .submissionHeader {
@@ -70,7 +71,7 @@
 
 .progressBar {
   position: absolute;
-  top: 129px;
+  top: 141px;
   left: calc(50% - 123px);
   height: 6px;
   display: flex;
@@ -95,6 +96,10 @@
   margin-top: 22;
   display: flex;
   flex-direction: column;
+}
+
+.taggingSectionHidden {
+  display: none;
 }
 
 .carouselContainer {
@@ -163,13 +168,6 @@
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
-}
-
-.pvpTag {
-  margin-right: 2px;
-  color: #debb01;
-  font-size: 10px;
-  font-weight: 700;
 }
 
 .tagDot {
@@ -276,9 +274,11 @@
 
 .teamBadge {
   display: flex;
-  width: 88px;
+  width: fit-content;
+  min-width: 88px;
+  max-width: 50%;
   height: 31px;
-  padding: 8px 31px 7px;
+  padding: 4px 10px;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -289,6 +289,7 @@
 }
 
 .teamText {
+  min-width: 0;
   color: rgb(31, 31, 31);
   font-family: var(--font-rubik), Rubik, sans-serif;
   font-size: 12px;

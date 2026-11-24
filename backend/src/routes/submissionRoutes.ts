@@ -6,11 +6,13 @@ import {
   getSubmissions,
   updateSubmission,
 } from "../controllers/submissionControllers";
+import { uploadSubmissionPhotos } from "../multer/uploadSubmissionPhotos";
+import { validateSubmissionCreation } from "../validators/submissionValidators";
 
 const router = express.Router();
 
 router.get("/", getSubmissions);
-router.post("/", createSubmission);
+router.post("/", uploadSubmissionPhotos, validateSubmissionCreation, createSubmission);
 router.patch("/:id", updateSubmission);
 router.delete("/:id", deleteSubmission);
 
