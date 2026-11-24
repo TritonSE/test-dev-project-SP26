@@ -52,7 +52,8 @@ export const getSubmissions = async (req: Request, res: Response) => {
 
 export const createSubmission = async (req: Request, res: Response) => {
   const files = Array.isArray(req.files) ? req.files : [];
-  const { eventName, date, location, tags } = req.body.submission as ParsedSubmissionBody;
+  const { submission } = req.body as { submission: ParsedSubmissionBody };
+  const { eventName, date, location, tags } = submission;
 
   const photoKeys: string[] = [];
   try {

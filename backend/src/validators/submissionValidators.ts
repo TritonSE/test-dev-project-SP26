@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { body, validationResult } from "express-validator";
+import { Types } from "mongoose";
 
 import type { NextFunction, Request, Response } from "express";
 
@@ -8,6 +8,11 @@ type SubmissionTagInput = {
   photoIndex: number;
   x: number;
   y: number;
+};
+
+type SubmissionRequestBody = {
+  submission?: unknown;
+  submissionParseError?: boolean;
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -36,7 +41,10 @@ const isSubmissionTag = (tag: unknown): tag is SubmissionTagInput => {
 const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(400).json({ error: errors.array()[0]?.msg ?? "Invalid request." });
+    const firstMsg: unknown = errors.array()[0]?.msg;
+    res.status(400).json({
+      error: typeof firstMsg === "string" ? firstMsg : "Invalid request.",
+    });
     return;
   }
   next();
@@ -47,12 +55,13 @@ const handleValidationErrors = (req: Request, res: Response, next: NextFunction)
  * so the body() chains below can validate nested fields.
  */
 const parseSubmissionBody = (req: Request, _res: Response, next: NextFunction) => {
-  const submission = req.body?.submission;
+  const bodyData = req.body as SubmissionRequestBody;
+  const submission = bodyData.submission;
   if (typeof submission === "string") {
     try {
-      req.body.submission = JSON.parse(submission);
+      bodyData.submission = JSON.parse(submission) as unknown;
     } catch {
-      req.body.submissionParseError = true;
+      bodyData.submissionParseError = true;
     }
   }
   next();
@@ -74,13 +83,14 @@ export const validateSubmissionCreation = [
     .withMessage("Submission details are required.")
     .bail()
     .custom((_value, { req }) => {
-      if (req.body.submissionParseError) {
+      const bodyData = req.body as SubmissionRequestBody;
+      if (bodyData.submissionParseError) {
         throw new Error("Submission details are invalid JSON.");
       }
       return true;
     })
     .bail()
-    .custom((value) => {
+    .custom((value: unknown) => {
       if (!isRecord(value) || Array.isArray(value)) {
         throw new Error("Submission details are invalid.");
       }
@@ -110,7 +120,7 @@ export const validateSubmissionCreation = [
     .isString()
     .withMessage("Submission details are incomplete or invalid.")
     .bail()
-    .custom((date) => !Number.isNaN(Date.parse(date)))
+    .custom((date: unknown) => typeof date === "string" && !Number.isNaN(Date.parse(date)))
     .withMessage("Submission details are incomplete or invalid.")
     .bail(),
 
@@ -136,7 +146,7 @@ export const validateSubmissionCreation = [
     .isArray({ min: 3 })
     .withMessage("Submission details are incomplete or invalid.")
     .bail()
-    .custom((tags, { req }) => {
+    .custom((tags: unknown, { req }) => {
       if (!Array.isArray(tags) || !tags.every(isSubmissionTag)) {
         throw new Error("Submission details are incomplete or invalid.");
       }

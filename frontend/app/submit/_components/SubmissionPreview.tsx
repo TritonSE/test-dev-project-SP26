@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 
-import TeamChip, { getTeamVariantClassName } from "./TeamChip";
 import styles from "./submissionPreview.module.css";
+import TeamChip, { getTeamVariantClassName } from "./TeamChip";
 import teamChipStyles from "./teamChip.module.css";
 
 import type { EventDetails } from "./EventDetailsStep";

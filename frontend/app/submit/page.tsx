@@ -26,7 +26,7 @@ type Tag = {
 
 let tagCounter = 0;
 
-const ITEM_WIDTH = 343; 
+const ITEM_WIDTH = 343;
 
 function getLocalDateString(date = new Date()) {
   const year = date.getFullYear();
@@ -459,9 +459,7 @@ export default function SubmitPage() {
     Boolean(eventDetails.eventDate) &&
     !Number.isNaN(Date.parse(eventDetails.eventDate));
   const canContinue =
-    photos.length > 0 &&
-    allTaggedMembers.length >= 3 &&
-    (pageState === 0 || isEventDetailsValid);
+    photos.length > 0 && allTaggedMembers.length >= 3 && (pageState === 0 || isEventDetailsValid);
 
   return (
     <div className={styles.mainContainer}>
