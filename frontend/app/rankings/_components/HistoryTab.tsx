@@ -199,6 +199,7 @@ export default function HistoryTab() {
 
           const weeksAgo = Math.round((thisWeekStart - week.start.getTime()) / WEEK_MS);
           const title = weeksAgo === 0 ? "This Week" : weeksAgo === 1 ? "Last Week" : range;
+          const hasRanking = week.alerts.some((alert) => alert.type === "ranking");
 
           return (
             <div key={week.start.getTime()} className={styles.week}>
@@ -206,7 +207,28 @@ export default function HistoryTab() {
                 <h2 className={styles.weekTitle}>{title}</h2>
                 {title !== range && <span className={styles.weekRange}>{range}</span>}
               </div>
+              {/* If there was a ranking alert this week, show a button to view the weekly ranking
+              popup */}
+              {hasRanking && (
+                <button
+                  type="button"
+                  className={`${styles.alert} ${styles.clickable}`}
+                  onClick={() => setOpenPopup({ type: "weeklyRanking", weekRange: range })}
+                >
+                  <span className={styles.alertIcon}>
+                    <Image
+                      src="/week-ranking-icon.svg"
+                      alt=""
+                      width={RANKING_ICON_SIZE}
+                      height={RANKING_ICON_SIZE}
+                    />
+                  </span>
 
+                  <span className={styles.alertText}>View this week&apos;s rankings!</span>
+
+                  <span className={styles.alertDate}>{formatMonthDay(end)}</span>
+                </button>
+              )}
               {/* Keys are database ids, so React only adds new alerts instead of redrawing all of them */}
               {week.alerts.map((alert) => {
                 if (alert.type === "social") {
@@ -240,31 +262,6 @@ export default function HistoryTab() {
 
                 const match = PLACEMENT_PATTERN.exec(alert.message);
 
-                // "View this week's rankings!" opens the weekly ranking popup
-                if (!match) {
-                  return (
-                    <button
-                      key={alert.id}
-                      type="button"
-                      className={`${styles.alert} ${styles.clickable}`}
-                      onClick={() => setOpenPopup({ type: "weeklyRanking", weekRange: range })}
-                    >
-                      <span className={styles.alertIcon}>
-                        <Image
-                          src="/week-ranking-icon.svg"
-                          alt=""
-                          width={RANKING_ICON_SIZE}
-                          height={RANKING_ICON_SIZE}
-                        />
-                      </span>
-
-                      <span className={styles.alertText}>{alert.message}</span>
-
-                      <span className={styles.alertDate}>{formatMonthDay(alert.date)}</span>
-                    </button>
-                  );
-                }
-
                 // "Team X is now in 3rd place!" opens the rank change popup
                 return (
                   <button
@@ -283,10 +280,16 @@ export default function HistoryTab() {
                     </span>
 
                     <span className={styles.alertText}>
-                      <strong>{match[1]}</strong>
-                      {match[2]}
-                      <strong>{match[3]}</strong>
-                      {match[4]}
+                      {match ? (
+                        <>
+                          <strong>{match[1]}</strong>
+                          {match[2]}
+                          <strong>{match[3]}</strong>
+                          {match[4]}
+                        </>
+                      ) : (
+                        alert.message
+                      )}
                     </span>
 
                     <span className={styles.alertDate}>{formatMonthDay(alert.date)}</span>
