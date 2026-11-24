@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import HistoryTab from "./_components/HistoryTab";
 import IndividualTeam from "./_components/IndividualTeam";
 import PodiumProfile from "./_components/PodiumProfile";
 import TabSwitch from "./_components/TabSwitch";
@@ -32,6 +33,7 @@ export default function RankingsPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"ranks" | "history">("ranks");
 
   useEffect(() => {
     async function fetchRankings() {
@@ -73,55 +75,71 @@ export default function RankingsPage() {
 
   return (
     <main className={styles.leaderboardContainer}>
-      <TabSwitch activeTab="ranks" onTabSwitch={(tab) => console.info(tab)} />
+      <TabSwitch activeTab={activeTab} onTabSwitch={setActiveTab} />
 
-      <div className={styles.topThree}>
-        {podiumTeams.map((team) => {
-          const rank = team === topThree[0] ? 1 : team === topThree[1] ? 2 : 3;
+      {activeTab === "ranks" && (
+        <>
+          <div className={styles.topThree}>
+            {podiumTeams.map((team) => {
+              const rank = team === topThree[0] ? 1 : team === topThree[1] ? 2 : 3;
 
-          return (
-            <PodiumProfile
-              key={team._id}
-              rank={rank}
-              points={team.points}
-              name={team.teamName}
-              imageSrc={team.avatarUrl || "/eshaan-profile.jpg"}
-            />
-          );
-        })}
-      </div>
+              return (
+                <PodiumProfile
+                  key={team._id}
+                  rank={rank}
+                  points={team.points}
+                  name={team.teamName}
+                  imageSrc={team.avatarUrl || "/eshaan-profile.jpg"}
+                />
+              );
+            })}
+          </div>
 
-      <div className={styles.leaderboard}>
-        <h2 className={styles.mainLabel}>Top 3 Teams</h2>
+          <div className={styles.leaderboard}>
+            <h2 className={styles.mainLabel}>Top 3 Teams</h2>
 
-        {topThree.map((team, index) => (
-          <IndividualTeam
-            key={team._id}
-            rank={index + 1}
-            name={team.teamName}
-            points={team.points}
-            containerStyle={
-              index === 0 ? styles.firstPlace : index === 1 ? styles.secondPlace : styles.thirdPlace
-            }
-            isExpanded={expandedTeamId === team._id}
-            recentSubmission={getRecentSubmission(team._id)}
-            onClick={() => setExpandedTeamId((current) => (current === team._id ? null : team._id))}
-          />
-        ))}
+            {topThree.map((team, index) => (
+              <IndividualTeam
+                key={team._id}
+                rank={index + 1}
+                name={team.teamName}
+                points={team.points}
+                containerStyle={
+                  index === 0
+                    ? styles.firstPlace
+                    : index === 1
+                      ? styles.secondPlace
+                      : styles.thirdPlace
+                }
+                isExpanded={expandedTeamId === team._id}
+                recentSubmission={getRecentSubmission(team._id)}
+                onClick={() =>
+                  setExpandedTeamId((current) => (current === team._id ? null : team._id))
+                }
+              />
+            ))}
 
-        <h2 className={styles.mainLabel}>Runner Ups</h2>
+            <h2 className={styles.mainLabel}>Runner Ups</h2>
 
-        {runnerUp.map((team, index) => (
-          <IndividualTeam
-            key={team._id}
-            rank={index + 4}
-            name={team.teamName}
-            points={team.points}
-            isExpanded={expandedTeamId === team._id}
-            recentSubmission={getRecentSubmission(team._id)}
-            onClick={() => setExpandedTeamId((current) => (current === team._id ? null : team._id))}
-          />
-        ))}
+            {runnerUp.map((team, index) => (
+              <IndividualTeam
+                key={team._id}
+                rank={index + 4}
+                name={team.teamName}
+                points={team.points}
+                isExpanded={expandedTeamId === team._id}
+                recentSubmission={getRecentSubmission(team._id)}
+                onClick={() =>
+                  setExpandedTeamId((current) => (current === team._id ? null : team._id))
+                }
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      <div hidden={activeTab !== "history"} className={styles.historyWrapper}>
+        <HistoryTab />
       </div>
 
       <Link className={styles.submitButton} href="/submit/select" aria-label="Submit social points">

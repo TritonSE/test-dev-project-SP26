@@ -1,0 +1,457 @@
+.history {
+  /* colors */
+  --color-primary: #0c2b35;
+  --color-surface: #f5f7f9;
+  --color-text: #000;
+  --color-text-muted: #555;
+  --color-divider: #c9ced3;
+  --color-points: #1f8a4c;
+  --color-social-accent: #dbe9fb;
+  --color-overlay: rgb(0 0 0 / 60%);
+  --color-white: #fff;
+  --color-gold: #debb01;
+  --color-silver: #8f9ba6;
+  --color-bronze: #d97b14;
+  --color-rank-circle: #dde5ec;
+  --color-photo-placeholder: #e2e6ea;
+
+  /* spacing */
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1.25rem;
+  --space-xl: 2rem;
+
+  /* font sizes */
+  --font-size-sm: 0.75rem;
+  --font-size-md: 0.875rem;
+  --font-size-lg: 1.5625rem;
+  --font-size-xl: 1.75rem;
+  --font-size-popup-title: 1.125rem;
+  --font-size-ranking-title: 1.375rem;
+
+  /* sizes */
+  --card-width: min(22rem, 80vw);
+  --popup-width: min(24rem, 75vw);
+  --popup-width-large: min(26rem, 93vw);
+  --popup-max-height: 85dvh;
+  --popup-drop-distance: -100dvh;
+  --popup-animation-duration: 0.3s;
+  --icon-size: 2rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.5rem;
+  --z-index-popup: 50;
+
+  --month-card-min-height: 7rem;
+  --photo-aspect-ratio: 4 / 3;
+  --carousel-photo-width: 75%;
+  --carousel-side-space: calc((100% - var(--carousel-photo-width)) / 2);
+  --carousel-button-size: 1.75rem;
+  --shadow-photo: 0 4px 8px rgb(0 0 0 / 20%);
+  --carousel-transition-duration: 0.8s;
+  --carousel-easing: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --stack-offset: 16%;
+  --stack-scale: 0.9;
+  --stack-opacity: 0.5;
+  --stack-offset-far: 32%;
+  --stack-scale-far: 0.8;
+  --stack-opacity-far: 0.25;
+  --shadow-button: 0 2px 4px rgb(0 0 0 / 15%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+
+  width: 100%;
+  padding: var(--space-xl) 0;
+}
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
+
+.card {
+  width: var(--card-width);
+  padding: var(--space-lg) var(--space-xl);
+  box-sizing: border-box;
+
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+
+  color: var(--color-text);
+  text-align: left;
+}
+
+.monthTitle,
+.weekTitle {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
+.monthTitle,
+.monthStats,
+.emptyText {
+  text-align: center;
+}
+
+.monthNumber {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.monthCard {
+  min-height: var(--month-card-min-height);
+}
+
+.monthStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: var(--space-sm);
+}
+
+.monthStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.monthPoints {
+  color: var(--color-points);
+}
+
+.monthLabel {
+  font-size: var(--font-size-md);
+}
+
+.week + .week {
+  margin-top: var(--space-lg);
+}
+
+.weekHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.weekRange,
+.alertDate,
+.emptyText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ============================================================================
+   ALERTS
+   ============================================================================ */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+
+  width: 100%;
+  padding: var(--space-md) 0;
+
+  /* reset default <button> styles so social and ranking alerts look the same */
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-divider);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.alertIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: var(--radius-sm);
+}
+
+.alertText {
+  flex: 1;
+  font-size: var(--font-size-md);
+}
+
+.socialIcon {
+  background-color: var(--color-social-accent);
+}
+
+/* ============================================================================
+   SOCIAL POPUP
+   ============================================================================ */
+
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-index-popup);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-overlay);
+}
+
+.popup {
+  position: relative;
+
+  width: var(--popup-width);
+  max-height: var(--popup-max-height);
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  box-sizing: border-box;
+
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+
+  color: var(--color-text);
+
+  animation: popup-drop var(--popup-animation-duration) ease-out;
+}
+
+/* Hide scrollbar for WebKit-based browsers */
+.popup::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes popup-drop {
+  from {
+    transform: translateY(var(--popup-drop-distance));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    animation: none;
+  }
+
+  .carouselPhoto {
+    transition: none;
+  }
+}
+
+.popupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.popupTitle {
+  font-size: var(--font-size-popup-title);
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.popupClose {
+  display: flex;
+  cursor: pointer;
+}
+
+.popupPhotos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+}
+
+.popupPhoto {
+  width: 100%;
+  aspect-ratio: var(--photo-aspect-ratio);
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-photo-placeholder);
+}
+
+/* ============================================================================
+   WEEKLY RANKING POPUP
+   ============================================================================ */
+
+.largePopup {
+  width: var(--popup-width-large);
+}
+
+.centeredHeader {
+  position: relative;
+  justify-content: center;
+  border-bottom: none;
+}
+
+.centeredHeader .popupClose {
+  position: absolute;
+  right: var(--space-lg);
+}
+
+.rankingTitle {
+  font-size: var(--font-size-ranking-title);
+}
+
+.standings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+
+  padding: 0 var(--space-lg) var(--space-lg);
+}
+
+.standing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+
+  padding: var(--space-md);
+
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+
+  font-size: var(--font-size-md);
+}
+
+.standingRank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: var(--icon-size);
+  height: var(--icon-size);
+
+  background-color: var(--color-rank-circle);
+  border-radius: 50%;
+}
+
+.firstPlace,
+.secondPlace,
+.thirdPlace {
+  color: var(--color-white);
+}
+
+.firstPlace {
+  background-color: var(--color-gold);
+}
+
+.secondPlace {
+  background-color: var(--color-silver);
+}
+
+.thirdPlace {
+  background-color: var(--color-bronze);
+}
+
+/* ============================================================================
+   RANK CHANGE POPUP
+   ============================================================================ */
+
+.recentSocialsTitle {
+  font-weight: normal;
+  color: var(--color-text);
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+
+  padding: var(--space-lg) 0;
+}
+
+.carouselStack {
+  position: relative;
+
+  width: var(--carousel-photo-width);
+  aspect-ratio: var(--photo-aspect-ratio);
+  margin: 0 auto;
+}
+
+.carouselPhoto {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  background-color: var(--color-photo-placeholder);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-photo);
+
+  transition:
+    transform var(--carousel-transition-duration) var(--carousel-easing),
+    opacity var(--carousel-transition-duration) var(--carousel-easing);
+  will-change: transform, opacity;
+}
+
+.carouselPhoto[data-position="current"] {
+  z-index: 3;
+}
+
+.carouselPhoto[data-position="next"] {
+  z-index: 2;
+  transform: translateX(var(--stack-offset)) scale(var(--stack-scale));
+  opacity: var(--stack-opacity);
+}
+
+.carouselPhoto[data-position="later"] {
+  z-index: 1;
+  transform: translateX(var(--stack-offset-far)) scale(var(--stack-scale-far));
+  opacity: var(--stack-opacity-far);
+}
+
+.carouselPhoto[data-position="previous"] {
+  z-index: 2;
+  transform: translateX(calc(-1 * var(--stack-offset))) scale(var(--stack-scale));
+  opacity: var(--stack-opacity);
+}
+
+.carouselPhoto[data-position="earlier"] {
+  z-index: 1;
+  transform: translateX(calc(-1 * var(--stack-offset-far))) scale(var(--stack-scale-far));
+  opacity: var(--stack-opacity-far);
+}
+
+.carouselButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--carousel-button-size);
+  height: var(--carousel-button-size);
+
+  background-color: var(--color-white);
+  border-radius: 50%;
+  box-shadow: var(--shadow-button);
+  cursor: pointer;
+
+  z-index: 4;
+}
+
+.carouselButton:disabled {
+  visibility: hidden;
+}
+
+.carouselPrevious {
+  left: calc(var(--carousel-side-space) - var(--carousel-button-size) / 2);
+}
+
+.carouselNext {
+  right: calc(var(--carousel-side-space) - var(--carousel-button-size) / 2);
+}
