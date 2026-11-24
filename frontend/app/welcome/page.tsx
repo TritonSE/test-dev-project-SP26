@@ -16,6 +16,13 @@ type Member = {
   photoUrl: string | null;
 };
 
+type Team = {
+  _id: string;
+  teamName: string;
+  points: number;
+  avatarUrl?: string | null;
+};
+
 type PhotoStatus = "loading" | "loaded" | "missing" | "error";
 
 export default function WelcomePage() {
@@ -38,15 +45,27 @@ export default function WelcomePage() {
 
     async function loadMemberPhoto() {
       try {
-        const response = await fetch("/api/members");
-        if (!response.ok) {
-          throw new Error("Failed to fetch members");
+        const [membersResponse, teamsResponse] = await Promise.all([
+          fetch("/api/members"),
+          fetch("/api/teams/"),
+        ]);
+
+        if (!membersResponse.ok || !teamsResponse.ok) {
+          throw new Error("Failed to fetch welcome data");
         }
 
-        const members = (await response.json()) as Member[];
+        const [members, teams] = (await Promise.all([
+          membersResponse.json(),
+          teamsResponse.json(),
+        ])) as [Member[], Team[]];
         const member = members.find(
           (item) => item.name.trim().toLowerCase() === memberName.trim().toLowerCase(),
         );
+        const firstPlace = [...teams].sort((a, b) => b.points - a.points)[0];
+
+        if (firstPlace) {
+          sessionStorage.setItem("firstPlaceTeam", JSON.stringify(firstPlace));
+        }
 
         if (member?.photoUrl) {
           setPhotoUrl(member.photoUrl);
