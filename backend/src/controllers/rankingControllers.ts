@@ -1,8 +1,8 @@
 import Ranking from "../models/Rankings";
 import { getPresignedImageUrl } from "../utils/s3";
 
-import type { Request, Response } from "express";
 import type { Submission as SubmissionData } from "../models/Submission";
+import type { Request, Response } from "express";
 
 export const getRankings = async (_req: Request, res: Response) => {
   try {

@@ -8,7 +8,8 @@ const rankingsSchema = new Schema(
       required: true,
     },
     rankings: {
-      type: [String],
+      type: [Schema.Types.ObjectId],
+      ref: "Team",
       required: true,
     },
     source: {

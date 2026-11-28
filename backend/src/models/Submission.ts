@@ -68,16 +68,9 @@ const submissionSchema = new Schema(
       default: "no",
       required: true,
     },
-    awardedTeam: {
+    pvpTargetTeam: {
       type: Schema.Types.ObjectId,
       ref: "Team",
-      required(this: { pvpHandling: string }): boolean {
-        return this.pvpHandling === "yes";
-      },
-    },
-    pvpPoints: {
-      type: Number,
-      min: 0,
       required(this: { pvpHandling: string }): boolean {
         return this.pvpHandling === "yes";
       },
